@@ -24,6 +24,7 @@ Route::get('admin/home','AdminController@index');
 
 //Stock
 Route::get('admin/stock','AdminController@goodsStock');
+Route::get('admin/stock/edit/{id}','AdminController@goodsStockEdit');
 
 //User
 Route::get('admin/dataUser','AdminController@dataUser');
