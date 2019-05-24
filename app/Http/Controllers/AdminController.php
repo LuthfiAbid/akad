@@ -4,23 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Admin;
 use App\Buyer;
+use App\Goods;
+use App\Category;
 use Session;
 use Hash;
 use DB;
 
 class AdminController extends Controller
 {
+    use AuthenticatesUsers;
+ 
     /**
-     * Display a listing of the resource.
+     * Where to redirect users after login.
      *
-     * @return \Illuminate\Http\Response
+     * @var string
      */
-    // public function back()
-    // {
-    //     return redirect()->back();
-    // }
+    protected $redirectTo = 'admin/home';
+    public function __construct()
+    {
+        $this->redirectTo = 'admin/login';
+        // $this->middleware('guest', ['except' => 'logout']);
+    }
     public function index()
     {
         if(!Session::get('login')){
@@ -30,9 +37,10 @@ class AdminController extends Controller
         return view('home.index',compact('data'));
         }
     }
-    
+    //---------------------------------LOGIN & LOGOUT----------------------------------//
     public function login()
     {
+
         return view('login.login');
     }
 
@@ -58,11 +66,17 @@ class AdminController extends Controller
             return redirect('/admin/login')->with('alert','Password atau Username, Salah!');
         }
     }
+    
     public function logout()
     {
+        Auth::logout(); // logout user
         Session::flush();
+        Redirect::back();
         return redirect('admin/login')->with('alert','Kamu sudah Logout!');
     }
+    //------------------------------- END LOGIN & LOGOUT --------------------------//
+
+    //------------------------------ GOODS STOCK ----------------------------------//
     public function goodsStock()
     {
         $data_admin = Session::get('nama_admin');
@@ -76,8 +90,40 @@ class AdminController extends Controller
     {
         $data_admin = Session::get('nama_admin');
         $data = DB::table('goods')->where('id_goods',$id)->first();
+        // dd($data);
         return view('goods.edit',compact('data','data_admin'));
     }
+
+    public function goodsStockAdd()
+    {
+        $data_admin = Session::get('nama_admin');
+        return view('goods.insert',compact('data_admin'));
+    }
+
+    public function goodsStockUpdate(Request $request, $id)
+    {
+        $goods = Goods::where('id_goods',$id)->first();       
+
+        if($request->hasFile('image')){
+            $file = $request->file('picture');
+            $extension = $file->getClientOriginalExtension();
+            if($goods->id_category == 1){
+            $file->move('productImages/shirt',$extension);
+            }else if($goods->id_category == 2){
+            $file->move('productImages/pants',$extension);
+            }else{
+            $file->move('productImages/dress',$extension);
+            }
+            $goods->goods_name = $request->goods_name;
+            $goods->stock = $request->stock;
+            $goods->price = $request->price;
+            $goods->picture = $extension;
+            $goods->save();
+        }
+        return redirect('admin/stock');
+    }
+
+    //--------------------------- END GOODS STOCK ----------------------------------//
     public function dataUser()
     {
         $data_admin = Session::get('nama_admin');
