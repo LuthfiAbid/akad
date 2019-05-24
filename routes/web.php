@@ -30,6 +30,7 @@ Route::get('admin/stock','AdminController@goodsStock');
 Route::get('admin/stock/edit/{id}','AdminController@goodsStockEdit');
 Route::put('admin/stock/editPost/{id}','AdminController@goodsStockUpdate');
 Route::get('admin/stock/add','AdminController@goodsStockAdd');
+Route::post('admin/stock/addPost','AdminController@goodsStockAddPost');
 
 //User
 Route::get('admin/dataUser','AdminController@dataUser');

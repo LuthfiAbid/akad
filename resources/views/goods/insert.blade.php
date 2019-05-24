@@ -6,23 +6,35 @@
             <!-- Remove This Before You Start -->
             <h1>Add Goods Data</h1>
             <hr>
-            <form action="{{url('admin/stock/editPost')}}" method="post">
+            <form action="{{url('admin/stock/addPost')}}" method="post">
                 {{ csrf_field() }}
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="form-group">
                     <label for="nama">Goods Name :</label>
                     <input type="text" required class="form-control" id="goods_name" name="goods_name">
                 </div>
                 <div class="form-group">
                     <label for="nama">Stock :</label>
-                    <input type="text" required class="form-control" id="stock" name="stock">
+                    <input type="number" required class="form-control" id="stock" name="stock">
                 </div>
                 <div class="form-group">
                     <label for="nama">Price :</label>
                     <input type="number" required class="form-control" id="price" name="price">
                 </div>
                 <div class="form-group">
-                    <label for="nama">Description :</label>
-                    <input type="text" required class="form-control" name="description">
+                        <label for="nama">Categores : </label>
+                        <select class="form-control" class="col-md-5" name="id_category">
+                            <option value="1">Shirt</option>                        
+                            <option value="2">Pants</option>                        
+                            <option value="3">Dress</option>                        
+                        </select>
+                    </div>
+                {{-- <div class="form-group">
+                    <label for="nama">Picture : </label>
+                    <input type="file" class="form-control" name="picture">
+                </div> --}}
+                <div class="form-group">
+                    <textarea name="description" cols="50" rows="5" placeholder="Description . . ."></textarea>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-md btn-primary">Submit</button>

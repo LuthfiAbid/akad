@@ -102,26 +102,60 @@ class AdminController extends Controller
 
     public function goodsStockUpdate(Request $request, $id)
     {
-        $goods = Goods::where('id_goods',$id)->first();       
+        $this->validate($request,[
+            'picture' => 'required|image|mimes:jpeg,png,jpg'
+            ]);
+        $goods = Goods::firstOrNew(['id_goods' => $request->id_goods]);       
+        $file = $request->file('picture');
+        $extension = $file->getClientOriginalName();
 
-        if($request->hasFile('image')){
-            $file = $request->file('picture');
-            $extension = $file->getClientOriginalExtension();
-            if($goods->id_category == 1){
-            $file->move('productImages/shirt',$extension);
-            }else if($goods->id_category == 2){
-            $file->move('productImages/pants',$extension);
-            }else{
-            $file->move('productImages/dress',$extension);
-            }
-            $goods->goods_name = $request->goods_name;
-            $goods->stock = $request->stock;
-            $goods->price = $request->price;
-            $goods->picture = $extension;
-            $goods->save();
+        if($goods->id_category == 1){
+        $file->move('productImages/shirt',$extension);
+        }else if($goods->id_category == 2){
+        $file->move('productImages/pants',$extension);
+        }else{
+        $file->move('productImages/dress',$extension);
         }
+        $goods->goods_name = $request->goods_name;
+        $goods->stock = $request->stock;
+        $goods->price = $request->price;
+        $goods->picture = $extension;
+        $goods->save();
+        
         return redirect('admin/stock');
     }
+
+    public function goodsStockAddPost(Request $request)
+    {        
+        $this->validate($request,[
+            'price' => 'required|numeric',
+            'stock' => 'required|numeric',
+            'id_category' => 'required|numeric'
+            ]);
+
+        $admin = Session::get('id_admin');
+        // $photo = $request->file('picture');
+        // $photoName = $photo->getClientOriginalName();        
+        // if($request->id_category == '1'){
+        //     $file->move('productImages/shirt',$photoName);
+        // }else if($request->id_category == '2'){
+        //     $file->move('productImages/pants',$photoName);
+        // }else{
+        //     $file->move('productImages/dress',$photoName);
+        // }        
+        $goods = new Goods();
+        $goods->id_category = $request->id_category;
+        $goods->goods_name = $request->goods_name;
+        $goods->stock = $request->stock;
+        $goods->id_admin = $admin; 
+        $goods->price = $request->price;
+        $goods->id_category = $request->id_category;
+        // $goods->picture = $photoName;
+        $goods->description = $request->description;
+        $goods->save();    
+        // $save = $photo->move($file,$photoName);
+        return redirect('admin/stock');
+    }    
 
     //--------------------------- END GOODS STOCK ----------------------------------//
     public function dataUser()
