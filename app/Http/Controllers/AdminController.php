@@ -72,6 +72,12 @@ class AdminController extends Controller
         ->get();
         return view('goods/index',compact('data','data_admin'));
     }
+    public function goodsStockEdit($id)
+    {
+        $data_admin = Session::get('nama_admin');
+        $data = DB::table('goods')->where('id_goods',$id)->first();
+        return view('goods.edit',compact('data','data_admin'));
+    }
     public function dataUser()
     {
         $data_admin = Session::get('nama_admin');

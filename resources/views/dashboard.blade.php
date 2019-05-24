@@ -64,9 +64,9 @@
                                 </li> -->
                             </ul>
                         </div>
-				{{-- <div class="navbar-btn">
+				<div class="navbar-btn">
 					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
-				</div>				 --}}
+				</div>				
 				<div id="navbar-menu">
 					<ul class="nav navbar-nav navbar-right">												
 					</ul>

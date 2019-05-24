@@ -23,6 +23,7 @@
             <td>Price</td>
             <td>Picture</td>
             <td>Category</td>
+            <td>Action</td>
         </tr>
         </thead>
         <tbody>
@@ -32,6 +33,9 @@
             <td>Rp. {{number_format($data->price,0,'.','.')}}</td>
             <td><img src="{{asset('productImages/food').'/'.$data->picture}}" height="50px"></td>
             <td>{{$data->cat_name}}</td>
+            <td>
+            <a href="{{url('admin/stock/edit',$data->id_goods)}}" class=" btn btn-sm btn-warning">Edit</a>
+            </td>
         </tbody>
         @endforeach
     </table>
