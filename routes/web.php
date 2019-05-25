@@ -25,13 +25,16 @@ Route::get('admin/login/loginPost','AdminController@loginPost');
 Route::get('admin/logout','AdminController@logout');
 Route::get('admin/home','AdminController@index');
 
+//--------------------------------buyer------------------------------------//
 Route::get('buyer/login','BuyerController@login');
 Route::get('buyer/login/loginPostBuyer','BuyerController@loginPostBuyer');
 Route::get('buyer/register','BuyerController@register');
-Route::get('buyer/register/registerBuyer','BuyerController@registerBuyer');
-
+Route::post('buyer/registerBuyer','BuyerController@saveRegisterBuyer');
 Route::get('buyer/logout','BuyerController@logout');
+Route::get('buyer/setting/{id_buyer}','BuyerController@setting');
+Route::post('buyer/updateSettingBuyer','BuyerController@updateSettingBuyer');
 Route::get('buyer/home','BuyerController@index');
+//--------------------------------buyer------------------------------------//
 
 //Stock
 Route::get('admin/stock','AdminController@goodsStock');
