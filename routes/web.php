@@ -17,10 +17,18 @@ Route::get('/', function () {
 Route::get('/back','AdminController@back');
 
 Route::get('admin/login','AdminController@login');
-Route::post('admin/login/loginPost','AdminController@loginPost');
+Route::get('admin/login/loginPost','AdminController@loginPost');
 
 Route::get('admin/logout','AdminController@logout');
 Route::get('admin/home','AdminController@index');
+
+Route::get('buyer/login','BuyerController@login');
+Route::get('buyer/login/loginPostBuyer','BuyerController@loginPostBuyer');
+Route::get('buyer/register','BuyerController@register');
+Route::get('buyer/register/registerBuyer','BuyerController@registerBuyer');
+
+Route::get('buyer/logout','BuyerController@logout');
+Route::get('buyer/home','BuyerController@index');
 
 //Stock
 Route::get('admin/stock','AdminController@goodsStock');

@@ -23,17 +23,24 @@ class AdminController extends Controller
     // }
     public function index()
     {
+        print_r(Session::get('login'));
         if(!Session::get('login')){
             return redirect('/admin/login')->with('alert','Kamu harus login dulu');
         }else{
-        $data = Session::get('nama_admin');
-        return view('home.index',compact('data'));
+            $data = Session::get('nama_admin');
+            return view('home.index',compact('data'));
         }
     }
     
     public function login()
     {
-        return view('login.login');
+        print_r(Session::get('login'));
+        if(!Session::get('login')){
+            return view('login.login');
+        }else{
+        $data = Session::get('nama_admin');
+        return view('home.index',compact('data'));
+        }
     }
 
     public function loginPost(Request $request)
@@ -71,12 +78,6 @@ class AdminController extends Controller
         ->select('goods.*','categories.category_name as cat_name')
         ->get();
         return view('goods/index',compact('data','data_admin'));
-    }
-    public function goodsStockEdit($id)
-    {
-        $data_admin = Session::get('nama_admin');
-        $data = DB::table('goods')->where('id_goods',$id)->first();
-        return view('goods.edit',compact('data','data_admin'));
     }
     public function dataUser()
     {

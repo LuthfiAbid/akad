@@ -19,6 +19,7 @@
 	<!-- ICONS -->
 	<link rel="apple-touch-icon" sizes="76x76" href="{{asset('assets/img/apple-icon.png')}}">
 	<link rel="icon" type="image/png" sizes="96x96" href="{{asset('assets/img/favicon.png')}}">
+	<script type="text/javascript" src="{{URL::asset('assets/js/jquery-1.12.0.min.js')}}"></script>
 </head>
 
 <body>
@@ -38,15 +39,15 @@
                                     @endif                    
                                 </p>                                           
                             </div>
-							<form class="form-auth-small" action="{{url('admin/login/loginPost')}}" method="POST">
+							<form class="form-auth-small" id="form-login" action="" method="get">
 							{{ csrf_field() }}
 								<div class="form-group">
 									<label for="signin-email" class="control-label sr-only">Username</label>
-									<input type="text" class="form-control" name="username" placeholder="Username">
+									<input type="text" id="username" class="form-control" name="username" placeholder="Username">
 								</div>
 								<div class="form-group">
 									<label for="signin-password" class="control-label sr-only">Password</label>
-									<input type="password" class="form-control" name="password" placeholder="Password">
+									<input type="password" id="password" class="form-control" name="password" placeholder="Password">
 								</div>
 								{{-- <div class="form-group clearfix">
 									<label class="fancy-checkbox element-left">
@@ -72,7 +73,54 @@
 			</div>
 		</div>
 	</div>
+
+	<script>
+    // $(document).ready(function(){
+	// 	$.ajax({
+    //             type: "get",
+    //             url: "{{url('admin/home')}}",
+    //             data: {
+    //                 _token: "{{csrf_token()}}",
+    //                 username: $('#username').val()
+    //             },
+    //             success: function (response) {
+       
+                    
+    //             }
+    //         });
+	// });
+
+     $("#form-login").on('submit', function(e){
+        e.preventDefault()
+        var username = $('#username').val();
+        var password = $('#password').val();
+        if(username == ""){
+           alert("Username harus di isi!!!");
+        } else if (password == "") {
+			alert("Password harus di isi!!!");
+        } else {
+            $.ajax({
+                type: "get",
+                url: "{{url('admin/login/loginPost')}}",
+                data: {
+                    _token: "{{csrf_token()}}",
+                    username: username,
+                    password: password
+                },
+                success: function (response) {
+       
+                        alert("Berhasil Masuk")
+						window.location.replace("{{url('admin/home')}}");
+                    
+                }
+            });
+        }
+
+    })
+
+</script>
 	<!-- END WRAPPER -->
 </body>
 
 </html>
+

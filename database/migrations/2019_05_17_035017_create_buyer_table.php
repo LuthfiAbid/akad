@@ -20,8 +20,6 @@ class CreateBuyerTable extends Migration
             $table->string('buyer_name',100);
             $table->string('address');
             $table->string('city');
-            $table->integer('id_admin')->unsigned();
-            $table->foreign('id_admin')->references('id_admin')->on('admin')->onDelete('cascade');
             $table->timestamps();
         });
     }

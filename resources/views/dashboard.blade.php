@@ -155,6 +155,30 @@
 	{{-- <script src="{{URL::asset('assets/vendor/chartist/js/chartist.min.js')}}"></script> --}}
 	<script src="{{URL::asset('assets/scripts/klorofil-common.js')}}"></script>		
 	{{-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script> --}}
+
+	<script>
+    function Logout() {
+		var id_logout = $('#id_logout').val();
+            $.ajax({
+                type: "get",
+                url: "{{ url('admin/logout') }}",
+                data: {
+                    _token: "{{csrf_token()}}",
+                    id_logout: id_logout
+                },
+                success: function (response) {
+						alert("berhasil Logout")
+						location.reload();
+                    
+                }
+            });
+        
+	}
+        
+
+
+
+</script>
 </body>
 
 </html>
