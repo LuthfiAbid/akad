@@ -26,6 +26,14 @@
                     <input type="text" required class="form-control" id="price" name="price" value="{{ $data->price }}">
                 </div>
                 <div class="form-group">
+                        <label for="nama">Categores : </label>
+                        <select class="form-control" class="col-md-5" name="id_category">
+                            <option value="1">Shirt</option>                        
+                            <option value="2">Pants</option>                        
+                            <option value="3">Dress</option>                        
+                        </select>
+                    </div>
+                <div class="form-group">
                     <label for="nama">Picture :</label>
                     <div class="col-md-3-lg"></div>
                     <input type="file" required class="form-control" name="picture">

@@ -10,6 +10,7 @@ use App\Buyer;
 use App\Goods;
 use App\Category;
 use Session;
+use Redirect;
 use Hash;
 use DB;
 
@@ -75,7 +76,7 @@ class AdminController extends Controller
     
     public function logout()
     {
-        Auth::logout(); // logout user
+        // Auth::logout(); // logout user
         Session::flush();
         Redirect::back();
         return redirect('admin/login')->with('alert','Kamu sudah Logout!');
@@ -89,9 +90,87 @@ class AdminController extends Controller
         $data = DB::table('goods')
         ->join('categories','categories.id_category','goods.id_category')
         ->select('goods.*','categories.category_name as cat_name')
+        ->orderBy('id_category','ASC')
         ->get();
         return view('goods/index',compact('data','data_admin'));
     }
+
+    public function goodsStockUpdate(Request $request, $id)
+    {
+        $this->validate($request,[
+            'picture' => 'required|image|mimes:jpeg,png,jpg'
+            ]);
+        $goods = Goods::firstOrNew(['id_goods' => $request->id_goods]);       
+        $file = $request->file('picture');
+        $extension = $file->getClientOriginalName();
+
+        if($goods->id_category == 1){
+        $file->move('productImages/shirt',$extension);
+        }else if($goods->id_category == 2){
+        $file->move('productImages/pants',$extension);
+        }else{
+        $file->move('productImages/dress',$extension);
+        }
+        $goods->goods_name = $request->goods_name;
+        $goods->stock = $request->stock;
+        $goods->price = $request->price;
+        $goods->id_category = $request->id_category;
+        $goods->picture = $extension;
+        $goods->save();
+        
+        return redirect('admin/stock');
+    }
+
+    public function goodsStockEdit($id)
+    {
+        $data_admin = Session::get('nama_admin');
+        $data = DB::table('goods')->where('id_goods',$id)->first();
+        return view('goods.edit',compact('data','data_admin'));
+    }
+
+    public function goodsStockAdd()
+    {
+        $data_admin = Session::get('nama_admin');
+        return view('goods.insert',compact('data_admin'));
+    }
+
+    public function goodsStockAddPost(Request $request)
+    {        
+        $this->validate($request,[
+            'picture' => 'required|image|mimes:jpeg,png,jpg'
+            ]);
+        $goods = Goods::firstOrNew(['id_goods' => $request->id_goods]);       
+        $file = $request->file('picture');
+        $extension = $file->getClientOriginalName();
+        $data_admin = Session::get('id_admin');
+
+        if($goods->id_category == 1){
+        $file->move('productImages/shirt',$extension);
+        }else if($goods->id_category == 2){
+        $file->move('productImages/pants',$extension);
+        }else{
+        $file->move('productImages/dress',$extension);
+        }
+        $goods->goods_name = $request->goods_name;
+        $goods->stock = $request->stock;
+        $goods->price = $request->price;
+        $goods->description = $request->description;
+        $goods->id_admin = $data_admin;
+        $goods->id_category = $request->id_category;
+        $goods->picture = $extension;
+        $goods->save();
+        return redirect('admin/stock');
+    }    
+
+    public function goodsDelete($id)
+    {
+        $data = Goods::findOrFail($id);
+        $data->delete();
+        return redirect('admin/stock');
+    }
+
+    //---------------------------------Data User --------------------------------//
+
     public function dataUser()
     {
         $data_admin = Session::get('nama_admin');

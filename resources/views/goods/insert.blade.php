@@ -6,8 +6,8 @@
             <!-- Remove This Before You Start -->
             <h1>Add Goods Data</h1>
             <hr>
-            <form action="{{url('admin/stock/addPost')}}" method="post">
-                {{ csrf_field() }}
+            <form action="{{url('admin/stock/addPost')}}" method="post" enctype="multipart/form-data">
+                @csrf
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="form-group">
                     <label for="nama">Goods Name :</label>
@@ -29,10 +29,10 @@
                             <option value="3">Dress</option>                        
                         </select>
                     </div>
-                {{-- <div class="form-group">
+                <div class="form-group">
                     <label for="nama">Picture : </label>
-                    <input type="file" class="form-control" name="picture">
-                </div> --}}
+                    <input type="file" name="picture">
+                </div>
                 <div class="form-group">
                     <textarea name="description" cols="50" rows="5" placeholder="Description . . ."></textarea>
                 </div>
