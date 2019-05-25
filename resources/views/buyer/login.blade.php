@@ -47,6 +47,22 @@
 		@include('buyer.footer')
 
 		<script>
+	// 	$(document).ready(function(){
+	// 	$.ajax({
+    //             type: "get",
+    //             url: "{{url('buyer/home')}}",
+    //             data: {
+    //                 _token: "{{csrf_token()}}",
+    //                 username: $('#username').val()
+    //             },
+    //             success: function (response) {
+       
+                    
+    //             }
+    //         });
+	// });
+
+
 		$("#form-login").on('submit', function(e){
         e.preventDefault()
         var username = $('#username').val();
@@ -64,14 +80,10 @@
                     username: username,
                     password: password
                 },
-                success: function (data) {
+                success: function (response) {
        
-                    if(data == 1){
-						alert("Berhasil Masuk")
+                        alert("Berhasil Masuk")
 						window.location.replace("{{url('buyer/home')}}");
-                    }else{
-                    	alert("Username dan Password tidak terdaftar");
-                 	 }
                     
                 }
             });

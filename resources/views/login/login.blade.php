@@ -72,6 +72,21 @@
 	</div>
 
 	<script>
+    // $(document).ready(function(){
+	// 	$.ajax({
+    //             type: "get",
+    //             url: "{{url('admin/home')}}",
+    //             data: {
+    //                 _token: "{{csrf_token()}}",
+    //                 username: $('#username').val()
+    //             },
+    //             success: function (response) {
+       
+                    
+    //             }
+    //         });
+	// });
+
      $("#form-login").on('submit', function(e){
         e.preventDefault()
         var username = $('#username').val();
@@ -89,14 +104,11 @@
                     username: username,
                     password: password
                 },
-                success: function (data) {
-					// console.log(data);
-					if(data == 1){
-						alert("Berhasil Masuk")
+                success: function (response) {
+       
+                        alert("Berhasil Masuk")
 						window.location.replace("{{url('admin/home')}}");
-                    }else{
-                    	alert("Username dan Password tidak terdaftar");
-                 	 }
+                    
                 }
             });
         }
