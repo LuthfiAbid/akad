@@ -14,7 +14,7 @@ class BuyerController extends Controller
     public function index()
     {
         // print_r(Session::get('username'));
-        if(!Session::get('login')){
+        if(!Session::get('login_buyer')){
             return view('buyer.home');
         }else{
         $data = Session::get('buyer_name');
@@ -25,7 +25,7 @@ class BuyerController extends Controller
     public function login()
     {
         // print_r(Session::get('username'));
-        if(!Session::get('login')){
+        if(!Session::get('login_buyer')){
              return view('buyer.login');
         }else{
             $data = Session::get('buyer_name');
@@ -36,19 +36,19 @@ class BuyerController extends Controller
     public function register()
     {
         // print_r(Session::get('username'));
-        if(!Session::get('login')){
+        // if(!Session::get('login_buyer')){
              return view('buyer.register');
-        }else{
-            $data = Session::get('buyer_name');
-        return view('buyer.home',compact('data'));
-        }
+        // }else{
+        //     $data = Session::get('buyer_name');
+        // return view('buyer.home',compact('data'));
+        // }
     }
 
     public function loginPostBuyer(Request $request)
     {
         try {
             $username = $request->username;
-        $password = $request->password;
+            $password = $request->password;
 
         $data = Buyer::where('username',$username)->first();
         if($data){ //apakah email tersebut ada atau tidak
@@ -56,12 +56,12 @@ class BuyerController extends Controller
                 Session::put('buyer_name',$data->buyer_name);
                 Session::put('username',$data->username);
                 Session::put('id_buyer',$data->id_buyer);
-                Session::put('login',TRUE);
+                Session::put('login_buyer',TRUE);
                 // return redirect('buyer/home');
-                var_dump($data);
+                echo 1;
             }
             else{
-                return redirect('/buyer/login')->with('alert','Password atau Username, Salah !');
+                echo 0;
             }
         }
         else{
@@ -73,15 +73,19 @@ class BuyerController extends Controller
         
     }
 
-    public function saveRegisterBuyer(){
+    public function saveRegisterBuyer(Request $request){
         $buyer = new Buyer();
+        if ($buyer) {
         $buyer->username = $request->username;
-        $buyer->password = $request->password;
+        $buyer->password = bcrypt($request->password);
         $buyer->buyer_name = $request->buyer_name;
         $buyer->address = $request->address;
         $buyer->city = $request->city;
         $buyer->save();
-        return redirect('/input');
+           echo 1;
+        }else{
+            echo 0;
+        }
 
     }
 
@@ -90,26 +94,31 @@ class BuyerController extends Controller
         Session::flush();
         return redirect('buyer/home')->with('alert','Kamu sudah Logout!');
     }
-    public function dataUser()
+
+    public function setting(Request $request, $id_buyer)
     {
-        $data_admin = Session::get('nama_buyer');
-        $data = DB::table('buyer')->get();
-        return view('buyer.index',compact('data','data_admin'));
+        $data_buyer = DB::table('buyer')->where('id_buyer',$id_buyer)->first();
+        $data = Session::get('buyer_name');
+        return view('buyer.setting',compact('data_buyer','data'));
     }
-    public function dataUserEdit(Request $request, $id)
+    public function updateSettingBuyer(Request $request)
     {
-        $data = DB::table('buyer')->where('id_buyer',$id)->first();
-        $data_admin = Session::get('nama_buyer');
-        return view('buyer.edit',compact('data','data_buyer'));
-    }
-    public function editDataUserPost(Request $request)
-    {
-        $data = Buyer::where('id_buyer',$request->id_buyer)->first();
-        $data->id_buyer = $request->id_buyer;
-        $data->buyer_name = $request->buyer_name;
-        $data->address = $request->address;
-        $data->city = $request->city;
-        $data->save();
-        return redirect('buyer/dataUser')->with('alert','Data has been edit!');
+        $buyer = Buyer::firstOrNew(['id_buyer' => $request->id_buyer]);
+        $buyer->username = $request->username;
+        if ($request->password != "no") {
+            $buyer->password = bcrypt($request->password);
+        }
+        $buyer->buyer_name = $request->buyer_name;
+        $buyer->address = $request->address;
+        $buyer->city = $request->city;
+        $buyer->save();
+            if ($buyer) {
+            Session::put('username', $request->username);
+            Session::put('buyer_name', $request->buyer_name);
+                echo 1;
+            } else {
+                echo 0;
+            }
+        // return redirect('buyer/dataUser')->with('alert','Data has been edit!');
     }
 }

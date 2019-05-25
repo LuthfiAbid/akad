@@ -48,14 +48,14 @@
 					<ul class="header-links pull-right">
 						<!-- <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li> -->
 					
-						@if(Session::get('login'))
+						@if(Session::get('login_buyer'))
 						
          {
 					<!-- <li><i class="fa fa-user-o"></i><label style="color:white;" for="">{{$data}}</label></li> -->
 					<li class="dropdown">
 						<a href="#" data-toggle="dropdown"><i class="fa fa-user-o"></i>{{$data}}</a>
 							<ul class="dropdown-menu">
-							<li><a href="#"><p style="color:black;"><i class="fa fa-cog" aria-hidden="true"> Setting</i></p></a></li>
+							<li><a href="{{URL::asset('buyer/setting')}}/{{Session::get('id_buyer')}}"><p style="color:black;"><i class="fa fa-cog" aria-hidden="true"> Setting</i></p></a></li>
 								<li><a onclick="logout_buyer()" href="#"><p style="color:black;"><i class="fa fa-sign-out" aria-hidden="true"> Logout</i></p></a></li>
 										<input id="id_logout" type="hidden" value="1">
 							</ul>
@@ -63,9 +63,10 @@
          }
          @else{
 					<li><a href="{{URL::asset('buyer/login')}}"><i class="fa fa-user-o"></i>Login</a></li>
+					<li><a href="{{URL::asset('buyer/register')}}"><i class="fa fa-registered"></i>Register</a></li>
          }
          @endif
-						<li><a href="{{URL::asset('buyer/register')}}"><i class="fa fa-registered"></i>Register</a></li>
+					
 					</ul>
 				</div>
 			</div>
