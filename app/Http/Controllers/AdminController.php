@@ -4,23 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Admin;
 use App\Buyer;
+use App\Goods;
+use App\Category;
 use Session;
 use Hash;
 use DB;
 
 class AdminController extends Controller
 {
+    use AuthenticatesUsers;
+ 
     /**
-     * Display a listing of the resource.
+     * Where to redirect users after login.
      *
-     * @return \Illuminate\Http\Response
+     * @var string
      */
-    // public function back()
-    // {
-    //     return redirect()->back();
-    // }
+    protected $redirectTo = 'admin/home';
+    public function __construct()
+    {
+        $this->redirectTo = 'admin/login';
+        // $this->middleware('guest', ['except' => 'logout']);
+    }
     public function index()
     {
         print_r(Session::get('login'));
@@ -31,7 +38,7 @@ class AdminController extends Controller
             return view('home.index',compact('data'));
         }
     }
-    
+    //---------------------------------LOGIN & LOGOUT----------------------------------//
     public function login()
     {
         print_r(Session::get('login'));
@@ -65,11 +72,17 @@ class AdminController extends Controller
             return redirect('/admin/login')->with('alert','Password atau Username, Salah!');
         }
     }
+    
     public function logout()
     {
+        Auth::logout(); // logout user
         Session::flush();
+        Redirect::back();
         return redirect('admin/login')->with('alert','Kamu sudah Logout!');
     }
+    //------------------------------- END LOGIN & LOGOUT --------------------------//
+
+    //------------------------------ GOODS STOCK ----------------------------------//
     public function goodsStock()
     {
         $data_admin = Session::get('nama_admin');

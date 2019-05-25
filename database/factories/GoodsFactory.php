@@ -4,7 +4,7 @@
 use Faker\Generator as Faker;
 
 $factory->define(App\Goods::class, function (Faker $faker) {
-    $random = "productImages/food/";
+    $random = "productImages/shirt/";
     $num_originals = 3;
     return [
         'goods_name' => $faker->name,

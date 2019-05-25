@@ -11,8 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware' => 'revalidate'],function(){
+    Auth::routes();
+    Route::get('admin/home','AdminController@index');
+
+
 });
 Route::get('/back','AdminController@back');
 
@@ -33,6 +36,9 @@ Route::get('buyer/home','BuyerController@index');
 //Stock
 Route::get('admin/stock','AdminController@goodsStock');
 Route::get('admin/stock/edit/{id}','AdminController@goodsStockEdit');
+Route::put('admin/stock/editPost/{id}','AdminController@goodsStockUpdate');
+Route::get('admin/stock/add','AdminController@goodsStockAdd');
+Route::post('admin/stock/addPost','AdminController@goodsStockAddPost');
 
 //User
 Route::get('admin/dataUser','AdminController@dataUser');
