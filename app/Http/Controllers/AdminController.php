@@ -125,13 +125,15 @@ class AdminController extends Controller
     {
         $data_admin = Session::get('nama_admin');
         $data = DB::table('goods')->where('id_goods',$id)->first();
-        return view('goods.edit',compact('data','data_admin'));
+        $category = Category::all();
+        return view('goods.edit',compact('data','data_admin','category'));
     }
 
     public function goodsStockAdd()
     {
         $data_admin = Session::get('nama_admin');
-        return view('goods.insert',compact('data_admin'));
+        $category = Category::all();
+        return view('goods.insert',compact('data_admin','category'));
     }
 
     public function goodsStockAddPost(Request $request)

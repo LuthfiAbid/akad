@@ -26,11 +26,11 @@
                     <input type="text" required class="form-control" id="price" name="price" value="{{ $data->price }}">
                 </div>
                 <div class="form-group">
-                        <label for="nama">Categores : </label>
-                        <select class="form-control" class="col-md-5" name="id_category">
-                            <option value="1">Shirt</option>                        
-                            <option value="2">Pants</option>                        
-                            <option value="3">Dress</option>                        
+                    <label for="nama">Categores : </label>
+                    <select class="form-control" class="col-md-5" name="id_category">
+                        @foreach ($category as $categories)                        
+                            <option value="{{$categories->id_category}}">{{$categories->category_name}}</option>                                                
+                        @endforeach
                         </select>
                     </div>
                 <div class="form-group">

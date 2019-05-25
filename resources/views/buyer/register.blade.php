@@ -32,7 +32,7 @@
                         <input type="password" id="password" class="col-xs-4" name="password" placeholder="Password">
                         <br>
                         <br>
-												<label for="">Address</label>
+												<label for="">Address.</label>
                         <br>
 												<textarea name="address" id="address" cols="30" rows="3"></textarea>
                          <!-- <input type="text" id="address" class="col-xs-4" name="address" placeholder="Address"> -->

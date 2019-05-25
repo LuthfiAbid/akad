@@ -24,9 +24,9 @@
                 <div class="form-group">
                         <label for="nama">Categores : </label>
                         <select class="form-control" class="col-md-5" name="id_category">
-                            <option value="1">Shirt</option>                        
-                            <option value="2">Pants</option>                        
-                            <option value="3">Dress</option>                        
+                            @foreach ($category as $item)
+                                <option value="{{$item->id_category}}">{{$item->category_name}}</option>                                                                              
+                            @endforeach
                         </select>
                     </div>
                 <div class="form-group">
