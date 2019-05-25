@@ -63,14 +63,15 @@ class AdminController extends Controller
                 Session::put('username',$data->username);
                 Session::put('id_admin',$data->id_admin);
                 Session::put('login',TRUE);
-                return redirect('/admin/home');
+                // return redirect('/admin/home');
+                echo 1;
             }
             else{
-                return redirect('/admin/login')->with('alert','Password atau Username, Salah !');
+                echo 0;
             }
         }
         else{
-            return redirect('/admin/login')->with('alert','Password atau Username, Salah!');
+            return redirect('/admin/home')->with('alert','Password atau Username, Salah!');
         }
     }
     
@@ -78,7 +79,6 @@ class AdminController extends Controller
     {
         // Auth::logout(); // logout user
         Session::flush();
-        Redirect::back();
         return redirect('admin/login')->with('alert','Kamu sudah Logout!');
     }
     //------------------------------- END LOGIN & LOGOUT --------------------------//

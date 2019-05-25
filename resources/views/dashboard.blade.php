@@ -168,7 +168,7 @@
                 },
                 success: function (response) {
 						alert("berhasil Logout")
-						location.reload();
+						window.location.replace("{{url('admin/home')}}");
                     
                 }
             });

@@ -112,12 +112,12 @@
 		<!-- /FOOTER -->
 
 		<!-- jQuery Plugins -->
-		<script src="js/jquery.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/slick.min.js"></script>
-		<script src="js/nouislider.min.js"></script>
-		<script src="js/jquery.zoom.min.js"></script>
-		<script src="js/main.js"></script>
+		<script src="{{URL::asset('buyer/js/jquery.min.js')}}"></script>
+		<script src="{{URL::asset('buyer/js/bootstrap.min.js')}}"></script>
+		<script src="{{URL::asset('buyer/js/slick.min.js')}}"></script>
+		<script src="{{URL::asset('buyer/js/nouislider.min.js')}}"></script>
+		<script src="{{URL::asset('buyer/js/jquery.zoom.min.js')}}"></script>
+		<script src="{{URL::asset('buyer/js/main.js')}}"></script>
 
 
 		<script>
