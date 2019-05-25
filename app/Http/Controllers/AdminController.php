@@ -124,7 +124,10 @@ class AdminController extends Controller
     public function goodsStockEdit($id)
     {
         $data_admin = Session::get('nama_admin');
-        $data = DB::table('goods')->where('id_goods',$id)->first();
+        $data = DB::table('goods')
+        ->join('categories','categories.id_category','goods.id_category')
+        ->where('id_goods',$id)
+        ->first();
         $category = Category::all();
         return view('goods.edit',compact('data','data_admin','category'));
     }
