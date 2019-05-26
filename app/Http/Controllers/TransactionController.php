@@ -23,6 +23,28 @@ class TransactionController extends Controller
         }
     }
 
+    public function viewChart(){
+        $detail_transaction = DB::table('transaction')
+                    ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
+                    ->join('goods','detail_transaction.id_goods','goods.id_goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
+                    ->where('id_buyer',"=", Session::get('id_buyer'))
+                    ->get();
+        return view('buyer.content.view_chart', compact('detail_transaction'));
+    }
+
+    public function viewCheckout(){
+        $detail_transaction = DB::table('transaction')
+                    ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
+                    ->join('goods','detail_transaction.id_goods','goods.id_goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
+                    ->where('id_buyer',"=", Session::get('id_buyer'))
+                    ->get();
+        return view('buyer.content.checkout', compact('detail_transaction'));
+    }
+
     public function getViewGoods($id_goods)
     {
 
@@ -38,9 +60,33 @@ class TransactionController extends Controller
                         ->orderBy('id_goods','ASC')
                         ->limit(4)
                         ->get();
-           return view('buyer.content.product',compact('data_goods','goods'));
+            $detail_transaction = DB::table('transaction')
+                        ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
+                        ->join('goods','detail_transaction.id_goods','goods.id_goods')
+                        ->join('categories','categories.id_category','goods.id_category')
+                        ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
+                        ->where('id_buyer',"=", Session::get('id_buyer'))
+                        ->get();
+           return view('buyer.content.product',compact('data_goods','goods','detail_transaction'));
 
     }
+
+    public function viewCountSubtotal(Request $request){
+        $count = DB::table('detail_transaction')
+            ->where('id_transaction', "=", $request->id_transaction)
+            ->sum('qty');
+
+            $sum = DB::table('detail_transaction')
+            ->where('id_transaction', "=", $request->id_transaction)
+            ->sum('subtotal');
+
+             $data = array('data_count'=>$count, 'data_sum'=>$sum);
+
+           echo json_encode($data);
+
+    }
+
+
 
     public function createTransaction(Request $request)
     {
@@ -95,6 +141,19 @@ class TransactionController extends Controller
             echo 2;
         }
 
+
+    }
+
+    public function deleteDetail(Request $request)
+    {
+        try {
+            $id = $request->id_detail;
+            $data = DetailTransaction::findOrFail($id);
+            $data->delete();
+            echo 1;
+        } catch (\Throwable $th) {
+            echo 0;
+        }
 
     }
 

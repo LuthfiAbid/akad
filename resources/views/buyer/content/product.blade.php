@@ -213,6 +213,7 @@
             success: function (data) {
                 if(data == 1){
                     alert("Berhasil Ditabah di Chart")
+                    location.reload();
                     // window.location.replace("{{url('buyer/viewChart')}}");
                 }else{
                     alert("Gagal Ditambahkan");

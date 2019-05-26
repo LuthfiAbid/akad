@@ -40,6 +40,10 @@ Route::get('buyer/home','BuyerController@index');
 Route::get('admin/stock','AdminController@goodsStock');
 Route::get('buyer/getViewGoods/{id}','TransactionController@getViewGoods');
 Route::get('buyer/createTransaction','TransactionController@createTransaction');
+Route::get('buyer/viewCountSubtotal','TransactionController@viewCountSubtotal');
+Route::get('buyer/viewChart','TransactionController@viewChart');
+Route::get('buyer/viewCheckout','TransactionController@viewCheckout');
+Route::post('buyer/deleteDetail','TransactionController@deleteDetail');
 //--------------------------------------------------------------------//
 
 //-----------------------------Stock----------------------------------//
