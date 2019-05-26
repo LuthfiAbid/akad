@@ -36,8 +36,8 @@
                                     @if (session('alert'))
                                         {{-- <div class="alert alert-danger"> --}}
                                         {{ session('alert') }}
-                                    @endif                    
-                                </p>                                           
+                                    @endif
+                                </p>
                             </div>
 							<form class="form-auth-small" id="form-login" action="" method="get">
 							{{ csrf_field() }}

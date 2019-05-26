@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<!-- VENDOR CSS -->	
+	<!-- VENDOR CSS -->
 	<link rel="stylesheet" href="{{URL::asset('assets/vendor/bootstrap/css/bootstrap.min.css')}}">
 	<link rel="stylesheet" href="{{URL::asset('assets/vendor/font-awesome/css/font-awesome.min.css')}}">
 	<link rel="stylesheet" href="{{URL::asset('assets/vendor/linearicons/style.css')}}">
@@ -66,16 +66,16 @@
                         </div>
 				<div class="navbar-btn">
 					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
-				</div>				
+				</div>
 				<div id="navbar-menu">
-					<ul class="nav navbar-nav navbar-right">												
+					<ul class="nav navbar-nav navbar-right">
 					</ul>
 				</div>
 			</div>
 		</nav>
 		<!-- END NAVBAR -->
 		<!-- LEFT SIDEBAR -->
-		<div id="sidebar-nav" class="sidebar">            
+		<div id="sidebar-nav" class="sidebar">
 			<div class="sidebar-scroll">
                 <nav>
 					<ul class="nav">
@@ -126,11 +126,11 @@
 						<i class='fa fa-edit'></i>
 							<span>Logout</span>
             				</a>
-						</li--}}				
+						</li--}}
 					</ul>
 				</nav>
 			</div>
-        </div>       
+        </div>
 		<!-- END LEFT SIDEBAR -->
 		<!-- MAIN -->
 		<div class="main">
@@ -145,7 +145,7 @@
 			</div>
 		</div>
 		<!-- END MAIN -->
-		<div class="clearfix"></div>		
+		<div class="clearfix"></div>
 	</div>
 	<!-- END WRAPPER -->
 	<!-- Javascript -->
@@ -153,7 +153,7 @@
 	<script type="text/javascript" src="{{URL::asset('assets/js/jquery.dataTables.min.js')}}"></script>
 	<script src="{{URL::asset('assets/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
 	{{-- <script src="{{URL::asset('assets/vendor/chartist/js/chartist.min.js')}}"></script> --}}
-	<script src="{{URL::asset('assets/scripts/klorofil-common.js')}}"></script>		
+	<script src="{{URL::asset('assets/scripts/klorofil-common.js')}}"></script>
 	{{-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script> --}}
 
 	<script>
@@ -169,12 +169,12 @@
                 success: function (response) {
 						alert("berhasil Logout")
 						window.location.replace("{{url('admin/home')}}");
-                    
+
                 }
             });
-        
+
 	}
-        
+
 
 
 

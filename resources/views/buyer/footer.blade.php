@@ -1,6 +1,6 @@
 
 <!-- NEWSLETTER -->
-		<div id="newsletter" class="section">
+<div id="newsletter" class="section">
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
@@ -121,6 +121,47 @@
 
 
 		<script>
+
+        $( document ).ready(function() {
+        var id_transaction = $('#id_transaction').val();
+            $.ajax({
+                type: "get",
+                url: "{{ url('buyer/viewCountSubtotal') }}",
+                data: {
+                    _token: "{{csrf_token()}}",
+                    id_transaction: id_transaction
+                },
+                dataType : 'json',
+                success: function (data) {
+
+                    var count = data.data_count;
+                    var sum = data.data_sum;
+                    if (count == 0) {
+                        $('#count').html('<small>0 Item(s) selected</small>');
+                        $('#count2').html('<div class="qty">0</div>');
+                        $('#sum').html('<h5">SUBTOTAL: Rp. 0</h5>');
+                        $('#sum2').html('<h3 align="right">SUBTOTAL: Rp. 0</h3>');
+                        $('#sum3').html('<strong class="order-total">RP. 0</strong>');
+
+                    }else{
+                        $('#count').html('<small>'+count+' Item(s) selected</small>');
+                        $('#count2').html('<div class="qty">'+count+'</div>');
+                        $('#sum').html('<h5>SUBTOTAL: '+sum+'</h5>');
+                        $('#sum2').html('<h3 align="right">SUBTOTAL: '+sum+'</h3>');
+                        $('#sum3').html('<strong class="order-total">'+sum+'</strong>');
+                    }
+                }
+
+        });
+        })
+
+        function viewChart() {
+            window.location.replace("{{url('buyer/viewChart')}}");
+        }
+
+        function viewCheckout() {
+            window.location.replace("{{url('buyer/viewCheckout')}}");
+        }
 		function logout_buyer() {
 		var id_logout = $('#id_logout').val();
             $.ajax({
@@ -132,11 +173,11 @@
                 },
                 success: function (response) {
 						alert("berhasil Logout")
-						location.reload();
-                    
+						window.location.replace("{{url('buyer/home')}}");
+
                 }
             });
-        
+
 	}
 		</script>
 		</body>
