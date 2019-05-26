@@ -36,6 +36,12 @@ Route::post('buyer/updateSettingBuyer','BuyerController@updateSettingBuyer');
 Route::get('buyer/home','BuyerController@index');
 //--------------------------------buyer------------------------------------//
 
+//---------------------Transaction Buyer------------------------------//
+Route::get('admin/stock','AdminController@goodsStock');
+Route::get('buyer/getViewGoods/{id}','TransactionController@getViewGoods');
+Route::get('buyer/createTransaction','TransactionController@createTransaction');
+//--------------------------------------------------------------------//
+
 //-----------------------------Stock----------------------------------//
 Route::get('admin/stock','AdminController@goodsStock');
 Route::get('admin/stock/edit/{id}','AdminController@goodsStockEdit');

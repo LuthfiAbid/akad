@@ -65,14 +65,14 @@
                     password: password
                 },
                 success: function (data) {
-       
+
                     if(data == 1){
 						alert("Berhasil Masuk")
 						window.location.replace("{{url('buyer/home')}}");
                     }else{
                     	alert("Username dan Password tidak terdaftar");
                  	 }
-                    
+
                 }
             });
         }

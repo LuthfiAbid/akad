@@ -132,11 +132,11 @@
                 },
                 success: function (response) {
 						alert("berhasil Logout")
-						location.reload();
-                    
+						window.location.replace("{{url('buyer/home')}}");
+
                 }
             });
-        
+
 	}
 		</script>
 		</body>

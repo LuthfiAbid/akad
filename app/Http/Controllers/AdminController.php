@@ -17,7 +17,7 @@ use DB;
 class AdminController extends Controller
 {
     use AuthenticatesUsers;
- 
+
     /**
      * Where to redirect users after login.
      *
@@ -63,22 +63,21 @@ class AdminController extends Controller
                 Session::put('username',$data->username);
                 Session::put('id_admin',$data->id_admin);
                 Session::put('login',TRUE);
-                // return redirect('/admin/home');
                 echo 1;
-            }
-            else{
-                echo 0;
+            }else{
+               echo 0;
             }
         }
         else{
-            return redirect('/admin/home')->with('alert','Password atau Username, Salah!');
+            return redirect('/admin/login')->with('alert','Password atau Username, Salah!');
         }
     }
-    
+
     public function logout()
     {
         // Auth::logout(); // logout user
         Session::flush();
+        Redirect::back();
         return redirect('admin/login')->with('alert','Kamu sudah Logout!');
     }
     //------------------------------- END LOGIN & LOGOUT --------------------------//
@@ -100,7 +99,7 @@ class AdminController extends Controller
         $this->validate($request,[
             'picture' => 'required|image|mimes:jpeg,png,jpg'
             ]);
-        $goods = Goods::firstOrNew(['id_goods' => $request->id_goods]);       
+        $goods = Goods::firstOrNew(['id_goods' => $request->id_goods]);
         $file = $request->file('picture');
         $extension = $file->getClientOriginalName();
 
@@ -117,7 +116,7 @@ class AdminController extends Controller
         $goods->id_category = $request->id_category;
         $goods->picture = $extension;
         $goods->save();
-        
+
         return redirect('admin/stock');
     }
 
@@ -135,11 +134,11 @@ class AdminController extends Controller
     }
 
     public function goodsStockAddPost(Request $request)
-    {        
+    {
         $this->validate($request,[
             'picture' => 'required|image|mimes:jpeg,png,jpg'
             ]);
-        $goods = Goods::firstOrNew(['id_goods' => $request->id_goods]);       
+        $goods = Goods::firstOrNew(['id_goods' => $request->id_goods]);
         $file = $request->file('picture');
         $extension = $file->getClientOriginalName();
         $data_admin = Session::get('id_admin');
@@ -160,7 +159,7 @@ class AdminController extends Controller
         $goods->picture = $extension;
         $goods->save();
         return redirect('admin/stock');
-    }    
+    }
 
     public function goodsDelete($id)
     {

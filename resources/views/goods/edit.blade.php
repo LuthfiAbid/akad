@@ -26,6 +26,14 @@
                     <input type="text" required class="form-control" id="price" name="price" value="{{ $data->price }}">
                 </div>
                 <div class="form-group">
+                        <label for="nama">Categores : </label>
+                        <select class="form-control" class="col-md-5" name="id_category">
+                            <option value="1">Shirt</option>                        
+                            <option value="2">Pants</option>                        
+                            <option value="3">Dress</option>                        
+                        </select>
+                    </div>
+                <div class="form-group">
                     <label for="nama">Picture :</label>
                     <div class="col-md-3-lg"></div>
                     <input type="file" required class="form-control" name="picture">
@@ -37,33 +45,6 @@
                 </div>
             </form>
         </div>
-        {{-- <script type="text/javascript">
-		
-            var rupiah = document.getElementById('price');
-            rupiah.addEventListener('keyup', function(e){
-                // tambahkan 'Rp.' pada saat form di ketik
-                // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-                rupiah.value = formatRupiah(this.value, 'Rp. ');
-            });
-     
-            /* Fungsi formatRupiah */
-            function formatRupiah(angka, prefix){
-                var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                split   		= number_string.split(','),
-                sisa     		= split[0].length % 3,
-                rupiah     		= split[0].substr(0, sisa),
-                ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
-     
-                // tambahkan titik jika yang di input sudah menjadi angka ribuan
-                if(ribuan){
-                    separator = sisa ? '.' : '';
-                    rupiah += separator + ribuan.join('.');
-                }
-     
-                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-            }
-        </script> --}}
         <!-- /.content -->
     </section>
     @endsection

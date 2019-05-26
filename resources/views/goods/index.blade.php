@@ -24,17 +24,24 @@
         </thead>
         <tbody>
             @foreach ($data as $data)                
-            <td>{{$data->goods_name}}</td>
-            <td>{{$data->stock}}</td>
-            <td>Rp. {{number_format($data->price,0,'.','.')}}</td>
-            <td><img src="{{asset('productImages/shirt').'/'.$data->picture}}" height="50px"></td>
-            <td>{{$data->cat_name}}</td>
-            <td>
-            <a href="{{url('admin/stock/edit',$data->id_goods)}}" class=" btn btn-sm btn-warning">Edit</a>
-            </td>
+                <form action="{{url('admin/stock/delete',$data->id_goods)}}" method="POST">
+                    <td>{{$data->goods_name}}</td>
+                    <td>{{$data->stock}}</td>
+                    <td>Rp. {{number_format($data->price,0,'.','.')}}</td>
+                    <td><img src="{{asset('productImages/shirt').'/'.$data->picture}}" height="50px"></td>
+                    <td>{{$data->cat_name}}</td>
+                    <td>
+                    <a href="{{url('admin/stock/edit',$data->id_goods)}}" class=" btn btn-sm btn-warning">Edit</a>        
+                    <form action="{{url('admin/stock/delete',$data->id_goods)}}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    </td>
+            </form>
         </tbody>
-        @endforeach
-    </table>
+            @endforeach
+        </table>
     @endsection
     @section('navmenu')
     <li class="dropdown">

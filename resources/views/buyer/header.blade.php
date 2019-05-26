@@ -47,13 +47,13 @@
 					</ul>
 					<ul class="header-links pull-right">
 						<!-- <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li> -->
-					
+
 						@if(Session::get('login_buyer'))
-						
+
          {
-					<!-- <li><i class="fa fa-user-o"></i><label style="color:white;" for="">{{$data}}</label></li> -->
+					<!-- <li><i class="fa fa-user-o"></i><label style="color:white;" for="">{{Session::get('buyer_name')}}</label></li> -->
 					<li class="dropdown">
-						<a href="#" data-toggle="dropdown"><i class="fa fa-user-o"></i>{{$data}}</a>
+						<a href="#" data-toggle="dropdown"><i class="fa fa-user-o"></i>{{Session::get('buyer_name')}}</a>
 							<ul class="dropdown-menu">
 							<li><a href="{{URL::asset('buyer/setting')}}/{{Session::get('id_buyer')}}"><p style="color:black;"><i class="fa fa-cog" aria-hidden="true"> Setting</i></p></a></li>
 								<li><a onclick="logout_buyer()" href="#"><p style="color:black;"><i class="fa fa-sign-out" aria-hidden="true"> Logout</i></p></a></li>
@@ -66,7 +66,7 @@
 					<li><a href="{{URL::asset('buyer/register')}}"><i class="fa fa-registered"></i>Register</a></li>
          }
          @endif
-					
+
 					</ul>
 				</div>
 			</div>
@@ -89,7 +89,7 @@
 							</div>
 						</div>
 						<!-- /LOGO -->
-	
+
 						<!-- SEARCH BAR -->
 						<div class="col-md-7">
 							<div class="header-search">
@@ -111,7 +111,7 @@
 						<div class="col-md-2 clearfix">
 							<div class="header-ctn">
 								<!-- Wishlist -->
-								
+
 								<!-- /Wishlist -->
 
 								<!-- Cart -->
@@ -123,18 +123,29 @@
 									</a>
 									<div class="cart-dropdown">
 										<div class="cart-list">
+                                            @if (Session::get('login_buyer'))
+
+                                                @foreach ($detail_transaction as $detail_transaction)
 											<div class="product-widget">
 												<div class="product-img">
-													<img src="./img/product01.png" alt="">
+													<img src="{{asset('productImages/shirt').'/'.$detail_transaction->picture}}" alt="">
 												</div>
 												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+													<h3 class="product-name"><a href="#">{{$detail_transaction->goods_name}}</a></h3>
+													<h4 class="product-price"><span class="qty">{{$detail_transaction->qty}}</span>Rp. {{number_format($detail_transaction->subtotal,0,'.','.')}}</h4>
 												</div>
 												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
+                                            </div>
+                                            @endforeach
 
-											<div class="product-widget">
+                                            @else
+                                                <div class="product-widget">
+                                                        No Items Purchased
+                                                    </div>
+
+                                            @endif
+
+											{{-- <div class="product-widget">
 												<div class="product-img">
 													<img src="./img/product02.png" alt="">
 												</div>
@@ -143,7 +154,7 @@
 													<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
 												</div>
 												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
+											</div> --}}
 										</div>
 										<div class="cart-summary">
 											<small>3 Item(s) selected</small>

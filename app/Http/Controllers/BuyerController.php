@@ -15,21 +15,88 @@ class BuyerController extends Controller
     {
         // print_r(Session::get('username'));
         if(!Session::get('login_buyer')){
-            return view('buyer.home');
+            $goods = DB::table('goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','categories.category_name as cat_name')
+                    ->orderBy('id_goods','ASC')
+                    ->limit(5)
+                    ->get();
+            $goodss = DB::table('goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','categories.category_name as cat_name')
+                    ->orderBy('id_goods','DESC')
+                    ->limit(5)
+                    ->get();
+            $goods_w_ts = DB::table('goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','categories.category_name as cat_name')
+                    ->orderBy('id_goods','DESC')
+                    ->limit(6)
+                    ->get();
+            $goods_w_np = DB::table('goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','categories.category_name as cat_name')
+                    ->orderBy('id_goods','ASC')
+                    ->limit(6)
+                    ->get();
+            $goods_w_a = DB::table('goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','categories.category_name as cat_name')
+                    ->orderBy('id_goods','ASC')
+                    ->limit(6)
+                    ->get();
+        return view('buyer.home',compact('goods','goodss', 'goods_w_ts', 'goods_w_np', 'goods_w_a'));
         }else{
-        $data = Session::get('buyer_name');
-            return view('buyer.home',compact('data'));
+            $goods = DB::table('goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','categories.category_name as cat_name')
+                    ->orderBy('id_goods','ASC')
+                    ->limit(5)
+                    ->get();
+            $goodss = DB::table('goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','categories.category_name as cat_name')
+                    ->orderBy('id_goods','DESC')
+                    ->limit(5)
+                    ->get();
+            $goods_w_ts = DB::table('goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','categories.category_name as cat_name')
+                    ->orderBy('id_goods','DESC')
+                    ->limit(6)
+                    ->get();
+            $goods_w_np = DB::table('goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','categories.category_name as cat_name')
+                    ->orderBy('id_goods','ASC')
+                    ->limit(6)
+                    ->get();
+            $goods_w_a = DB::table('goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','categories.category_name as cat_name')
+                    ->orderBy('id_goods','ASC')
+                    ->limit(6)
+                    ->get();
+
+            $detail_transaction = DB::table('transaction')
+                    ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
+                    ->join('goods','detail_transaction.id_goods','goods.id_goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
+                    ->where('id_buyer',"=", Session::get('id_buyer'))
+                    ->get();
+                return view('buyer.home',compact('detail_transaction','goods', 'goodss', 'goods_w_ts', 'goods_w_np', 'goods_w_a'));
         }
     }
-    
+
     public function login()
     {
         // print_r(Session::get('username'));
         if(!Session::get('login_buyer')){
              return view('buyer.login');
         }else{
-            $data = Session::get('buyer_name');
-        return view('buyer.home',compact('data'));
+
+        return view('buyer.home');
         }
     }
 
@@ -70,7 +137,7 @@ class BuyerController extends Controller
           } catch (Exception $e) {
                   return $e;
           }
-        
+
     }
 
     public function saveRegisterBuyer(Request $request){
@@ -97,9 +164,15 @@ class BuyerController extends Controller
 
     public function setting(Request $request, $id_buyer)
     {
+        $detail_transaction = DB::table('transaction')
+                    ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
+                    ->join('goods','detail_transaction.id_goods','goods.id_goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
+                    ->where('id_buyer',"=", Session::get('id_buyer'))
+                    ->get();
         $data_buyer = DB::table('buyer')->where('id_buyer',$id_buyer)->first();
-        $data = Session::get('buyer_name');
-        return view('buyer.setting',compact('data_buyer','data'));
+        return view('buyer.setting',compact('data_buyer','detail_transaction'));
     }
     public function updateSettingBuyer(Request $request)
     {
@@ -119,6 +192,5 @@ class BuyerController extends Controller
             } else {
                 echo 0;
             }
-        // return redirect('buyer/dataUser')->with('alert','Data has been edit!');
     }
 }
