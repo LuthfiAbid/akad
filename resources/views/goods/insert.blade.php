@@ -22,7 +22,7 @@
                     <input type="number" required class="form-control" id="price" name="price">
                 </div>
                 <div class="form-group">
-                        <label for="nama">Categores : </label>
+                        <label for="nama">Categories : </label>
                         <select class="form-control" class="col-md-5" name="id_category">
                             @foreach ($category as $item)
                                 <option value="{{$item->id_category}}">{{$item->category_name}}</option>                                                                              

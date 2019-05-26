@@ -130,7 +130,8 @@ class AdminController extends Controller
     public function goodsStockAdd()
     {
         $data_admin = Session::get('nama_admin');
-        return view('goods.insert',compact('data_admin'));
+        $category = DB::table('categories')->get();
+        return view('goods.insert',compact('data_admin','category'));
     }
 
     public function goodsStockAddPost(Request $request)
