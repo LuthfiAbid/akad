@@ -35,8 +35,9 @@ class AdminController extends Controller
         if(!Session::get('login')){
             return redirect('/admin/login')->with('alert','Kamu harus login dulu');
         }else{
-            $data = Session::get('nama_admin');
-            return view('home.index',compact('data'));
+            $transaction = DB::table('transaction')->count();
+            $data = Session::get('admin_name');
+            return view('home.index',compact('data','transaction'));
         }
     }
     //---------------------------------LOGIN & LOGOUT----------------------------------//
@@ -46,7 +47,7 @@ class AdminController extends Controller
         if(!Session::get('login')){
             return view('login.login');
         }else{
-        $data = Session::get('nama_admin');
+        $data = Session::get('admin_name');
         return view('home.index',compact('data'));
         }
     }
@@ -59,7 +60,7 @@ class AdminController extends Controller
         $data = Admin::where('username',$username)->first();
         if($data){ //apakah email tersebut ada atau tidak
             if(Hash::check($password,$data->password)){
-                Session::put('nama_admin',$data->admin_name);
+                Session::put('admin_name',$data->admin_name);
                 Session::put('username',$data->username);
                 Session::put('id_admin',$data->id_admin);
                 Session::put('login',TRUE);
@@ -85,7 +86,7 @@ class AdminController extends Controller
     //------------------------------ GOODS STOCK ----------------------------------//
     public function goodsStock()
     {
-        $data_admin = Session::get('nama_admin');
+        $data_admin = Session::get('admin_name');
         $data = DB::table('goods')
         ->join('categories','categories.id_category','goods.id_category')
         ->select('goods.*','categories.category_name as cat_name')
@@ -122,14 +123,14 @@ class AdminController extends Controller
 
     public function goodsStockEdit($id)
     {
-        $data_admin = Session::get('nama_admin');
+        $data_admin = Session::get('admin_name');
         $data = DB::table('goods')->where('id_goods',$id)->first();
         return view('goods.edit',compact('data','data_admin'));
     }
 
     public function goodsStockAdd()
     {
-        $data_admin = Session::get('nama_admin');
+        $data_admin = Session::get('admin_name');
         $category = DB::table('categories')->get();
         return view('goods.insert',compact('data_admin','category'));
     }
@@ -173,14 +174,14 @@ class AdminController extends Controller
 
     public function dataUser()
     {
-        $data_admin = Session::get('nama_admin');
+        $data_admin = Session::get('admin_name');
         $data = DB::table('buyer')->get();
         return view('user.index',compact('data','data_admin'));
     }
     public function dataUserEdit(Request $request, $id)
     {
         $data = DB::table('buyer')->where('id_buyer',$id)->first();
-        $data_admin = Session::get('nama_admin');
+        $data_admin = Session::get('admin_name');
         return view('user.edit',compact('data','data_admin'));
     }
     public function editDataUserPost(Request $request)
@@ -192,5 +193,11 @@ class AdminController extends Controller
         $data->city = $request->city;
         $data->save();
         return redirect('admin/dataUser')->with('alert','Data has been edit!');
+    }
+    public function pendingPo()
+    {
+        $data_admin = Session::get('admin_name');
+        $data = DB::table('transaction')->where('status','in approve')->get();
+        return view('dashboard.pendingPo',compact('data','data_admin'));
     }
 }

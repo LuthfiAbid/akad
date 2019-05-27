@@ -21,6 +21,7 @@ class CreateTransactionTable extends Migration
             $table->foreign('id_admin')->references('id_admin')->on('admin')->onDelete('cascade');
             $table->string('total_price');
             $table->integer('isdone');
+            $table->enum('status',['in approve','pending','reject','agree'])->default('pending');
             $table->string('description')->nullable();
             $table->timestamps();
         });

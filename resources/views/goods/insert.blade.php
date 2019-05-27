@@ -1,4 +1,4 @@
-@extends('dashboard')
+@extends('layout.dashboard')
 @section('content')
 <section class="main-section">
         <!-- Add Your Content Inside -->

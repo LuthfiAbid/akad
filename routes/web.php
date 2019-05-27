@@ -25,6 +25,10 @@ Route::get('admin/login/loginPost','AdminController@loginPost');
 Route::get('admin/logout','AdminController@logout');
 Route::get('admin/home','AdminController@index');
 
+//-------------------------------box dashboard-----------------------------//
+Route::get('admin/pendingPO','AdminController@pendingPo');
+//-------------------------------------------------------------------------//
+
 //--------------------------------buyer------------------------------------//
 Route::get('buyer/login','BuyerController@login');
 Route::get('buyer/login/loginPostBuyer','BuyerController@loginPostBuyer');

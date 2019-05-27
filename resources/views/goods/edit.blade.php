@@ -1,4 +1,4 @@
-@extends('dashboard')
+@extends('layout.dashboard')
 @section('content')
 {{-- <script src="cleave.min.js"></script> --}}
 <section class="main-section">

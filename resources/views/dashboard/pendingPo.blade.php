@@ -10,42 +10,39 @@
         });
 </script>
     <table class="display" id="table_id">
-        <h2>Goods Warehouse</h2>     
-        <center><a href="{{url('admin/stock/add')}}" class="btn btn-info"><li class="fa fa-plus">Add Goods</li></a>   </center>
+        <h2>Purchase Order Pending</h2>        
         <thead>
         <tr>
-            <td>Goods name</td>
-            <td>Stock</td>
-            <td>Price</td>
-            <td>Picture</td>
-            <td>Category</td>
+            <td>Buyer Name</td>
+            <td>Status</td>
             <td>Action</td>
         </tr>
         </thead>
         <tbody>
             @foreach ($data as $data)                
-                <form action="{{url('admin/stock/delete',$data->id_goods)}}" method="POST">
-                    <td>{{$data->goods_name}}</td>
-                    <td>{{$data->stock}}</td>
-                    <td>Rp. {{number_format($data->price,0,'.','.')}}</td>
+                <form action="{{url('admin/stock/delete',$data->id_transaction)}}" method="POST">
+                    <td>{{$data->buyer_name}}</td>
+                    <td>{{$data->status}}</td>
+                    {{-- <td>Rp. {{number_format($data->price,0,'.','.')}}</td>
                     <td><img src="{{asset('productImages/shirt').'/'.$data->picture}}" height="50px"></td>
-                    <td>{{$data->cat_name}}</td>
+                    <td>{{$data->cat_name}}</td> --}}
                     <td>
-                    <a href="{{url('admin/stock/edit',$data->id_goods)}}" class=" btn btn-sm btn-warning">Edit</a>        
-                    <form action="{{url('admin/stock/delete',$data->id_goods)}}" method="post">
+                    <a href="{{url('admin/stock/edit',$data->id_transaction)}}" class=" btn btn-sm btn-warning">Edit</a>        
+                    {{-- <form action="{{url('admin/stock/delete',$data->id_goods)}}" method="post">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+                    </form> --}}
                     </td>
             </form>
         </tbody>
             @endforeach
         </table>
+        <a href="{{ URL::previous() }}" class="btn btn-md btn-info">Back</a>
     @endsection
     @section('navmenu')
     <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{asset('assets/img/user.png')}}" class="img-circle" alt="Avatar"> <span>{{$data_admin}}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{asset('assets/img/user.png')}}" class="img-circle" alt="Avatar"><span>{{$data_admin}}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
         <ul class="dropdown-menu">
             <li><a href="{{ url('admin/logout') }}"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
         </ul>

@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<!-- VENDOR CSS -->
+	<!-- VENDOR CSS -->	
 	<link rel="stylesheet" href="{{URL::asset('assets/vendor/bootstrap/css/bootstrap.min.css')}}">
 	<link rel="stylesheet" href="{{URL::asset('assets/vendor/font-awesome/css/font-awesome.min.css')}}">
 	<link rel="stylesheet" href="{{URL::asset('assets/vendor/linearicons/style.css')}}">
@@ -20,8 +20,8 @@
 	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
 	<!-- GOOGLE FONTS -->
 	<!-- ICONS -->
-	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+	<link rel="apple-touch-icon" href="{{URL::asset('img/logo.png')}}">
+	<link rel="icon" sizes="96x96" href="{{URL::asset('img/logo.png')}}">
 </head>
 
 <body>
@@ -30,12 +30,12 @@
 		<!-- NAVBAR -->
 		<nav class="navbar navbar-default navbar-fixed-top">
 			<div class="brand">
-				<a><img src="{{URL::asset('assets/img/logo-dark.png')}}" alt="Klorofil Logo" class="img-responsive logo"></a>
+				<a><img src="{{URL::asset('img/header.png')}}"  alt="Klorofil Logo" class="img-responsive logo"></a>
 			</div>
 			<div class="container-fluid">
                     <div id="navbar-menu">
                             <ul class="nav navbar-nav navbar-right">
-                                {{-- <li active="dropdown">
+                                {{-- <li dropdown>
                                     <a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
                                         <i class="lnr lnr-alarm"></i>
                                         <span class="badge bg-danger">5</span>
@@ -49,7 +49,7 @@
                                         <li><a href="#" class="more">See all notifications</a></li>
                                     </ul>
                                 </li> --}}
-                                {{-- <li active="dropdown">
+                                {{-- <li dropdown>
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="lnr lnr-question-circle"></i> <span>Help</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#">Basic Uses</a></li>
@@ -66,86 +66,89 @@
                         </div>
 				<div class="navbar-btn">
 					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
-				</div>
+				</div>				
 				<div id="navbar-menu">
-					<ul class="nav navbar-nav navbar-right">
+					<ul class="nav navbar-nav navbar-right">												
 					</ul>
 				</div>
 			</div>
 		</nav>
 		<!-- END NAVBAR -->
 		<!-- LEFT SIDEBAR -->
-		<div id="sidebar-nav" class="sidebar">
+		<div id="sidebar-nav" class="sidebar">            
 			<div class="sidebar-scroll">
                 <nav>
 					<ul class="nav">
-						<li active="@yield('admin/home')">
+						<li>
             				<a href="{{ url('admin/home') }}">
 						<i class='fa fa-edit'></i>
 							<span>Home</span>
             				</a>
 						</li>
-						<li active="@yield('admin/stock')">
+						<li class="{{ (request()->is('admin/stock')) ? 'active' : '' }}">
             				<a href="{{ url('admin/stock') }}">
 						<i class='fa fa-edit'></i>
 							<span>Stock</span>
             				</a>
 						</li>
-						<li active="@yield('admin/dataUser')">
+						<li class="active">
 							<a href="{{ url('admin/dataUser') }}">
 						<i class='fa fa-edit'></i>
 							<span>Data User</span>
 							</a>
 						</li>
-						<li active="@yield('admin/dataPelanggan')">
+						<li class="active">
             				<a href="{{ url('admin/dataPelanggan') }}">
 						<i class='fa fa-edit'></i>
 							<span>Data Transaction</span>
             				</a>
 						</li>
-						<li active="@yield('admin/paymenVerification')">
+						<li class="active">
             				<a href="{{ url('admin/paymenVerification') }}">
 						<i class='fa fa-edit'></i>
 							<span>Data Usage</span>
             				</a>
 						</li>
-						<li active="@yield('admin/history')">
+						<li class="active">
             				<a href="{{ url('admin/history') }}">
 						<i class='fa fa-edit'></i>
 							<span>Payment Verification</span>
             				</a>
                         </li>
-                        <li active="@yield('admin/logout')">
+                        <li class="active">
             				<a href="{{ url('admin/logout') }}">
 						<i class='fa fa-edit'></i>
 							<span>History Payment</span>
             				</a>
 						</li>
-						{{--<li active="@yield('admin/logout')">
+						{{--<li @yield('admin/logout')>
             				<a href="{{ url('admin/logout') }}">
 						<i class='fa fa-edit'></i>
 							<span>Logout</span>
             				</a>
-						</li--}}
+						</li--}}				
 					</ul>
 				</nav>
 			</div>
-        </div>
+        </div>       
 		<!-- END LEFT SIDEBAR -->
-		<!-- MAIN -->
-		<div class="main">
-			<div class="main-content">
-				<div class="container-fluid">
-					<div class="panel">
-						<div class="panel-body">
-							@yield('content')
-						</div>
-					</div>
+		<!-- MAIN -->		
+	<div class="main">
+		<div class="main-content">
+			<div class="panel">
+				<div class="panel-body">
+					@yield('content')
 				</div>
 			</div>
 		</div>
+			<div class="main-content">
+				<div class="container-fluid">	
+				@yield('box')													
+			</div>
+		</div>
+	</div>
 		<!-- END MAIN -->
-		<div class="clearfix"></div>
+		<div class="clearfix"></div>		
 	</div>
 	<!-- END WRAPPER -->
 	<!-- Javascript -->
@@ -153,7 +156,7 @@
 	<script type="text/javascript" src="{{URL::asset('assets/js/jquery.dataTables.min.js')}}"></script>
 	<script src="{{URL::asset('assets/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
 	{{-- <script src="{{URL::asset('assets/vendor/chartist/js/chartist.min.js')}}"></script> --}}
-	<script src="{{URL::asset('assets/scripts/klorofil-common.js')}}"></script>
+	<script src="{{URL::asset('assets/scripts/klorofil-common.js')}}"></script>		
 	{{-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script> --}}
 
 	<script>
@@ -168,17 +171,10 @@
                 },
                 success: function (response) {
 						alert("berhasil Logout")
-						window.location.replace("{{url('admin/home')}}");
-
+						window.location.replace("{{url('admin/home')}}");                   
                 }
             });
-
 	}
-
-
-
-
 </script>
 </body>
-
 </html>
