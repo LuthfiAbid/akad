@@ -44,6 +44,8 @@ Route::get('buyer/viewCountSubtotal','TransactionController@viewCountSubtotal');
 Route::get('buyer/viewChart','TransactionController@viewChart');
 Route::get('buyer/viewCheckout','TransactionController@viewCheckout');
 Route::post('buyer/deleteDetail','TransactionController@deleteDetail');
+Route::get('buyer/updateTransaction','TransactionController@updateTransaction');
+
 //--------------------------------------------------------------------//
 
 //-----------------------------Stock----------------------------------//

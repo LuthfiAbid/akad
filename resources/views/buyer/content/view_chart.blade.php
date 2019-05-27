@@ -93,7 +93,8 @@
                                     src="{{asset('productImages/shirt').'/'.$detail_transaction2->picture}}" alt="">
                             </td>
                             <td><p style="margin-top:40%;">{{$detail_transaction2->cat_name}}</p></td>
-                            <td><p style="margin-top:40%;" id="edit" onclick="edit_stok('edit');" >{{$detail_transaction2->qty}}</p>
+                            <td><p style="margin-top:40%;" id="goods_{{$detail_transaction2->id_detail}}" onclick="edit_stok('goods_{{$detail_transaction2->id_detail}}');" >{{$detail_transaction2->qty}}</p>
+                                <input type="hidden" id="id_check_{{$detail_transaction2->id_detail}}" name="id_check" value="id_check_{{$detail_transaction2->id_detail}}">
                             </td>
                             <td><p style="margin-top:40%;">Rp. {{number_format($detail_transaction2->subtotal,0,'.','.')}}</p></td>
                             <td><button style="margin-top:40%;" onclick="deleteDetail({{$detail_transaction2->id_detail}})" class="btn btn-danger"><i class="fa fa-close"></i></button></td>
@@ -146,19 +147,20 @@
 
 	}
 
-    function edit_stok(edit) {
-    console.log(edit);
-    inputIdWithHash = "#" + edit;
+    function edit_stok(good_id) {
+    console.log(good_id);
+    inputIdWithHash = "#" + good_id;
     elementValue = $(inputIdWithHash).text();
-    $(inputIdWithHash).replaceWith('<input name="test" style="margin-top:40%; width: 70px;border-radius: 5px;" id="' + edit + '" type="number" value="' + elementValue + '">');
+    $(inputIdWithHash).replaceWith('<input name="test" style="margin-top:40%; width: 70px;border-radius: 5px;" id="' + good_id + '" type="number" value="' + elementValue + '">');
 
     $(document).click(function (event) {
-        var qty = $('#edit').val()
-        var edit = 'edit';
+        var id_check = $('#id_check').val()
+        var qty = $('#goods_'+id_check+'').val()
+        var edit = 'goods_'+id_check+'';
         if (!$(event.target).closest(inputIdWithHash).length) {
-            $(inputIdWithHash).replaceWith('<p style="margin-top:40%;" id="' + edit + '" onclick="edit_stok(\'' + edit + '\')">' + qty + '</p>');
+            $(inputIdWithHash).replaceWith('<p style="margin-top:40%;" id="' + edit + '" onclick="edit_stok(\''+ edit +'\')">' + qty + '</p>');
 
-            $('#edit').val(qty);
+            $('#'+edit+'').val(qty);
         }
 
     });

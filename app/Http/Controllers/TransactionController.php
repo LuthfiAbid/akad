@@ -30,6 +30,7 @@ class TransactionController extends Controller
                     ->join('categories','categories.id_category','goods.id_category')
                     ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
                     ->where('id_buyer',"=", Session::get('id_buyer'))
+                    ->where('isdone', "=", "0")
                     ->get();
         return view('buyer.content.view_chart', compact('detail_transaction'));
     }
@@ -41,6 +42,7 @@ class TransactionController extends Controller
                     ->join('categories','categories.id_category','goods.id_category')
                     ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
                     ->where('id_buyer',"=", Session::get('id_buyer'))
+                    ->where('isdone', "=", "0")
                     ->get();
         return view('buyer.content.checkout', compact('detail_transaction'));
     }
@@ -66,6 +68,7 @@ class TransactionController extends Controller
                         ->join('categories','categories.id_category','goods.id_category')
                         ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
                         ->where('id_buyer',"=", Session::get('id_buyer'))
+                        ->where('isdone', "=", "0")
                         ->get();
            return view('buyer.content.product',compact('data_goods','goods','detail_transaction'));
 
@@ -142,6 +145,22 @@ class TransactionController extends Controller
         }
 
 
+    }
+
+    public function updateTransaction(Request $request)
+    {
+        $id_transaction = $request->id_transaction;
+        $total_price = $request->total_price;
+
+        $transaction = Transaction::firstOrNew(['id_transaction' => $id_transaction]);
+        $transaction->total_price = $request->total_price;
+        $transaction->isdone = 1;
+        $transaction->save();
+            if ($transaction) {
+                echo 1;
+            } else {
+                echo 0;
+            }
     }
 
     public function deleteDetail(Request $request)

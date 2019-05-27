@@ -84,6 +84,7 @@ class BuyerController extends Controller
                     ->join('categories','categories.id_category','goods.id_category')
                     ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
                     ->where('id_buyer',"=", Session::get('id_buyer'))
+                    ->where('isdone', "=", "0")
                     ->get();
                 return view('buyer.home',compact('detail_transaction','goods', 'goodss', 'goods_w_ts', 'goods_w_np', 'goods_w_a'));
         }
@@ -123,6 +124,8 @@ class BuyerController extends Controller
                 Session::put('buyer_name',$data->buyer_name);
                 Session::put('username',$data->username);
                 Session::put('id_buyer',$data->id_buyer);
+                Session::put('buyer_address',$data->address);
+                Session::put('buyer_city',$data->city);
                 Session::put('login_buyer',TRUE);
                 // return redirect('buyer/home');
                 echo 1;
@@ -170,6 +173,7 @@ class BuyerController extends Controller
                     ->join('categories','categories.id_category','goods.id_category')
                     ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
                     ->where('id_buyer',"=", Session::get('id_buyer'))
+                    ->where('isdone', "=", "0")
                     ->get();
         $data_buyer = DB::table('buyer')->where('id_buyer',$id_buyer)->first();
         return view('buyer.setting',compact('data_buyer','detail_transaction'));

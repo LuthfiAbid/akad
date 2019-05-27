@@ -197,7 +197,7 @@
     var qty = $('#qty').val();
     var price = $('#price').val();
     var subtotal = (qty * price).valueOf();
-    alert(id_goods +" = "+ qty +" + "+ price+" = "+ subtotal);
+    // alert(id_goods +" = "+ qty +" + "+ price+" = "+ subtotal);
     if(qty == ""){
        alert("qty harus di isi!!!");
     } else {

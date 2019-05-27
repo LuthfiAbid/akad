@@ -104,7 +104,7 @@
 						</div>
 					</div>
 						<!-- /row -->
-				</div>
+                </div>
 				<!-- /container -->
 			</div>
 			<!-- /bottom footer -->
@@ -141,14 +141,14 @@
                         $('#count2').html('<div class="qty">0</div>');
                         $('#sum').html('<h5">SUBTOTAL: Rp. 0</h5>');
                         $('#sum2').html('<h3 align="right">SUBTOTAL: Rp. 0</h3>');
-                        $('#sum3').html('<strong class="order-total">RP. 0</strong>');
+                        $('#sum3').html('<strong class="order-total">RP. 0</strong><input type="hidden" id="total_price" name="total_price" value="0">');
 
                     }else{
                         $('#count').html('<small>'+count+' Item(s) selected</small>');
                         $('#count2').html('<div class="qty">'+count+'</div>');
                         $('#sum').html('<h5>SUBTOTAL: '+sum+'</h5>');
                         $('#sum2').html('<h3 align="right">SUBTOTAL: '+sum+'</h3>');
-                        $('#sum3').html('<strong class="order-total">'+sum+'</strong>');
+                        $('#sum3').html('<strong class="order-total">'+sum+'</strong><input type="hidden" id="total_price" name="total_price" value='+sum+'>');
                     }
                 }
 
