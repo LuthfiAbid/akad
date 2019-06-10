@@ -27,7 +27,7 @@
 
     <!-- Custom stlylesheet -->
     <link type="text/css" rel="stylesheet" href="{{URL::asset('buyer/css/style.css')}}" />
-
+    <link type="text/css" rel="stylesheet" href="{{URL::asset('buyer/css/jquery-confirm.css')}}" />
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -49,10 +49,11 @@
                 </ul>
                 <ul class="header-links pull-right">
                     <!-- <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li> -->
-
+                    <input type="hidden" id="id_buyer" value="{{Session::get('id_buyer')}}">
                     @if(Session::get('login_buyer'))
 
                     {
+
                     <!-- <li><i class="fa fa-user-o"></i><label style="color:white;" for="">{{Session::get('buyer_name')}}</label></li> -->
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown"><i
@@ -61,7 +62,7 @@
                             <li><a href="{{URL::asset('buyer/setting')}}/{{Session::get('id_buyer')}}">
                                     <p style="color:black;"><i class="fa fa-cog" aria-hidden="true"> Setting</i></p>
                                 </a></li>
-                            <li><a onclick="logout_buyer()" href="#">
+                            <li><a class="logout_confirm" onclick="" href="#">
                                     <p style="color:black;"><i class="fa fa-sign-out" aria-hidden="true"> Logout</i></p>
                                 </a></li>
                             <input id="id_logout" type="hidden" value="1">
@@ -99,15 +100,15 @@
                     <!-- /LOGO -->
 
                     <!-- SEARCH BAR -->
-                    <div class="col-md-7">
+                    <div class="col-md-8">
                         <div class="header-search">
                             <form>
-                                <select class="input-select" style="width:150px;">
+                                {{-- <select class="input-select" style="width:150px;">
                                     <option value="0">All Category </option>
                                     <option value="pakaian">T-shirt</option>
                                     <option value="aksesori">shirt</option>
                                     <option value="aksesori">koko shirt</option>
-                                </select>
+                                </select> --}}
                                 <input class="input" placeholder="Search here">
                                 <button class="search-btn">Search</button>
                             </form>
@@ -116,7 +117,7 @@
                     <!-- /SEARCH BAR -->
 
                     <!-- ACCOUNT -->
-                    <div class="col-md-2 clearfix">
+                    <div class="col-md-1 clearfix">
                         <div class="header-ctn">
                             <!-- Wishlist -->
 
@@ -126,7 +127,7 @@
                             <div class="dropdown" style="cursor: pointer;">
                                 <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                     <i class="fa fa-shopping-cart"></i>
-                                    <span>Chart</span>
+                                    <span>Cart</span>
                                     <div id="count2" class="qty"></div>
                                 </a>
                                 <div class="cart-dropdown">
@@ -200,7 +201,8 @@
                     <!-- NAV -->
                     <ul class="main-nav nav navbar-nav">
                         <li class="active"><a href="{{URL::asset('buyer/home')}}">Home</a></li>
-                        <li class="dropdown">
+                        <li class=""><a href="{{URL::asset('buyer/category')}}">Category</a></li>
+                        {{-- <li class="dropdown">
                             <a href="#" data-toggle="dropdown">Clothes</a>
                             <ul class="dropdown-menu">
                                 <li><a href="#">Shirt</a></li>
@@ -213,7 +215,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="#">Koko Clothes</a></li>
                             </ul>
-                        </li>
+                        </li> --}}
                     </ul>
                     <!-- /NAV -->
                 </div>

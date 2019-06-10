@@ -165,7 +165,7 @@
                         I've read and accept the <a href="#">terms & conditions</a>
                     </label>
                 </div>
-                <a onclick="updateTransaction()" class="primary-btn order-submit">Place order</a>
+                <a style="cursor:pointer;" onclick="updateTransaction()" class="primary-btn order-submit">Place order</a>
             </div>
             <!-- /Order Details -->
         </div>
@@ -193,9 +193,40 @@
                 },
                 success: function (data) {
                     if(data == 1){
-                        alert("Oreder Success")
-                        location.reload();
-						// window.location.replace("{{url('buyer/viewChart')}}");
+                        // alert("Oreder Success")
+                        // location.reload();
+                        $.confirm({
+                                title: 'Transaction!',
+                                content: 'Are you sure to oder!',
+                                type: 'green',
+                                theme: 'modern',
+                                typeAnimated: true,
+                                buttons: {
+                                    Ok: {
+                                        text: 'Ok',
+                                        btnClass: 'btn-green',
+                                        action: function(){
+                                             $.confirm({
+                                                title: 'Alert Transaction!',
+                                                content: 'Transaction Successfully!',
+                                                type: 'green',
+                                                theme: 'light',
+                                                buttons: {
+                                                    Ok: {
+                                                        text: 'Ok',
+                                                        btnClass: 'btn-green',
+                                                        action: function(){
+                                                            window.location.replace("{{url('buyer/home')}}");
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    },
+                                    cancel: function () {
+                                    }
+                                }
+                            });
                     }else{
                         alert('Order Failed');
                     }

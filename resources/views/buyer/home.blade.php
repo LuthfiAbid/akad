@@ -182,7 +182,7 @@
 									<div class="products-slick" data-nav="#slick-nav-2">
 										<!-- product -->
 										@foreach ($goodss as $goodss)
-										<div class="product" onclick="window.location.href='view_barang.php'" style="cursor:pointer;">
+										<div class="product" onclick="window.location.href='{{url('buyer/getViewGoods')}}/{{$goodss->id_goods}}'" style="cursor:pointer;">
 											<div class="product-img">
 												<img height="360" width="42" src="{{asset('productImages/shirt').'/'.$goodss->picture}}" alt="">
 												<div class="product-label">
@@ -197,7 +197,7 @@
 												<div class="product-rating">
 												</div>
 												<div class="product-btns">
-													<button onclick="window.location.href='view_barang.php'" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+													<button onclick="window.location.href='{{url('buyer/getViewGoods')}}/{{$goodss->id_goods}}'" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 												</div>
 											</div>
 										</div>
