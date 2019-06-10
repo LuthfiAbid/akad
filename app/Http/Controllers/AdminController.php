@@ -12,6 +12,7 @@ use App\Category;
 use Session;
 use Redirect;
 use Hash;
+use Alert;
 use DB;
 
 class AdminController extends Controller
@@ -84,6 +85,58 @@ class AdminController extends Controller
     //------------------------------- END LOGIN & LOGOUT --------------------------//
 
     //------------------------------ GOODS STOCK ----------------------------------//
+    public function apiStock()
+    {
+        // $users = User::select(['id', 'name', 'email', 'password', 'created_at', 'updated_at']);
+        $dataAdmin = Session::get('id_admin');
+        $stock = DB::table('goods')
+        ->join('categories','categories.id_category','goods.id_category')
+        ->select('goods.*','categories.category_name as cat_name')
+        ->where('id_admin',$dataAdmin)
+        ->orderBy('id_category','ASC')
+        ->get();
+        // $category = Category::all();
+        // dd($stock);
+
+        return Datatables::of($stock)
+        ->addColumn('action', function ($stock){
+                return '<table id="tabel-in-opsi">'.
+                '<tr>'.
+                    '<td>'.
+                        '<a href="'. url('admin/stock/edit'.'/'.$stock->id_goods) .'" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Edit '. $stock->goods_name .'">Edit</a>'.'&nbsp;'.
+                        '<a href="'. url('admin/stock/delete'.'/'.$stock->id_goods) .'" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" onclick="return confirm('."'Are you sure want to delete it ?'".')" title="Delete '. $stock->goods_name .'">Delete</a>'.'&nbsp;'.
+                    '</td>'.
+                '</tr>'.
+            '</table>';
+            })
+            ->editColumn('goods_name', function($stock){
+                return '<td>'. ucfirst($stock->goods_name) .'</td> ';
+            })
+            ->editColumn('stock', function($stock){
+                return '<td>'. $stock->stock .'</td> ';
+            })
+            ->editColumn('price', function($stock){
+                return '<td>'.'Rp. ' . number_format($stock->price,0, ',' , '.') .'</td> ';
+            })
+            ->editColumn('category', function($stock){
+                return '<td>'. $stock->cat_name .'</td> ';
+            })
+            ->editColumn('picture', function($stock){
+                $fileShirt = "productImages/shirt";
+                $filePants = "productImages/Pants";
+                $fileDress = "productImages/dress";
+            if($stock->id_category = 1){
+                return'<td><img src='.asset($fileShirt).'/'.$stock->picture.' height="50px"></img></td>';
+            }else if($stock->id_category = 2){
+                return'<td><img src='.asset($filePants).'/'.$stock->picture.' height="50px"></img></td>';
+            }else{
+                return'<td><img src='.asset($fileDress).'/'.$stock->picture.' height="50px"></img></td>';
+            }
+            })
+                ->addIndexColumn()
+                ->rawColumns(['goods_name','stock','price','picture','category','action'])
+                ->make(true);
+    }
     public function goodsStock()
     {
         $data_admin = Session::get('admin_name');
@@ -98,7 +151,7 @@ class AdminController extends Controller
     public function goodsStockUpdate(Request $request, $id)
     {
         $this->validate($request,[
-            'picture' => 'required|image|mimes:jpeg,png,jpg'
+            'picture' => 'required|image|mimes:png,jpg'
             ]);
         $goods = Goods::firstOrNew(['id_goods' => $request->id_goods]);
         $file = $request->file('picture');
@@ -117,7 +170,7 @@ class AdminController extends Controller
         $goods->id_category = $request->id_category;
         $goods->picture = $extension;
         $goods->save();
-
+        Alert::success('Goods Updated!','Success')->autoclose(2000);
         return redirect('admin/stock');
     }
 
@@ -138,7 +191,7 @@ class AdminController extends Controller
     public function goodsStockAddPost(Request $request)
     {
         $this->validate($request,[
-            'picture' => 'required|image|mimes:jpeg,png,jpg'
+            'picture' => 'required|image|mimes:png,jpg,jpeg'
             ]);
         $goods = Goods::firstOrNew(['id_goods' => $request->id_goods]);
         $file = $request->file('picture');
@@ -159,19 +212,23 @@ class AdminController extends Controller
         $goods->id_admin = $data_admin;
         $goods->id_category = $request->id_category;
         $goods->picture = $extension;
-        $goods->save();
+        $goods->save();        
+        Alert::success('Goods Added!','Add')->autoclose(2000);
         return redirect('admin/stock');
     }
-
+    public function pendingstock()
+    {
+        $data_admin = Session::get('admin_name');
+        $data = DB::table('transaction')->where('status','in approve')->get();
+        return view('dashboard.pendingstock',compact('data','data_admin'));
+    }
     public function goodsDelete($id)
     {
         $data = Goods::findOrFail($id);
         $data->delete();
-        return redirect('admin/stock');
+        return redirect('admin/stock')->with('delete','Delete Succes!');
     }
-
     //---------------------------------Data User --------------------------------//
-
     public function dataUser()
     {
         $data_admin = Session::get('admin_name');
@@ -184,7 +241,7 @@ class AdminController extends Controller
         $data_admin = Session::get('admin_name');
         return view('user.edit',compact('data','data_admin'));
     }
-    public function editDataUserPost(Request $request)
+    public function editDataUserstockst(Request $request)
     {
         $data = Buyer::where('id_buyer',$request->id_buyer)->first();
         $data->id_buyer = $request->id_buyer;
@@ -194,10 +251,38 @@ class AdminController extends Controller
         $data->save();
         return redirect('admin/dataUser')->with('alert','Data has been edit!');
     }
-    public function pendingPo()
+    public function apiUser()
     {
-        $data_admin = Session::get('admin_name');
-        $data = DB::table('transaction')->where('status','in approve')->get();
-        return view('dashboard.pendingPo',compact('data','data_admin'));
+        $user = Buyer::orderBy('id_buyer','DESC')->get();
+        // dd($stock);
+        return Datatables::of($user)
+        ->addColumn('action', function ($user){
+                return '<table id="tabel-in-opsi">'.
+                '<tr>'.
+                    '<td>'.
+                        '<a href="'. url('admin/dataUser/edit'.'/'.$user->id_buyer) .'" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Edit '. $user->buyer_name .'">Edit</a>'.'&nbsp;'.
+                    '</td>'.
+                '</tr>'.
+            '</table>';
+            })
+            ->editColumn('buyer_name', function($user){
+                return '<td>'. ($user->buyer_name) .'</td> ';
+            })
+            ->editColumn('address', function($user){
+                return '<td>'. $user->address .'</td> ';
+            })
+            ->editColumn('city', function($user){
+                return '<td>'.$user->city.'</td> ';
+            })
+                ->addIndexColumn()
+                ->rawColumns(['buyer_name','address','city','action'])
+                ->make(true);
     }
+    // public function userDelete($id)
+    // {
+    //     $data = Goods::findOrFail($id);
+    //     $data->delete();
+    //     return redirect('admin/stock')->with('delete','Delete Succes!');
+    // }
+    //------------------------------------------------------------------------------------------------------//
 }

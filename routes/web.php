@@ -56,11 +56,13 @@ Route::get('admin/stock/edit/{id}','AdminController@goodsStockEdit');
 Route::put('admin/stock/editPost/{id}','AdminController@goodsStockUpdate');
 Route::get('admin/stock/add','AdminController@goodsStockAdd');
 Route::post('admin/stock/addPost','AdminController@goodsStockAddPost');
-Route::delete('admin/stock/delete/{id}','AdminController@goodsDelete');
+Route::get('admin/stock/delete/{id}','AdminController@goodsDelete');
+Route::get('stock/api/get','AdminController@apiStock');
 //--------------------------------------------------------------------//
 
 //------------------------------User----------------------------------//
 Route::get('admin/dataUser','AdminController@dataUser');
 Route::get('admin/dataUser/edit/{id}','AdminController@dataUserEdit');
 Route::post('admin/dataUser/editPost','AdminController@editDataUserPost');
+Route::get('user/api/get','AdminController@apiUser');
 //--------------------------------------------------------------------//

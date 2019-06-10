@@ -22,25 +22,34 @@
             </tr>
         </thead>
         <tbody>
-                @foreach ($data as $data)                           
+                {{-- @foreach ($data as $data)                           
             <input type="hidden" value="{{$data->id_buyer}}" name="id_buyer">
             <td>{{$data->buyer_name}}</td>
             <td>{{$data->address}}</td>
             <td>{{$data->city}}</td>
             <td>
             <a href="{{url('admin/dataUser/edit',$data->id_buyer)}}" class=" btn btn-sm btn-warning">Edit</a>
-            {{-- <a href="{{}}"></a> --}}
-            </td>
+            </td> --}}
         </tbody>
-        @endforeach
+        {{-- @endforeach --}}
     </table>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function () {
-            $('#table_id').DataTable();
-         });
+            $('#table_id').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '<?= url("user/api/get") ?>',
+                columns: [
+                    {data: 'buyer_name', name: 'buyer_name'},
+                    {data: 'address', name: 'address'},
+                    {data: 'city', name: 'city'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
+            });
+        });
     </script>
 @endsection
 @section('navmenu')

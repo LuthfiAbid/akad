@@ -81,41 +81,41 @@
 					<ul class="nav">
 						<li>
             				<a href="{{ url('admin/home') }}">
-						<i class='fa fa-edit'></i>
+						<i class='fa fa-home'></i>
 							<span>Home</span>
             				</a>
 						</li>
-						<li class="{{ (request()->is('admin/stock')) ? 'active' : '' }}">
+						<li>
             				<a href="{{ url('admin/stock') }}">
-						<i class='fa fa-edit'></i>
+						<i class='fa fa-truck'></i>
 							<span>Stock</span>
             				</a>
 						</li>
-						<li class="active">
+						<li>
 							<a href="{{ url('admin/dataUser') }}">
-						<i class='fa fa-edit'></i>
+						<i class='fa fa-users'></i>
 							<span>Data User</span>
 							</a>
 						</li>
-						<li class="active">
+						<li>
             				<a href="{{ url('admin/dataPelanggan') }}">
-						<i class='fa fa-edit'></i>
+						<i class='fa fa-dollar'></i>
 							<span>Data Transaction</span>
             				</a>
 						</li>
-						<li class="active">
+						<li>
             				<a href="{{ url('admin/paymenVerification') }}">
 						<i class='fa fa-edit'></i>
 							<span>Data Usage</span>
             				</a>
 						</li>
-						<li class="active">
+						<li>
             				<a href="{{ url('admin/history') }}">
 						<i class='fa fa-edit'></i>
 							<span>Payment Verification</span>
             				</a>
                         </li>
-                        <li class="active">
+                        <li>
             				<a href="{{ url('admin/logout') }}">
 						<i class='fa fa-edit'></i>
 							<span>History Payment</span>
