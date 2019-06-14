@@ -176,5 +176,31 @@ class TransactionController extends Controller
 
     }
 
+    public function updateQty(Request $request)
+    {
+
+        $id = $request->id_detail;
+        $qty = $request->qty;
+
+        $goods = DB::table('goods')
+                        ->join('detail_transaction','goods.id_goods','detail_transaction.id_goods')
+                        ->select('goods.*','detail_transaction.*')
+                        ->where('id_detail', "=", $id)
+                        ->first();
+
+        $price = $goods->price;
+        $subtotal = $qty * $price;
+
+        $data = DetailTransaction::findOrFail($id);
+        $data->qty = $request->qty;
+        $data->subtotal = $subtotal;
+        $data->save();
+            if ($data) {
+                echo 1;
+            } else {
+                echo 0;
+            }
+    }
+
 
 }

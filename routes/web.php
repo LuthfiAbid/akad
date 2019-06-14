@@ -45,6 +45,7 @@ Route::get('buyer/viewChart','TransactionController@viewChart');
 Route::get('buyer/viewCheckout','TransactionController@viewCheckout');
 Route::post('buyer/deleteDetail','TransactionController@deleteDetail');
 Route::get('buyer/updateTransaction','TransactionController@updateTransaction');
+Route::get('buyer/updateQty','TransactionController@updateQty');
 
 //--------------------------------------------------------------------//
 

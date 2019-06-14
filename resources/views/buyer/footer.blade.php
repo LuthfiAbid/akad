@@ -126,6 +126,10 @@
 <script>
     $( document ).ready(function() {
 
+        refreshsum();
+
+        })
+        function refreshsum(){
         var id_transaction = $('#id_transaction').val();
             $.ajax({
                 type: "get",
@@ -167,7 +171,8 @@
                 }
 
         });
-        })
+    }
+
 
         function viewChart() {
             window.location.replace("{{url('buyer/viewChart')}}");
