@@ -67,10 +67,41 @@
                 success: function (data) {
 
                     if(data == 1){
-						alert("Berhasil Masuk")
-						window.location.replace("{{url('buyer/home')}}");
+                        $.confirm({
+                                title: 'Login!',
+                                content: 'Login Success!',
+                                type: 'green',
+                                theme: 'light',
+                                typeAnimated: true,
+                                buttons: {
+                                    Ok: {
+                                        text: 'Ok',
+                                        btnClass: 'btn-green',
+                                        action: function(){
+                                            window.location.replace("{{url('buyer/home')}}");
+                                        }
+                                    }
+                                }
+                            });
+						// alert("Berhasil Masuk")
+						// window.location.replace("{{url('buyer/home')}}");
                     }else{
-                    	alert("Username dan Password tidak terdaftar");
+                        $.confirm({
+                                title: 'Alert Login!',
+                                content: 'Undifined Username or Password!',
+                                type: 'orange',
+                                theme: 'light',
+                                typeAnimated: true,
+                                buttons: {
+                                    Ok: {
+                                        text: 'Ok',
+                                        btnClass: 'btn-orange',
+                                        action: function(){
+                                        }
+                                    }
+                                }
+                            });
+                    	// alert("Username dan Password tidak terdaftar");
                  	 }
 
                 }

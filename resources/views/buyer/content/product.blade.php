@@ -11,9 +11,8 @@
             <div class="col-md-12">
                 <ul class="breadcrumb-tree">
                     <li><a href="#">Home</a></li>
-                    <li><a href="#">All Categories</a></li>
-                    <li><a href="#">Accessories</a></li>
-                    <li><a href="#">Headphones</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">{{$data_goods->cat_name}}</a></li>
                     <li class="active">{{$data_goods->goods_name}}</li>
                 </ul>
             </div>
@@ -53,19 +52,19 @@
                     <div>
                         <h3 class="product-price">Rp. {{number_format($data_goods->price,0,'.','.')}}<del
                                 class="product-old-price"></del></h3>
-                                <input type="hidden" id="price" name="price" value="{{$data_goods->price}}">
+                        <input type="hidden" id="price" name="price" value="{{$data_goods->price}}">
                         <span class="product-available">{{$data_goods->stock}} Stock</span>
                     </div>
                     <p>{{$data_goods->description}}</p>
                     <form id="form-goods" action="" method="get">
-                    <div class="add-to-cart">
-                        <div class="qty-label">
-                            Qty
-                            <input id="qty" name="qty" style="width:75px;" type="number">
+                        <div class="add-to-cart">
+                            <div class="qty-label">
+                                Qty
+                                <input id="qty" name="qty" style="width:75px;" type="number">
+                            </div>
+                            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
                         </div>
-                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                    </div>
-                </form>
+                    </form>
 
                     <ul class="product-btns">
                         {{-- <li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
@@ -193,13 +192,49 @@
 <script>
     $("#form-goods").on('submit', function(e){
     e.preventDefault()
+    var id_buyer = $('#id_buyer').val();
     var id_goods = $('#id_goods').val();
     var qty = $('#qty').val();
     var price = $('#price').val();
     var subtotal = (qty * price).valueOf();
-    alert(id_goods +" = "+ qty +" + "+ price+" = "+ subtotal);
+    if (id_buyer == "") {
+        $.confirm({
+            title: 'Login!',
+            content: 'You Must Login?',
+            type: 'Blue',
+            theme: 'modern',
+            boxWidth: '500px',
+            useBootstrap: false,
+            typeAnimated: true,
+            buttons: {
+                Login: {
+                    text: 'Login',
+                    btnClass: 'btn-blue',
+                    action: function(){
+                        window.location.replace("{{url('buyer/login')}}");
+                    }
+                },
+                close: function () {
+                }
+            }
+        });
+    }else{
     if(qty == ""){
-       alert("qty harus di isi!!!");
+        $.confirm({
+           title: 'Alert Qty!',
+            content: 'Qty Undifined!',
+            type: 'orange',
+            theme: 'light',
+            typeAnimated: true,
+            buttons: {
+                Ok: {
+                    text: 'Ok',
+                        btnClass: 'btn-orange',
+                    action: function(){
+                    }
+                    }
+                }
+            });
     } else {
         $.ajax({
             type: "get",
@@ -212,8 +247,24 @@
             },
             success: function (data) {
                 if(data == 1){
-                    alert("Berhasil Ditabah di Chart")
-                    location.reload();
+                    // alert("Berhasil Ditabah di Chart")
+                    $.confirm({
+                                title: 'Add Cart!',
+                                content: 'Add Cart Success!',
+                                type: 'green',
+                                theme: 'light',
+                                typeAnimated: true,
+                                buttons: {
+                                    Ok: {
+                                        text: 'Ok',
+                                        btnClass: 'btn-green',
+                                        action: function(){
+                                            location.reload();
+                                        }
+                                    }
+                                }
+                            });
+
                     // window.location.replace("{{url('buyer/viewChart')}}");
                 }else{
                     alert("Gagal Ditambahkan");
@@ -222,6 +273,7 @@
             }
         });
     }
+}
 
 })
-    </script>
+</script>
