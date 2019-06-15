@@ -58,6 +58,7 @@ Route::get('admin/stock/add','AdminController@goodsStockAdd');
 Route::post('admin/stock/addPost','AdminController@goodsStockAddPost');
 Route::get('admin/stock/delete/{id}','AdminController@goodsDelete');
 Route::get('stock/api/get','AdminController@apiStock');
+Route::get('admin/stock/show/{id}','AdminController@goodsShow');
 //--------------------------------------------------------------------//
 
 //------------------------------User----------------------------------//

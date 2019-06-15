@@ -1,5 +1,7 @@
 @extends('layout.dashboard')
 @section('content')
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+@include('sweet::alert')
 <section class="main-section">
         <!-- Add Your Content Inside -->
         <div class="content">
@@ -16,7 +18,6 @@
                     </ul>
                 </div>
             @endif
-            <hr>
             <form action="{{url('admin/stock/addPost')}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">

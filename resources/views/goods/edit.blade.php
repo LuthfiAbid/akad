@@ -10,9 +10,8 @@
             <form action="{{url('admin/stock/editPost',$data->id_goods)}}" method="post" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 {{method_field('PUT')}}
-            <input type="hidden" value="{{$data->id_category}}" name="id_category">
-            <input type="hidden" value="{{$data->id_goods}}" name="id_goods">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <!-- <input type="hidden" value="{{$data->id_category}}" name="id_category"> -->
+            <!-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> -->
                 <div class="form-group">
                     <label for="nama">Goods Name :</label>
                     <input type="text" required class="form-control" id="goods_name" name="goods_name" value="{{ $data->goods_name }}">
@@ -28,9 +27,10 @@
                 <div class="form-group">
                         <label for="nama">Categores : </label>
                         <select class="form-control" class="col-md-5" name="id_category">
-                            <option value="1">Shirt</option>                        
-                            <option value="2">Pants</option>                        
-                            <option value="3">Dress</option>                        
+                        @foreach($categories as $cat){
+                            <option value={{ $cat->id_category }}>{{$cat->category_name}}</option>                                            
+                        }
+                        @endforeach
                         </select>
                     </div>
                 <div class="form-group">

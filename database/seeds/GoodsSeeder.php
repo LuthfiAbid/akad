@@ -53,7 +53,6 @@ class GoodsSeeder extends Seeder
             'id_category' => '1',
             ]);
     
-
        DB::table('goods')->insert([
         'goods_name' => 'Kira T-Shirt',
         'stock' => '12',

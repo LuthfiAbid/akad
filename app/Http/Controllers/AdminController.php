@@ -9,10 +9,11 @@ use App\Admin;
 use App\Buyer;
 use App\Goods;
 use App\Category;
-use Session;
 use Redirect;
-use Hash;
+use Session;
 use Alert;
+use Input;
+use Hash;
 use DB;
 
 class AdminController extends Controller
@@ -34,6 +35,7 @@ class AdminController extends Controller
     {
         print_r(Session::get('login'));
         if(!Session::get('login')){
+            Alert::error('You must login first!','Warning')->autoclose(2000);
             return redirect('/admin/login')->with('alert','Kamu harus login dulu');
         }else{
             $transaction = DB::table('transaction')->count();
@@ -85,17 +87,23 @@ class AdminController extends Controller
     //------------------------------- END LOGIN & LOGOUT --------------------------//
 
     //------------------------------ GOODS STOCK ----------------------------------//
+    // public function goodsShow($id)
+    // {
+    //     $data = DB::table('goods')
+    //     ->join('categories','categories.id_category','goods.id_category')
+    //     ->where('id_goods',$id)
+    //     ->first();
+    //     return view('goods.show',compact('data'));
+    // }
     public function apiStock()
     {
         // $users = User::select(['id', 'name', 'email', 'password', 'created_at', 'updated_at']);
         $dataAdmin = Session::get('id_admin');
         $stock = DB::table('goods')
-        ->join('categories','categories.id_category','goods.id_category')
+        ->leftjoin('categories','goods.id_category','categories.id_category')
         ->select('goods.*','categories.category_name as cat_name')
-        ->where('id_admin',$dataAdmin)
-        ->orderBy('id_category','ASC')
+        ->orderBy('id_category','DESC')
         ->get();
-        // $category = Category::all();
         // dd($stock);
 
         return Datatables::of($stock)
@@ -103,6 +111,7 @@ class AdminController extends Controller
                 return '<table id="tabel-in-opsi">'.
                 '<tr>'.
                     '<td>'.
+                    // '<a href="'. url('admin/stock/show'.'/'.$stock->id_goods) .'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit '. $stock->goods_name .'">Show</a>'.'&nbsp;'.
                         '<a href="'. url('admin/stock/edit'.'/'.$stock->id_goods) .'" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Edit '. $stock->goods_name .'">Edit</a>'.'&nbsp;'.
                         '<a href="'. url('admin/stock/delete'.'/'.$stock->id_goods) .'" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" onclick="return confirm('."'Are you sure want to delete it ?'".')" title="Delete '. $stock->goods_name .'">Delete</a>'.'&nbsp;'.
                     '</td>'.
@@ -122,15 +131,15 @@ class AdminController extends Controller
                 return '<td>'. $stock->cat_name .'</td> ';
             })
             ->editColumn('picture', function($stock){
-                $fileShirt = "productImages/shirt";
-                $filePants = "productImages/Pants";
-                $fileDress = "productImages/dress";
-            if($stock->id_category = 1){
-                return'<td><img src='.asset($fileShirt).'/'.$stock->picture.' height="50px"></img></td>';
-            }else if($stock->id_category = 2){
-                return'<td><img src='.asset($filePants).'/'.$stock->picture.' height="50px"></img></td>';
+                // $fileShirt = "productImages/shirt";
+                // $filePants = "productImages/pants";
+                // $fileDress = "productImages/dress";
+            if($stock->id_category == 1){
+                return'<td><img src='.asset("productImages/shirt").'/'.$stock->picture.' height="50px"></img></td>';
+            }else if($stock->id_category == 2){
+                return'<td><img src='.asset("productImages/pants").'/'.$stock->picture.' height="50px"></img></td>';
             }else{
-                return'<td><img src='.asset($fileDress).'/'.$stock->picture.' height="50px"></img></td>';
+                return'<td><img src='.asset("productImages/dress").'/'.$stock->picture.' height="50px"></img></td>';
             }
             })
                 ->addIndexColumn()
@@ -151,11 +160,12 @@ class AdminController extends Controller
     public function goodsStockUpdate(Request $request, $id)
     {
         $this->validate($request,[
-            'picture' => 'required|image|mimes:png,jpg'
+            'picture' => 'required|image|mimes:png,jpg,jpeg'
             ]);
-        $goods = Goods::firstOrNew(['id_goods' => $request->id_goods]);
+        $goods = Goods::where('id_goods',$id)->first();
         $file = $request->file('picture');
         $extension = $file->getClientOriginalName();
+        $dataAdmin = Session::get('id_admin');
 
         if($goods->id_category == 1){
         $file->move('productImages/shirt',$extension);
@@ -164,6 +174,7 @@ class AdminController extends Controller
         }else{
         $file->move('productImages/dress',$extension);
         }
+        $goods->id_admin = $dataAdmin;
         $goods->goods_name = $request->goods_name;
         $goods->stock = $request->stock;
         $goods->price = $request->price;
@@ -177,8 +188,9 @@ class AdminController extends Controller
     public function goodsStockEdit($id)
     {
         $data_admin = Session::get('admin_name');
+        $categories = DB::table('categories')->get();
         $data = DB::table('goods')->where('id_goods',$id)->first();
-        return view('goods.edit',compact('data','data_admin'));
+        return view('goods.edit',compact('data','data_admin','categories'));
     }
 
     public function goodsStockAdd()
@@ -193,11 +205,12 @@ class AdminController extends Controller
         $this->validate($request,[
             'picture' => 'required|image|mimes:png,jpg,jpeg'
             ]);
-        $goods = Goods::firstOrNew(['id_goods' => $request->id_goods]);
+        $goods = Goods::firstOrFail();
         $file = $request->file('picture');
         $extension = $file->getClientOriginalName();
         $data_admin = Session::get('id_admin');
 
+        if(!(Goods::where('goods_name', '=', $request->goods_name)->exists())){
         if($goods->id_category == 1){
         $file->move('productImages/shirt',$extension);
         }else if($goods->id_category == 2){
@@ -215,6 +228,10 @@ class AdminController extends Controller
         $goods->save();        
         Alert::success('Goods Added!','Add')->autoclose(2000);
         return redirect('admin/stock');
+        }else{
+        Alert::error('Goods name already exist!','Exist')->autoclose(2000);
+        return redirect('admin/stock/add');
+        }
     }
     public function pendingstock()
     {
@@ -241,7 +258,7 @@ class AdminController extends Controller
         $data_admin = Session::get('admin_name');
         return view('user.edit',compact('data','data_admin'));
     }
-    public function editDataUserstockst(Request $request)
+    public function editDataUserPost(Request $request)
     {
         $data = Buyer::where('id_buyer',$request->id_buyer)->first();
         $data->id_buyer = $request->id_buyer;
@@ -249,6 +266,7 @@ class AdminController extends Controller
         $data->address = $request->address;
         $data->city = $request->city;
         $data->save();
+        Alert::success('Goods Edited!','Edit')->autoclose(2000);
         return redirect('admin/dataUser')->with('alert','Data has been edit!');
     }
     public function apiUser()
