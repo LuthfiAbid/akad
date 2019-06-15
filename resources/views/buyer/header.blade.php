@@ -102,14 +102,14 @@
                     <!-- SEARCH BAR -->
                     <div class="col-md-8">
                         <div class="header-search">
-                            <form>
+                            <form action="{{url('buyer/searchCategory')}}" method="get">
                                 {{-- <select class="input-select" style="width:150px;">
                                     <option value="0">All Category </option>
                                     <option value="pakaian">T-shirt</option>
                                     <option value="aksesori">shirt</option>
                                     <option value="aksesori">koko shirt</option>
                                 </select> --}}
-                                <input class="input" placeholder="Search here">
+                                <input class="input" id="search" name="search" placeholder="Search here">
                                 <button class="search-btn">Search</button>
                             </form>
                         </div>

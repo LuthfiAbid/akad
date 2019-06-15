@@ -126,6 +126,7 @@
 <script>
     $( document ).ready(function() {
 
+
         refreshsum();
 
         })
@@ -172,6 +173,27 @@
 
         });
     }
+
+    $("#form-search").on('submit', function(e){
+        e.preventDefault()
+        var search = $("#search").val();
+       		$.ajax({
+			    type: "get",
+                url: "{{ url('buyer/searchCategory') }}",
+                data: {
+                    _token: "{{csrf_token()}}",
+                    search: search
+                },
+                success : function (data){
+                    //   if(data == 1){
+                    //        window.location.replace("{{url('buyer/login')}}");
+                    //   }else{
+                    //         alert("error");
+                    //     }
+                    }
+                  })
+
+    })
 
 
         function viewChart() {
