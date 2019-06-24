@@ -51,6 +51,11 @@ Route::get('buyer/searchCategory','TransactionController@searchCategory');
 
 //--------------------------------------------------------------------//
 
+//---------------------Transaction Category Buyer------------------------------//
+Route::get('buyer/category','TrCategoryController@index');
+
+//--------------------------------------------------------------------//
+
 //-----------------------------Stock----------------------------------//
 Route::get('admin/stock','AdminController@goodsStock');
 Route::get('admin/stock/edit/{id}','AdminController@goodsStockEdit');

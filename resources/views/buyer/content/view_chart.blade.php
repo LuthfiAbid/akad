@@ -251,30 +251,30 @@ $(document).ready(function(){
             });
 	}
 
-    function deleteDetail($id_detail) {
-        if (confirm('Are you sure you want to save this thing into the database?')) {
-            $.ajax({
-                type: "post",
-                url: "{{ url('buyer/deleteDetail') }}",
-                data: {
-                    _token: "{{csrf_token()}}",
-                    id_detail: $id_detail
-                },
-                success: function (data) {
-                    if(data == 1){
-                        alert("Success Delete")
-                        location.reload();
-						// window.location.replace("{{url('buyer/viewChart')}}");
-                    }else{
-                        alert('gagal delete');
-                    }
-                }
-            });
-        } else {
-            // Do nothing!
-        }
+    // function deleteDetail($id_detail) {
+    //     if (confirm('Are you sure you want to save this thing into the database?')) {
+    //         $.ajax({
+    //             type: "post",
+    //             url: "{{ url('buyer/deleteDetail') }}",
+    //             data: {
+    //                 _token: "{{csrf_token()}}",
+    //                 id_detail: $id_detail
+    //             },
+    //             success: function (data) {
+    //                 if(data == 1){
+    //                     alert("Success Delete")
+    //                     location.reload();
+	// 					// window.location.replace("{{url('buyer/viewChart')}}");
+    //                 }else{
+    //                     alert('gagal delete');
+    //                 }
+    //             }
+    //         });
+    //     } else {
+    //         // Do nothing!
+    //     }
 
 
-	}
+	// }
 
 </script>

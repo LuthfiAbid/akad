@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>Electro - HTML Ecommerce Template</title>
+    <title>AKAD - Belanja Halal Hati Lega</title>
 
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -149,7 +149,7 @@
                                                         class="qty">{{$detail_transaction->qty}}x</span>Rp.
                                                     {{number_format($detail_transaction->subtotal,0,'.','.')}}</h4>
                                             </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
+                                            <button onclick="deleteDetail({{$detail_transaction->id_detail}})" class="delete"><i class="fa fa-close"></i></button>
                                         </div>
                                         @endforeach
 

@@ -255,6 +255,60 @@
             });
 
 	}
+
+    function deleteDetail($id_detail) {
+        $.confirm({
+            title: 'Delete?',
+            content: 'Are you sure Delete data?',
+            type: 'red',
+            theme: 'dark',
+            boxWidth: '500px',
+            useBootstrap: false,
+            typeAnimated: true,
+            buttons: {
+                Yes: {
+                    text: 'Yes',
+                    btnClass: 'btn-red',
+                    action: function(){
+                     $.ajax({
+                            type: "post",
+                            url: "{{ url('buyer/deleteDetail') }}",
+                            data: {
+                                _token: "{{csrf_token()}}",
+                                id_detail: $id_detail
+                            },
+                            success: function (data) {
+                                if(data == 1){
+                                    $.confirm({
+                                    title: 'Data Deleted!',
+                                    content: 'Deleted Success!',
+                                    type: 'red',
+                                    theme: 'dark',
+                                    typeAnimated: true,
+                                    buttons: {
+                                        Ok: {
+                                            text: 'Ok',
+                                            btnClass: 'btn-red',
+                                            action: function(){
+                                                location.reload();
+                                            }
+                                        }
+                                        }
+
+                                });
+                                }else{
+                                    alert('gagal delete');
+                                }
+                            }
+                        });
+                    }
+                },
+                No: function () {
+                }
+            }
+        });
+
+    }
 </script>
 </body>
 
