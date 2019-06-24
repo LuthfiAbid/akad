@@ -25,6 +25,10 @@ Route::get('admin/login/loginPost','AdminController@loginPost');
 Route::get('admin/logout','AdminController@logout');
 Route::get('admin/home','AdminController@index');
 
+//-------------------------------box dashboard-----------------------------//
+Route::get('admin/pendingPO','AdminController@pendingPo');
+//-------------------------------------------------------------------------//
+
 //--------------------------------buyer------------------------------------//
 Route::get('buyer/login','BuyerController@login');
 Route::get('buyer/login/loginPostBuyer','BuyerController@loginPostBuyer');
@@ -54,11 +58,14 @@ Route::get('admin/stock/edit/{id}','AdminController@goodsStockEdit');
 Route::put('admin/stock/editPost/{id}','AdminController@goodsStockUpdate');
 Route::get('admin/stock/add','AdminController@goodsStockAdd');
 Route::post('admin/stock/addPost','AdminController@goodsStockAddPost');
-Route::delete('admin/stock/delete/{id}','AdminController@goodsDelete');
+Route::get('admin/stock/delete/{id}','AdminController@goodsDelete');
+Route::get('stock/api/get','AdminController@apiStock');
+Route::get('admin/stock/show/{id}','AdminController@goodsShow');
 //--------------------------------------------------------------------//
 
 //------------------------------User----------------------------------//
 Route::get('admin/dataUser','AdminController@dataUser');
 Route::get('admin/dataUser/edit/{id}','AdminController@dataUserEdit');
 Route::post('admin/dataUser/editPost','AdminController@editDataUserPost');
+Route::get('user/api/get','AdminController@apiUser');
 //--------------------------------------------------------------------//

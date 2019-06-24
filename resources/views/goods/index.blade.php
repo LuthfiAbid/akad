@@ -1,15 +1,47 @@
-@extends('dashboard')
+@extends('layout.dashboard')
 @section('content')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>    
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="{{URL::asset('DataTables/js/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{URL::asset('DataTables/js/datatables.bootstrap.min.js')}}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+@include('sweet::alert')
 <script type="text/javascript">
         $(document).ready( function () {
-            $('#table_id').DataTable();
+            $('#table_id').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '<?= url("stock/api/get") ?>',
+                columns: [
+                    {data: 'goods_name', name: 'goods_name'},
+                    {data: 'stock', name: 'stock'},
+                    {data: 'price', name: 'price'},
+                    {data: 'picture', name: 'picture'},
+                    {data: 'category', name: 'category'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
+            });
         });
 </script>
     <table class="display" id="table_id">
+        <div class="row">
+                <div class="col-md-12">                
+                    @if (session('success'))
+                    <div class="alert alert-success">
+                        <center>{{ session('success') }}</center>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        <div class="row">
+            <div class="col-md-12">                
+                @if (session('delete'))
+                <div class="alert alert-success">
+                    <center>{{ session('delete') }}</center>
+                    @endif
+                </div>
+            </div>
+        </div>
         <h2>Goods Warehouse</h2>     
         <center><a href="{{url('admin/stock/add')}}" class="btn btn-info"><li class="fa fa-plus">Add Goods</li></a>   </center>
         <thead>
@@ -23,7 +55,7 @@
         </tr>
         </thead>
         <tbody>
-            @foreach ($data as $data)                
+            {{-- @foreach ($data as $data)                
                 <form action="{{url('admin/stock/delete',$data->id_goods)}}" method="POST">
                     <td>{{$data->goods_name}}</td>
                     <td>{{$data->stock}}</td>
@@ -38,9 +70,9 @@
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                     </td>
-            </form>
+            </form> --}}
         </tbody>
-            @endforeach
+            {{-- @endforeach --}}
         </table>
     @endsection
     @section('navmenu')

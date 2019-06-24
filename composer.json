@@ -13,7 +13,9 @@
         "fzaninotto/faker": "^1.8",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
-        "yajra/laravel-datatables-oracle": "^9.2"
+        "srmklive/paypal": "^1.6",
+        "uxweb/sweet-alert": "^2.0",
+        "yajra/laravel-datatables-oracle": "^9.4"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

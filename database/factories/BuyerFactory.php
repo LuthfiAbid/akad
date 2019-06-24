@@ -16,6 +16,5 @@ $factory->define(App\Buyer::class, function (Faker $faker) {
         'buyer_name' => $faker->name,
         'address' => $faker->address,
         'city' => $faker->city,
-        'id_admin' => rand($min = 1, $max = 2),
     ];
 });
