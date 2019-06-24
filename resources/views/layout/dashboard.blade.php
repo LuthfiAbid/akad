@@ -98,7 +98,7 @@
 							</a>
 						</li>
 						<li>
-            				<a href="{{ url('admin/dataPelanggan') }}">
+            				<a href="{{ url('admin/dataTransaction') }}">
 						<i class='fa fa-dollar'></i>
 							<span>Data Transaction</span>
             				</a>

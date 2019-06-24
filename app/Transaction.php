@@ -8,5 +8,6 @@ class Transaction extends Model
 {
     protected $table='transaction';
     protected $primaryKey='id_transaction';
+    protected $fillable=['status','id_admin'];
     //
 }

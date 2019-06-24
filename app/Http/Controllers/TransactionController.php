@@ -141,7 +141,7 @@ class TransactionController extends Controller
                 }
                 echo 1;
         } catch (\Throwable $th) {
-            echo 2;
+            echo 0;
         }
 
 

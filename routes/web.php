@@ -69,3 +69,10 @@ Route::get('admin/dataUser/edit/{id}','AdminController@dataUserEdit');
 Route::post('admin/dataUser/editPost','AdminController@editDataUserPost');
 Route::get('user/api/get','AdminController@apiUser');
 //--------------------------------------------------------------------//
+
+//------------------------Transaction Admin----------------------------//
+Route::get('admin/dataTransaction','AdminController@transactionIndex');
+Route::get('admin/transaction/show/{id}','AdminController@showTransaction');
+Route::post('admin/transaction/inApprove/{id}','AdminController@inApprove');
+Route::get('transaction/api/get','AdminController@apiTransaction');
+//---------------------------------------------------------------------//

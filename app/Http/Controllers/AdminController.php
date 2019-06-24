@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Transaction;
+use App\Category;
 use App\Admin;
 use App\Buyer;
 use App\Goods;
-use App\Category;
 use Redirect;
 use Session;
 use Alert;
@@ -111,7 +112,7 @@ class AdminController extends Controller
                 return '<table id="tabel-in-opsi">'.
                 '<tr>'.
                     '<td>'.
-                    // '<a href="'. url('admin/stock/show'.'/'.$stock->id_goods) .'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit '. $stock->goods_name .'">Show</a>'.'&nbsp;'.
+                        '<a href="'. url('admin/stock/show'.'/'.$stock->id_goods) .'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Edit '. $stock->goods_name .'">Show</a>'.'&nbsp;'.
                         '<a href="'. url('admin/stock/edit'.'/'.$stock->id_goods) .'" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Edit '. $stock->goods_name .'">Edit</a>'.'&nbsp;'.
                         '<a href="'. url('admin/stock/delete'.'/'.$stock->id_goods) .'" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" onclick="return confirm('."'Are you sure want to delete it ?'".')" title="Delete '. $stock->goods_name .'">Delete</a>'.'&nbsp;'.
                     '</td>'.
@@ -245,6 +246,15 @@ class AdminController extends Controller
         $data->delete();
         return redirect('admin/stock')->with('delete','Delete Succes!');
     }
+    public function goodsShow($id)
+    {
+        $admin = Session::get('admin_name');
+        $data = DB::table('goods')
+        ->join('categories','categories.id_category','goods.id_category')
+        ->where('id_goods',$id)
+        ->first();
+        return view('goods.show',compact('data','admin'));
+    }
     //---------------------------------Data User --------------------------------//
     public function dataUser()
     {
@@ -303,4 +313,78 @@ class AdminController extends Controller
     //     return redirect('admin/stock')->with('delete','Delete Succes!');
     // }
     //------------------------------------------------------------------------------------------------------//
+
+    //-----------------------------------------Transaction--------------------------------------------------//
+        public function transactionIndex()
+        {
+            $dataAdmin = Session::get('id_admin');
+            $data = DB::table('transaction')->get();
+            return view('transaction.index',compact('data','dataAdmin'));
+        }
+        public function showTransaction($id)
+        {
+            $sumQty = DB::table('detail_transaction')
+            ->join('transaction','transaction.id_transaction','detail_transaction.id_transaction')
+            ->where('transaction.isdone','=','1')
+            ->where('detail_transaction.id_transaction',$id)
+            ->sum('detail_transaction.qty');
+
+            $sumPrice =  DB::table('detail_transaction')
+            ->join('transaction','transaction.id_transaction','detail_transaction.id_transaction')
+            ->where('transaction.isdone','=','1')
+            ->where('detail_transaction.id_transaction',$id)
+            ->sum('detail_transaction.subtotal');
+
+            $data = DB::table('transaction')
+            ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+            ->join('detail_transaction','detail_transaction.id_transaction','transaction.id_transaction')
+            ->join('goods','goods.id_goods','detail_transaction.id_goods')
+            ->where('detail_transaction.id_transaction',$id)
+            ->get();
+            return view('transaction.show',compact('sumQty','sumPrice','data'));
+        }
+        public function apiTransaction()
+        {
+        $dataAdmin = Session::get('id_admin');
+        $stock = DB::table('transaction')
+        ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+        // ->join('detail_transaction','detail_transaction.id_transaction','transaction.id_transaction')
+        // ->join('goods','goods.id_goods','detail_transaction.id_goods')
+        ->get();
+        // dd($stock);
+
+        return Datatables::of($stock)
+        ->addColumn('action', function ($stock){
+                return '<table id="tabel-in-opsi">'.
+                '<tr>'.
+                    '<td>'.
+                        '<a href="'. url('admin/transaction/show'.'/'.$stock->id_transaction) .'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top">Show</a>'.'&nbsp;'.
+                        '<a href="'. url('admin/transaction/cancel'.'/'.$stock->id_transaction) .'" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" onclick="return confirm('."'Are you sure want to cancel it ?'".')">Cancel</a>'.'&nbsp;'.
+                    '</td>'.
+                '</tr>'.
+            '</table>';
+            })
+            ->editColumn('buyer_name', function($stock){
+                return '<td>'. ucfirst($stock->buyer_name) .'</td> ';
+            })
+            ->editColumn('status', function($stock){
+                return '<td>'. ucfirst($stock->status) .'</td> ';
+            })
+            ->editColumn('created_at', function($stock){
+                return '<td>'. date('d M y H:i',strtotime($stock->created_at)) .'</td> ';
+            })        
+                ->addIndexColumn()
+                ->rawColumns(['buyer_name','status','created_at','action'])
+                ->make(true);
+    }
+    public function inApprove($id)
+    {
+        $admin = Session::get('id_admin');
+        $data = Transaction::find($id)
+        ->update(['status' => 'in approve',
+                  'id_admin' => $admin]);
+        return redirect('admin/dataTransaction');
+    }
+    //------------------------------------------------------------------------------------------------------//
+
 }
