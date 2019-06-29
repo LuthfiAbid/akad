@@ -11,10 +11,12 @@ use DB;
 class BuyerController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
         // print_r(Session::get('username'));
+        $good['search'] = $request->search;
         if(!Session::get('login_buyer')){
+
             $goods = DB::table('goods')
                     ->join('categories','categories.id_category','goods.id_category')
                     ->select('goods.*','categories.category_name as cat_name')
@@ -45,7 +47,7 @@ class BuyerController extends Controller
                     ->orderBy('id_goods','ASC')
                     ->limit(6)
                     ->get();
-        return view('buyer.home',compact('goods','goodss', 'goods_w_ts', 'goods_w_np', 'goods_w_a'));
+        return view('buyer.home',$good,compact('goods','goodss', 'goods_w_ts', 'goods_w_np', 'goods_w_a'));
         }else{
             $goods = DB::table('goods')
                     ->join('categories','categories.id_category','goods.id_category')
@@ -86,26 +88,28 @@ class BuyerController extends Controller
                     ->where('id_buyer',"=", Session::get('id_buyer'))
                     ->where('isdone', "=", "0")
                     ->get();
-                return view('buyer.home',compact('detail_transaction','goods', 'goodss', 'goods_w_ts', 'goods_w_np', 'goods_w_a'));
+                return view('buyer.home',$good,compact('detail_transaction','goods', 'goodss', 'goods_w_ts', 'goods_w_np', 'goods_w_a'));
         }
     }
 
-    public function login()
+    public function login(Request $request)
     {
         // print_r(Session::get('username'));
         if(!Session::get('login_buyer')){
-             return view('buyer.login');
+            $good['search'] = $request->search;
+             return view('buyer.login', $good);
         }else{
 
         return view('buyer.home');
         }
     }
 
-    public function register()
+    public function register(Request $request)
     {
         // print_r(Session::get('username'));
         // if(!Session::get('login_buyer')){
-             return view('buyer.register');
+            $good['search'] = $request->search;
+             return view('buyer.register', $good);
         // }else{
         //     $data = Session::get('buyer_name');
         // return view('buyer.home',compact('data'));
@@ -167,6 +171,7 @@ class BuyerController extends Controller
 
     public function setting(Request $request, $id_buyer)
     {
+        $good['search'] = $request->search;
         $detail_transaction = DB::table('transaction')
                     ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
                     ->join('goods','detail_transaction.id_goods','goods.id_goods')
@@ -176,7 +181,7 @@ class BuyerController extends Controller
                     ->where('isdone', "=", "0")
                     ->get();
         $data_buyer = DB::table('buyer')->where('id_buyer',$id_buyer)->first();
-        return view('buyer.setting',compact('data_buyer','detail_transaction'));
+        return view('buyer.setting',$good,compact('data_buyer','detail_transaction'));
     }
     public function updateSettingBuyer(Request $request)
     {

@@ -24,10 +24,29 @@ class TransactionController extends Controller
     }
 
     public function searchCategory(Request $request){
-        $data = DB::table('goods')
-                    ->join('categories','categories.id_category','goods.id_category')
-                    ->select('goods.*','categories.*')
-                    ->get();
+        $goods['search'] = $request->search;
+        if ($request->search == "") {
+            $goods['all'] = DB::table('goods')
+            ->join('categories','categories.id_category','goods.id_category')
+            ->select('goods.*','categories.*')
+            ->paginate(6);
+            $goods['count_goods'] = DB::table('goods')
+            ->join('categories','categories.id_category','goods.id_category')
+            ->select('goods.*','categories.*')
+            ->where('goods.goods_name', 'like', '%' . $request->search . '%')
+            ->count();
+        } else {
+            $goods['all'] = DB::table('goods')
+            ->join('categories','categories.id_category','goods.id_category')
+            ->select('goods.*','categories.*')
+            ->where('goods.goods_name', 'like', '%' . $request->search . '%')
+            ->paginate(6);
+            $goods['count_goods'] = DB::table('goods')
+            ->join('categories','categories.id_category','goods.id_category')
+            ->select('goods.*','categories.*')
+            ->where('goods.goods_name', 'like', '%' . $request->search . '%')
+            ->count();
+        }
         $detail_transaction = DB::table('transaction')
                     ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
                     ->join('goods','detail_transaction.id_goods','goods.id_goods')
@@ -36,11 +55,12 @@ class TransactionController extends Controller
                     ->where('id_buyer',"=", Session::get('id_buyer'))
                     ->where('isdone', "=", "0")
                     ->get();
-        return view('buyer.content.categories', compact('detail_transaction'));
+        return view('buyer.content.categories',$goods, compact('detail_transaction'));
     }
 
 
-    public function viewChart(){
+    public function viewChart(Request $request){
+        $good['search'] = $request->search;
         $detail_transaction = DB::table('transaction')
                     ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
                     ->join('goods','detail_transaction.id_goods','goods.id_goods')
@@ -49,10 +69,11 @@ class TransactionController extends Controller
                     ->where('id_buyer',"=", Session::get('id_buyer'))
                     ->where('isdone', "=", "0")
                     ->get();
-        return view('buyer.content.view_chart', compact('detail_transaction'));
+        return view('buyer.content.view_chart',$good, compact('detail_transaction'));
     }
 
-    public function viewCheckout(){
+    public function viewCheckout(Request $request){
+        $good['search'] = $request->search;
         $detail_transaction = DB::table('transaction')
                     ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
                     ->join('goods','detail_transaction.id_goods','goods.id_goods')
@@ -61,12 +82,12 @@ class TransactionController extends Controller
                     ->where('id_buyer',"=", Session::get('id_buyer'))
                     ->where('isdone', "=", "0")
                     ->get();
-        return view('buyer.content.checkout', compact('detail_transaction'));
+        return view('buyer.content.checkout',$good, compact('detail_transaction'));
     }
 
-    public function getViewGoods($id_goods)
+    public function getViewGoods(Request $request, $id_goods)
     {
-
+        $good['search'] = $request->search;
         //    $data = Session::get('buyer_name');
            $data_goods = DB::table('goods')
                         ->join('categories','categories.id_category','goods.id_category')
@@ -87,7 +108,7 @@ class TransactionController extends Controller
                         ->where('id_buyer',"=", Session::get('id_buyer'))
                         ->where('isdone', "=", "0")
                         ->get();
-           return view('buyer.content.product',compact('data_goods','goods','detail_transaction'));
+           return view('buyer.content.product',$good, compact('data_goods','goods','detail_transaction'));
 
     }
 

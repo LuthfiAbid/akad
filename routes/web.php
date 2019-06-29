@@ -53,6 +53,7 @@ Route::get('buyer/searchCategory','TransactionController@searchCategory');
 
 //---------------------Transaction Category Buyer------------------------------//
 Route::get('buyer/category','TrCategoryController@index');
+Route::get('buyer/viewSelectedCategory/{category_name}','TrCategoryController@viewSelectedCategory');
 
 //--------------------------------------------------------------------//
 

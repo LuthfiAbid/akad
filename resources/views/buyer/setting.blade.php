@@ -90,8 +90,23 @@
                         success : function (data){
 
                           if(data == 1){
-							alert('Setting Success')
-                            window.location.replace("{{url('buyer/home')}}");
+							$.confirm({
+                                title: 'Setting!',
+                                content: 'Setting Success!',
+                                type: 'green',
+                                theme: 'light',
+                                typeAnimated: true,
+                                buttons: {
+                                    Ok: {
+                                        text: 'Ok',
+                                        btnClass: 'btn-green',
+                                        action: function(){
+                                            window.location.replace("{{url('buyer/home')}}");
+                                        }
+                                    }
+                                }
+                            });
+
                           }else{
                             alert("error");
                           }
@@ -100,5 +115,5 @@
                   })
 
     })
-    
+
 		</script>

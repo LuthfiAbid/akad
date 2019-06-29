@@ -10,8 +10,14 @@
 				<div class="row">
 					<div class="col-md-12">
 						<ul class="breadcrumb-tree">
-							<li><a href="#">Home</a></li>
-							<li><a href="#">All Categories ({{$count_data_goods}})</a></li>
+                            <li><a onclick="window.location.href='{{url('buyer/home')}}'" style="cursor:pointer;">Home</a></li>
+                            @if ($category_name == "")
+
+                            <li><a onclick="window.location.href='{{url('buyer/category')}}'" style="cursor:pointer;">All Categories ({{$count_data_goods}})</a></li>
+                            @else
+                            <li><a onclick="window.location.href='{{url('buyer/viewSelectedCategory')}}/{{$category_name}}'" style="cursor:pointer;">{{$category_name}}</a></li>
+                            @endif
+
 						</ul>
 					</div>
 				</div>
@@ -33,66 +39,23 @@
 						<div class="aside">
 							<h3 class="aside-title">Categories</h3>
 							<div class="checkbox-filter">
-
+                                    @foreach ($category as $category)
 								<div class="input-checkbox">
-									<input type="checkbox" id="category-1">
+									<label for="category-1">∎</label>
 									<label for="category-1">
 										<span></span>
-										Laptops
-										<small>(120)</small>
-									</label>
-								</div>
+                                        <a onclick="window.location.href='{{url('buyer/viewSelectedCategory')}}/{{$category->category_name}}'">{{$category->category_name}}</a>
 
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-2">
-									<label for="category-2">
-										<span></span>
-										Smartphones
-										<small>(740)</small>
+										{{-- <small>(120)</small> --}}
 									</label>
-								</div>
-
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-3">
-									<label for="category-3">
-										<span></span>
-										Cameras
-										<small>(1450)</small>
-									</label>
-								</div>
-
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-4">
-									<label for="category-4">
-										<span></span>
-										Accessories
-										<small>(578)</small>
-									</label>
-								</div>
-
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-5">
-									<label for="category-5">
-										<span></span>
-										Laptops
-										<small>(120)</small>
-									</label>
-								</div>
-
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-6">
-									<label for="category-6">
-										<span></span>
-										Smartphones
-										<small>(740)</small>
-									</label>
-								</div>
+                                </div>
+                                    @endforeach
 							</div>
 						</div>
 						<!-- /aside Widget -->
 
 						<!-- aside Widget -->
-						<div class="aside">
+						{{-- <div class="aside">
 							<h3 class="aside-title">Price</h3>
 							<div class="price-filter">
 								<div id="price-slider"></div>
@@ -108,14 +71,14 @@
 									<span class="qty-down">-</span>
 								</div>
 							</div>
-						</div>
+						</div> --}}
 						<!-- /aside Widget -->
 
 						<!-- aside Widget -->
 						<div class="aside">
                             <h3 class="aside-title">Top selling</h3>
                             @foreach ($goods_w_ts as $goods_w_ts)
-							<div class="product-widget">
+							<div onclick="window.location.href='{{url('buyer/getViewGoods')}}/{{$goods_w_ts->id_goods}}'" style="cursor:pointer;" class="product-widget">
 								<div class="product-img">
 									<img src="{{asset('productImages/shirt').'/'.$goods_w_ts->picture}}" alt="">
 								</div>
@@ -134,10 +97,24 @@
 
 					<!-- STORE -->
 					<div id="store" class="col-md-9">
+
 						<div class="row">
                             <!-- product -->
+                            {{-- {{$count_goods}} --}}
+                            @if (!empty($count_goods))
+                                @if (empty($search))
+                                <div>
+                                        <label for="">Item Found ({{$count_goods}})</label>
+                                </div>
+                                @else
+                                <div>
+                                        <label for="">Item Found ({{$count_goods}})</label>
+                                </div>
+                                @endif
+
+
                             @foreach ($all as $no => $goods)
-							<div class="col-md-4 col-xs-6">
+							<div onclick="window.location.href='{{url('buyer/getViewGoods')}}/{{$goods->id_goods}}'" style="cursor:pointer;" class="col-md-4 col-xs-6">
 
 								<div class="product" style="height:550px;">
 									<div class="product-img">
@@ -159,6 +136,10 @@
 								</div>
                             </div>
                             @endforeach
+                            @else
+                               <label for=""> Item Not Found </label>
+                            @endif
+
 							<!-- /product -->
                         </div>
 
