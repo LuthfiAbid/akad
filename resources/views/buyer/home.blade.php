@@ -238,7 +238,7 @@
                                             @for ($i = 0; $i < 2; $i++)
                                             <div>
                                                 @for ($c = 0; $c < 3; $c++)
-                                                <div class="product-widget">
+                                                <div class="product-widget" onclick="window.location.href='{{url('buyer/getViewGoods')}}/{{$goods_w_ts[$a]->id_goods}}'" style="cursor:pointer;">
                                                     <div class="product-img">
                                                         <img src="{{asset('productImages/shirt').'/'.$goods_w_ts[$a]->picture}}" alt="">
                                                     </div>
@@ -278,7 +278,7 @@
                                                 @for ($i = 0; $i < 2; $i++)
                                                 <div>
                                                     @for ($c = 0; $c < 3; $c++)
-                                                    <div class="product-widget">
+                                                    <div class="product-widget"  onclick="window.location.href='{{url('buyer/getViewGoods')}}/{{$goods_w_np[$a]->id_goods}}'" style="cursor:pointer;">
                                                         <div class="product-img">
                                                             <img src="{{asset('productImages/shirt').'/'.$goods_w_np[$a]->picture}}" alt="">
                                                         </div>
@@ -318,7 +318,7 @@
                                                     @for ($i = 0; $i < 2; $i++)
                                                     <div>
                                                         @for ($c = 0; $c < 3; $c++)
-                                                        <div class="product-widget">
+                                                        <div class="product-widget"  onclick="window.location.href='{{url('buyer/getViewGoods')}}/{{$goods_w_a[$a]->id_goods}}'" style="cursor:pointer;">
                                                             <div class="product-img">
                                                                 <img src="{{asset('productImages/shirt').'/'.$goods_w_a[$a]->picture}}" alt="">
                                                             </div>

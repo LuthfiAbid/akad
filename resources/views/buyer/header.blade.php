@@ -102,15 +102,15 @@
                     <!-- SEARCH BAR -->
                     <div class="col-md-8">
                         <div class="header-search">
-                            <form action="{{url('buyer/searchCategory')}}" method="get">
-                                {{-- <select class="input-select" style="width:150px;">
-                                    <option value="0">All Category </option>
-                                    <option value="pakaian">T-shirt</option>
-                                    <option value="aksesori">shirt</option>
-                                    <option value="aksesori">koko shirt</option>
-                                </select> --}}
-                                <input class="input" id="search" name="search" placeholder="Search here">
-                                <button class="search-btn">Search</button>
+                            <form action="{{URL::asset('buyer/category')}}" method="GET">
+                                    {{-- <select class="input-select" style="width:150px;">
+                                        <option value="0">All Category </option>
+                                        <option value="pakaian">T-shirt</option>
+                                        <option value="aksesori">shirt</option>
+                                        <option value="aksesori">koko shirt</option>
+                                    </select> --}}
+                                    <input class="input" id="search" name="search" value="{{$search}}" placeholder="Search here">
+                                    <button class="search-btn" type="submit">Search</button>
                             </form>
                         </div>
                     </div>
