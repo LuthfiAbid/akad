@@ -126,6 +126,11 @@
 <script>
     $( document ).ready(function() {
 
+
+        refreshsum();
+
+        })
+        function refreshsum(){
         var id_transaction = $('#id_transaction').val();
             $.ajax({
                 type: "get",
@@ -167,7 +172,29 @@
                 }
 
         });
-        })
+    }
+
+    $("#form-search").on('submit', function(e){
+        e.preventDefault()
+        var search = $("#search").val();
+       		$.ajax({
+			    type: "get",
+                url: "{{ url('buyer/searchCategory') }}",
+                data: {
+                    _token: "{{csrf_token()}}",
+                    search: search
+                },
+                success : function (data){
+                    //   if(data == 1){
+                    //        window.location.replace("{{url('buyer/login')}}");
+                    //   }else{
+                    //         alert("error");
+                    //     }
+                    }
+                  })
+
+    })
+
 
         function viewChart() {
             window.location.replace("{{url('buyer/viewChart')}}");
@@ -228,6 +255,60 @@
             });
 
 	}
+
+    function deleteDetail($id_detail) {
+        $.confirm({
+            title: 'Delete?',
+            content: 'Are you sure Delete data?',
+            type: 'red',
+            theme: 'dark',
+            boxWidth: '500px',
+            useBootstrap: false,
+            typeAnimated: true,
+            buttons: {
+                Yes: {
+                    text: 'Yes',
+                    btnClass: 'btn-red',
+                    action: function(){
+                     $.ajax({
+                            type: "post",
+                            url: "{{ url('buyer/deleteDetail') }}",
+                            data: {
+                                _token: "{{csrf_token()}}",
+                                id_detail: $id_detail
+                            },
+                            success: function (data) {
+                                if(data == 1){
+                                    $.confirm({
+                                    title: 'Data Deleted!',
+                                    content: 'Deleted Success!',
+                                    type: 'red',
+                                    theme: 'dark',
+                                    typeAnimated: true,
+                                    buttons: {
+                                        Ok: {
+                                            text: 'Ok',
+                                            btnClass: 'btn-red',
+                                            action: function(){
+                                                location.reload();
+                                            }
+                                        }
+                                        }
+
+                                });
+                                }else{
+                                    alert('gagal delete');
+                                }
+                            }
+                        });
+                    }
+                },
+                No: function () {
+                }
+            }
+        });
+
+    }
 </script>
 </body>
 

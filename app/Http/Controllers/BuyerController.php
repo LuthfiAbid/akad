@@ -197,4 +197,5 @@ class BuyerController extends Controller
                 echo 0;
             }
     }
+
 }

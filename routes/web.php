@@ -18,40 +18,15 @@ Route::group(['middleware' => 'revalidate'],function(){
 
 });
 Route::get('/back','AdminController@back');
-
 Route::get('admin/login','AdminController@login');
 Route::get('admin/login/loginPost','AdminController@loginPost');
-
 Route::get('admin/logout','AdminController@logout');
 Route::get('admin/home','AdminController@index');
-
 //-------------------------------box dashboard-----------------------------//
+Route::get('pendingPo/api/get','AdminController@apiPendingPo');
 Route::get('admin/pendingPO','AdminController@pendingPo');
+Route::post('admin/pendingPo/update/{id}','AdminController@updatePendingPoStatus');
 //-------------------------------------------------------------------------//
-
-//--------------------------------buyer------------------------------------//
-Route::get('buyer/login','BuyerController@login');
-Route::get('buyer/login/loginPostBuyer','BuyerController@loginPostBuyer');
-Route::get('buyer/register','BuyerController@register');
-Route::post('buyer/registerBuyer','BuyerController@saveRegisterBuyer');
-Route::get('buyer/logout','BuyerController@logout');
-Route::get('buyer/setting/{id_buyer}','BuyerController@setting');
-Route::post('buyer/updateSettingBuyer','BuyerController@updateSettingBuyer');
-Route::get('buyer/home','BuyerController@index');
-//--------------------------------buyer------------------------------------//
-
-//---------------------Transaction Buyer------------------------------//
-Route::get('admin/stock','AdminController@goodsStock');
-Route::get('buyer/getViewGoods/{id}','TransactionController@getViewGoods');
-Route::get('buyer/createTransaction','TransactionController@createTransaction');
-Route::get('buyer/viewCountSubtotal','TransactionController@viewCountSubtotal');
-Route::get('buyer/viewChart','TransactionController@viewChart');
-Route::get('buyer/viewCheckout','TransactionController@viewCheckout');
-Route::post('buyer/deleteDetail','TransactionController@deleteDetail');
-Route::get('buyer/updateTransaction','TransactionController@updateTransaction');
-
-//--------------------------------------------------------------------//
-
 //-----------------------------Stock----------------------------------//
 Route::get('admin/stock','AdminController@goodsStock');
 Route::get('admin/stock/edit/{id}','AdminController@goodsStockEdit');
@@ -62,17 +37,37 @@ Route::get('admin/stock/delete/{id}','AdminController@goodsDelete');
 Route::get('stock/api/get','AdminController@apiStock');
 Route::get('admin/stock/show/{id}','AdminController@goodsShow');
 //--------------------------------------------------------------------//
-
 //------------------------------User----------------------------------//
 Route::get('admin/dataUser','AdminController@dataUser');
 Route::get('admin/dataUser/edit/{id}','AdminController@dataUserEdit');
 Route::post('admin/dataUser/editPost','AdminController@editDataUserPost');
 Route::get('user/api/get','AdminController@apiUser');
 //--------------------------------------------------------------------//
-
 //------------------------Transaction Admin----------------------------//
 Route::get('admin/dataTransaction','AdminController@transactionIndex');
 Route::get('admin/transaction/show/{id}','AdminController@showTransaction');
 Route::post('admin/transaction/inApprove/{id}','AdminController@inApprove');
 Route::get('transaction/api/get','AdminController@apiTransaction');
 //---------------------------------------------------------------------//
+
+/////////////////////////////////// BUYER /////////////////////////////////
+//--------------------------------buyer------------------------------------//
+Route::get('buyer/login','BuyerController@login');
+Route::get('buyer/login/loginPostBuyer','BuyerController@loginPostBuyer');
+Route::get('buyer/register','BuyerController@register');
+Route::post('buyer/registerBuyer','BuyerController@saveRegisterBuyer');
+Route::get('buyer/logout','BuyerController@logout');
+Route::get('buyer/setting/{id_buyer}','BuyerController@setting');
+Route::post('buyer/updateSettingBuyer','BuyerController@updateSettingBuyer');
+Route::get('buyer/home','BuyerController@index');
+//--------------------------------buyer------------------------------------//
+//---------------------Transaction Buyer------------------------------//
+Route::get('admin/stock','AdminController@goodsStock');
+Route::get('buyer/getViewGoods/{id}','TransactionController@getViewGoods');
+Route::get('buyer/createTransaction','TransactionController@createTransaction');
+Route::get('buyer/viewCountSubtotal','TransactionController@viewCountSubtotal');
+Route::get('buyer/viewChart','TransactionController@viewChart');
+Route::get('buyer/viewCheckout','TransactionController@viewCheckout');
+Route::post('buyer/deleteDetail','TransactionController@deleteDetail');
+Route::get('buyer/updateTransaction','TransactionController@updateTransaction');
+//--------------------------------------------------------------------//

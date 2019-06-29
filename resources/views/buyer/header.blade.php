@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>Electro - HTML Ecommerce Template</title>
+    <title>AKAD - Belanja Halal Hati Lega</title>
 
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -102,14 +102,14 @@
                     <!-- SEARCH BAR -->
                     <div class="col-md-8">
                         <div class="header-search">
-                            <form>
+                            <form action="{{url('buyer/searchCategory')}}" method="get">
                                 {{-- <select class="input-select" style="width:150px;">
                                     <option value="0">All Category </option>
                                     <option value="pakaian">T-shirt</option>
                                     <option value="aksesori">shirt</option>
                                     <option value="aksesori">koko shirt</option>
                                 </select> --}}
-                                <input class="input" placeholder="Search here">
+                                <input class="input" id="search" name="search" placeholder="Search here">
                                 <button class="search-btn">Search</button>
                             </form>
                         </div>
@@ -149,7 +149,7 @@
                                                         class="qty">{{$detail_transaction->qty}}x</span>Rp.
                                                     {{number_format($detail_transaction->subtotal,0,'.','.')}}</h4>
                                             </div>
-                                            <button class="delete"><i class="fa fa-close"></i></button>
+                                            <button onclick="deleteDetail({{$detail_transaction->id_detail}})" class="delete"><i class="fa fa-close"></i></button>
                                         </div>
                                         @endforeach
 

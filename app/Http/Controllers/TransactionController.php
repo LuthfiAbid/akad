@@ -23,6 +23,23 @@ class TransactionController extends Controller
         }
     }
 
+    public function searchCategory(Request $request){
+        $data = DB::table('goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','categories.*')
+                    ->get();
+        $detail_transaction = DB::table('transaction')
+                    ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
+                    ->join('goods','detail_transaction.id_goods','goods.id_goods')
+                    ->join('categories','categories.id_category','goods.id_category')
+                    ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
+                    ->where('id_buyer',"=", Session::get('id_buyer'))
+                    ->where('isdone', "=", "0")
+                    ->get();
+        return view('buyer.content.categories', compact('detail_transaction'));
+    }
+
+
     public function viewChart(){
         $detail_transaction = DB::table('transaction')
                     ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
@@ -123,6 +140,7 @@ class TransactionController extends Controller
                     $detail_transaction->save();
 
                 }else {
+
                     $get_hd = DB::table('transaction')
                         ->select("transaction.id_transaction")
                         ->where('id_buyer', "=", Session::get('id_buyer'))
@@ -132,12 +150,48 @@ class TransactionController extends Controller
 
                     $id_transaction = $get_hd->id_transaction;
 
-                    $detail_transaction = new DetailTransaction();
-                    $detail_transaction->id_transaction =  $id_transaction;
-                    $detail_transaction->id_goods = $request->id_goods;
-                    $detail_transaction->qty =  $request->qty;
-                    $detail_transaction->subtotal =  $request->subtotal;
-                    $detail_transaction->save();
+                    $get_detail = DB::table('detail_transaction')
+                        ->select("detail_transaction.id_detail")
+                        ->where('id_transaction', "=", $id_transaction)
+                        ->where('id_goods', "=", $request->id_goods)
+                        ->count();
+
+                    $get_id_detail = $get_detail;
+
+                    if (empty($get_id_detail)) {
+                       $detail_transaction = new DetailTransaction();
+                       $detail_transaction->id_transaction =  $id_transaction;
+                       $detail_transaction->id_goods = $request->id_goods;
+                       $detail_transaction->qty =  $request->qty;
+                       $detail_transaction->subtotal =  $request->subtotal;
+                       $detail_transaction->save();
+                    }else{
+
+                        $get_detail = DB::table('detail_transaction')
+                        ->select("detail_transaction.id_detail")
+                        ->where('id_transaction', "=", $id_transaction)
+                        ->where('id_goods', "=", $request->id_goods)
+                        ->first();
+
+                    $get_id_detail = $get_detail->id_detail;
+
+                        $goods = DB::table('goods')
+                        ->join('detail_transaction','goods.id_goods','detail_transaction.id_goods')
+                        ->select('goods.*','detail_transaction.*')
+                        ->where('id_detail', "=", $get_id_detail)
+                        ->first();
+
+                        $qty = $request->qty;
+                        $sum_qty = $qty + $goods->qty;
+                        $price = $goods->price;
+                        $subtotal = $sum_qty * $price;
+
+                        $data = DetailTransaction::findOrFail($get_id_detail);
+                        $data->qty = $sum_qty;
+                        $data->subtotal = $subtotal;
+                        $data->save();
+                    }
+
                 }
                 echo 1;
         } catch (\Throwable $th) {
@@ -200,6 +254,22 @@ class TransactionController extends Controller
             } else {
                 echo 0;
             }
+    }
+
+    public function returnGrandTotal(Request $request){
+        $count = DB::table('detail_transaction')
+            ->where('id_transaction', "=", $request->id_transaction)
+            ->sum('qty');
+
+            $sum = DB::table('detail_transaction')
+            ->where('id_transaction', "=", $request->id_transaction)
+            ->sum('subtotal');
+
+        return view('buyer.content.returnGrandTotal', compact('count', 'sum'));
+        //      $data = array('data_count'=>$count, 'data_sum'=>$sum);
+
+        //    echo json_encode($data);
+
     }
 
 

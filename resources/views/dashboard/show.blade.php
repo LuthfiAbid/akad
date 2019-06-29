@@ -47,7 +47,23 @@
                                         <label for="">Sub Total</label>
                                     </td>
                                     <td style="width:20%"></td>
-                                    <td><b>Rp. {{number_format($sumPrice,0,'.','.')}}</b></td>
+                                    <td><b>Rp. {{number_format($subTotal,0,'.','.')}}</b></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="">Diskon(%)</label>
+                                    </td>
+                                    <td style="width:20%"></td>
+                                    {{-- <td> <b>{{  ( $detailSalesOrder[0]->diskon_header_persen != 0 ) ? $detailSalesOrder[0]->diskon_header_persen.' %' : '-' }}</b></td> --}}
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="">Diskon (Rp) </label>
+                                    </td>
+                                    <td style="width:20%"></td>
+                                    <td>
+                                        {{-- <b>{{  ($detailSalesOrder[0]->diskon_header_potongan != 0 ) ? 'Rp. '.number_format($detailSalesOrder[0]->diskon_header_potongan,0,'.','.') : '-' }}</b> --}}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -55,7 +71,7 @@
                                     </td>
                                     <td style="width:20%"></td>
                                     <td>
-                                        2.5 %
+                                        {{-- <b>{{$detailSalesOrder[0]->ppn}} %</b> --}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -64,7 +80,7 @@
                                     </td>
                                     <td style="width:20%"></td>
                                     <td>
-                                        <b>Rp. {{number_format($sumPrice * 2.5/100 ,0,'.','.')}}</b>
+                                        {{-- <b>Rp. {{number_format($detailSalesOrder[0]->amount_ppn,0,'.','.')}}</b> --}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -73,7 +89,7 @@
                                     </td>
                                     <td style="width:20%"></td>
                                     <td>
-                                        <b>Rp. {{number_format($totalPlusTax,0,'.','.')}}</b>
+                                        {{-- <b>Rp. {{number_format($detailSalesOrder[0]->grand_total,0,'.','.')}}</b> --}}
                                     </td>
                                 </tr>
                             </table>

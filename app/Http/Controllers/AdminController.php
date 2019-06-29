@@ -39,12 +39,68 @@ class AdminController extends Controller
             Alert::error('You must login first!','Warning')->autoclose(2000);
             return redirect('/admin/login')->with('alert','Kamu harus login dulu');
         }else{
-            $transaction = DB::table('transaction')->count();
+            $poPending = DB::table('transaction')->where('isdone','=','1')->where('status','=','pending')->count();
+            $payementPending = DB::table('transaction')->where('status','=','in approve')->count();
             $data = Session::get('admin_name');
-            return view('home.index',compact('data','transaction'));
+            return view('home.index',compact('data','poPending','payementPending'));
         }
     }
     //---------------------------------LOGIN & LOGOUT----------------------------------//
+
+    //---------------------------------View Dashboard----------------------------------//
+    public function apiPendingPo()
+    {
+        $pending = DB::table('transaction')
+        ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+        ->where('status','=','pending')
+        ->where('isdone','=','1')
+        // ->groupBy('buyer.id_buyer')
+        ->get();
+        // dd($pending);
+        return Datatables::of($pending)
+        ->addColumn('action', function ($pending){
+                return '<table id="tabel-in-opsi">'.
+                '<tr>'.
+                    '<td>'.
+                        '<a href="'. url('admin/transaction/show'.'/'.$pending->id_transaction) .'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Show details '. $pending->id_transaction .' ">Show </a>'.'&nbsp;'.
+                    '</td>'.
+                '</tr>'.
+            '</table>';
+            })
+            ->editColumn('no', function($pending){
+                return '<td>'. ($pending->id_transaction).'</td> ';
+            })
+            ->editColumn('buyer_name', function($pending){
+                return '<td>'. ($pending->buyer_name).'</td> ';
+            })
+            ->editColumn('status', function($pending){
+                return '<td>'. ucfirst($pending->status).'</td> ';
+            })
+            ->editColumn('transaction', function($pending){
+                return '<td>'.date('d F Y ',strtotime($pending->created_at)).'</td> ';
+            })
+                ->addIndexColumn()
+                ->rawColumns(['no','buyer_name','status','transaction','action'])
+                ->make(true);
+    }
+    public function pendingPo()
+    {
+        $data_admin = Session::get('admin_name');
+        $data = DB::table('transaction')
+        ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+        ->where('status','=','pending')
+        ->get();
+        return view('dashboard.pendingPo',compact('data','data_admin'));
+    }
+    public function updatePendingPoStatus($id)
+    {
+        $admin = Session::get('id_admin');
+        $data = Transaction::find($id)
+        ->update(['status' => 'in approve',
+        'id_admin' => $admin]);
+        return redirect('admin/pendingPO');
+    }
+    //---------------------------------------------------------------------------------//
     public function login()
     {
         print_r(Session::get('login'));
@@ -88,14 +144,6 @@ class AdminController extends Controller
     //------------------------------- END LOGIN & LOGOUT --------------------------//
 
     //------------------------------ GOODS STOCK ----------------------------------//
-    // public function goodsShow($id)
-    // {
-    //     $data = DB::table('goods')
-    //     ->join('categories','categories.id_category','goods.id_category')
-    //     ->where('id_goods',$id)
-    //     ->first();
-    //     return view('goods.show',compact('data'));
-    // }
     public function apiStock()
     {
         // $users = User::select(['id', 'name', 'email', 'password', 'created_at', 'updated_at']);
@@ -132,9 +180,6 @@ class AdminController extends Controller
                 return '<td>'. $stock->cat_name .'</td> ';
             })
             ->editColumn('picture', function($stock){
-                // $fileShirt = "productImages/shirt";
-                // $filePants = "productImages/pants";
-                // $fileDress = "productImages/dress";
             if($stock->id_category == 1){
                 return'<td><img src='.asset("productImages/shirt").'/'.$stock->picture.' height="50px"></img></td>';
             }else if($stock->id_category == 2){
@@ -306,12 +351,6 @@ class AdminController extends Controller
                 ->rawColumns(['buyer_name','address','city','action'])
                 ->make(true);
     }
-    // public function userDelete($id)
-    // {
-    //     $data = Goods::findOrFail($id);
-    //     $data->delete();
-    //     return redirect('admin/stock')->with('delete','Delete Succes!');
-    // }
     //------------------------------------------------------------------------------------------------------//
 
     //-----------------------------------------Transaction--------------------------------------------------//
@@ -335,13 +374,15 @@ class AdminController extends Controller
             ->where('detail_transaction.id_transaction',$id)
             ->sum('detail_transaction.subtotal');
 
+            $totalPlusTax = $sumPrice + ($sumPrice * 2.5/100);
+
             $data = DB::table('transaction')
             ->join('buyer','buyer.id_buyer','transaction.id_buyer')
             ->join('detail_transaction','detail_transaction.id_transaction','transaction.id_transaction')
             ->join('goods','goods.id_goods','detail_transaction.id_goods')
             ->where('detail_transaction.id_transaction',$id)
             ->get();
-            return view('transaction.show',compact('sumQty','sumPrice','data'));
+            return view('transaction.show',compact('sumQty','sumPrice','data','totalPlusTax'));
         }
         public function apiTransaction()
         {

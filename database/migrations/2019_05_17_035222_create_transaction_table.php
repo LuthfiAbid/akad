@@ -17,13 +17,14 @@ class CreateTransactionTable extends Migration
             $table->increments('id_transaction');
             $table->integer('id_buyer')->unsigned();
             $table->foreign('id_buyer')->references('id_buyer')->on('buyer')->onDelete('cascade');
-            $table->integer('id_admin')->unsigned();
+            $table->integer('id_admin')->unsigned()->nullable();
             $table->foreign('id_admin')->references('id_admin')->on('admin')->onDelete('cascade');
-            $table->string('total_price');
+            $table->string('total_price')->nullable();
             $table->integer('isdone');
             $table->enum('status',['in approve','pending','reject','agree'])->default('pending');
             $table->string('description')->nullable();
-            $table->timestamps();
+            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
