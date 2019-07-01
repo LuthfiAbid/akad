@@ -202,20 +202,7 @@
                     <ul class="main-nav nav navbar-nav">
                         <li class="active"><a href="{{URL::asset('buyer/home')}}">Home</a></li>
                         <li class=""><a href="{{URL::asset('buyer/category')}}">Category</a></li>
-                        {{-- <li class="dropdown">
-                            <a href="#" data-toggle="dropdown">Clothes</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Shirt</a></li>
-                                <li><a href="#">Batik Shirts</a></li>
-                                <li><a href="#">T-shirt</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" data-toggle="dropdown">Koko Clothes</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Koko Clothes</a></li>
-                            </ul>
-                        </li> --}}
+                        <li class=""><a href="{{URL::asset('buyer/statusTransaction')}}">Status Transaction</a></li>
                     </ul>
                     <!-- /NAV -->
                 </div>
