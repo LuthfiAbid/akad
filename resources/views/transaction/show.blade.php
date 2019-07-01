@@ -12,11 +12,12 @@
             <table class="table table-striped table-hover table-responsive" id="table-detail">
                 <thead>
                     <tr>
-                        <th width="20%">No.</th>
+                        <th width="5%">No.</th>
                         <th width="20%">Goods Name</th>
                         <th width="20%">Price</th>
                         <th width="20%">Qty</th>
-                        <th width="20%">Picture</th>
+                        <th width="20%">Status</th>
+                        <th width="30%">Picture</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,6 +28,7 @@
                         <td>{{$data->goods_name}}</td>
                         <td style="padding-right:12px">Rp. {{number_format($data->price,0, ',' , '.')}} </td>
                         <td>{{$data->qty}}</td>
+                        <td>{{ucfirst($data->status)}}</td>
                         @if($data->id_category == 1)
                         <td style="padding-right:12px"><img src="{{asset('productImages/shirt/'.$data->picture)}}" style="height:100px;"></td>
                         @elseif($data->id_category ==2)
@@ -40,42 +42,18 @@
             </table>            
             <div class="row">
                     <div class="col-md-4 col-md-offset-7">
-                        <div class="pull-left">
+                        <div class="pull-right">
                             <table class="" style="">
-                                <tr>
-                                    <td>
-                                        <label for="">Sub Total</label>
-                                    </td>
-                                    <td style="width:20%"></td>
-                                    <td><b>Rp. {{number_format($sumPrice,0,'.','.')}}</b></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label for="">PPN (%) </label>
-                                    </td>
-                                    <td style="width:20%"></td>
-                                    <td>
-                                        2.5 %
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label for="">Amount PPN </label>
-                                    </td>
-                                    <td style="width:20%"></td>
-                                    <td>
-                                        <b>Rp. {{number_format($sumPrice * 2.5/100 ,0,'.','.')}}</b>
-                                    </td>
-                                </tr>
+                                <hr>
                                 <tr>
                                     <td>
                                         <label for="">Grand Total</label>
                                     </td>
                                     <td style="width:20%"></td>
                                     <td>
-                                        <b>Rp. {{number_format($totalPlusTax,0,'.','.')}}</b>
+                                        <b>Rp. {{number_format($sumPrice,0,'.','.')}}</b>
                                     </td>
-                                </tr>
+                                </tr>                              
                             </table>
                         </div>
                     </div>

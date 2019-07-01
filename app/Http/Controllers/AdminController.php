@@ -30,7 +30,6 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->redirectTo = 'admin/login';
-        // $this->middleware('guest', ['except' => 'logout']);
     }
     public function index()
     {
@@ -52,8 +51,9 @@ class AdminController extends Controller
     {
         $pending = DB::table('transaction')
         ->join('buyer','buyer.id_buyer','transaction.id_buyer')
-        ->where('status','=','pending')
-        ->where('isdone','=','1')
+        ->where('transaction.status','=','pending')
+        ->where('transaction.isdone','=','1')
+        ->select('transaction.*','buyer.buyer_name')
         // ->groupBy('buyer.id_buyer')
         ->get();
         // dd($pending);
@@ -77,7 +77,7 @@ class AdminController extends Controller
                 return '<td>'. ucfirst($pending->status).'</td> ';
             })
             ->editColumn('transaction', function($pending){
-                return '<td>'.date('d F Y ',strtotime($pending->created_at)).'</td> ';
+                return '<td>'.date('d/m/y - H:i:s',strtotime($pending->created_at)).'</td> ';
             })
                 ->addIndexColumn()
                 ->rawColumns(['no','buyer_name','status','transaction','action'])
