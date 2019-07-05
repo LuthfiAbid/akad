@@ -3,7 +3,7 @@
 <!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
     <!-- container -->
-    <div class="container">
+    <div class="container" style="box-shadow:1px 1px 5px lightgrey;padding:30px;margin-left:35%;margin-right:35%;width:450px;background-color:#FFFFFF;">
         <!-- row -->
         <div class="row">
             <div class="col-md-12">
@@ -19,31 +19,31 @@
                 <br>
                 <label for="">Name</label>
                 <br>
-                <input type="text" id="buyer_name" class="col-xs-4" name="buyer_name" placeholder="Name" required>
+                <input type="text" id="buyer_name" class="col-xs-12" name="buyer_name" placeholder="Name" required>
                 <br>
                 <br>
                 <label for="">Username</label>
                 <br>
-                <input type="text" id="username" class="col-xs-4" name="username" placeholder="Username" required>
+                <input type="text" id="username" class="col-xs-12" name="username" placeholder="Username" required>
                 <br>
                 <br>
                 <label for="">Password</label>
                 <br>
-                <input type="password" id="password" class="col-xs-4" name="password" placeholder="Password" required>
+                <input type="password" id="password" class="col-xs-12" name="password" placeholder="Password" required>
                 <br>
                 <br>
                 <label for="">Address</label>
                 <br>
-                <textarea name="address" id="address" cols="30" rows="3" required></textarea>
+                <textarea name="address" id="address" class="col-xs-12" cols="30" rows="3" required></textarea>
                 <!-- <input type="text" id="address" class="col-xs-4" name="address" placeholder="Address"> -->
                 <br>
                 <br>
                 <label for="">City</label>
                 <br>
-                <input type="text" id="city" class="col-xs-4" name="city" placeholder="City" required>
+                <input type="text" id="city" class="col-xs-12" name="city" placeholder="City" required>
                 <br>
                 <br>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary" style="width:100%;border:4px;height:35px;">Save</button>
             </form>
         </div>
         <!-- /container -->
@@ -62,7 +62,7 @@
         <!-- /container -->
     </div>
     <!-- /SECTION -->
-
+</div>
     @include('buyer.footer')
     <script>
         $("#form-register").on('submit', function(e){

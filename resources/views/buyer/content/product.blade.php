@@ -54,13 +54,14 @@
                                 class="product-old-price"></del></h3>
                         <input type="hidden" id="price" name="price" value="{{$data_goods->price}}">
                         <span class="product-available">{{$data_goods->stock}} Stock</span>
+                        <input type="hidden" id="stock" name="price" value="{{$data_goods->stock}}">
                     </div>
                     <p>{{$data_goods->description}}</p>
                     <form id="form-goods" action="" method="get">
                         <div class="add-to-cart">
                             <div class="qty-label">
                                 Qty
-                                <input id="qty" name="qty" style="width:75px;" type="number">
+                                <input id="qty" value="1" min="1" name="qty" style="width:75px;" type="number">
                             </div>
                             <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
                         </div>
@@ -195,6 +196,9 @@
     var id_buyer = $('#id_buyer').val();
     var id_goods = $('#id_goods').val();
     var qty = $('#qty').val();
+    var qty2 = parseInt(qty)
+    var stock = $('#stock').val();
+    var stock2 = parseInt(stock)
     var price = $('#price').val();
     var subtotal = (qty * price).valueOf();
     if (id_buyer == "") {
@@ -236,6 +240,23 @@
                 }
             });
     } else {
+        if(stock2  <= qty2 ){
+            $.confirm({
+           title: 'Alert Qty!',
+            content: 'Quantity must not be greater than stock',
+            type: 'orange',
+            theme: 'light',
+            typeAnimated: true,
+            buttons: {
+                Ok: {
+                    text: 'Ok',
+                        btnClass: 'btn-orange',
+                    action: function(){
+                    }
+                    }
+                }
+            });
+        }else{
         $.ajax({
             type: "get",
             url: "{{url('buyer/createTransaction')}}",
@@ -272,6 +293,7 @@
 
             }
         });
+    }
     }
 }
 

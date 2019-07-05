@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Transaction;
 use App\DetailTransaction;
+use App\Goods;
 use Hash;
 use DB;
 
@@ -262,6 +263,20 @@ class TransactionController extends Controller
                         ->select('goods.*','detail_transaction.*')
                         ->where('id_detail', "=", $id)
                         ->first();
+
+        $qty_detil = $goods->qty;
+        $stock_goods = $goods->stock;
+        $id_goods = $goods->id_goods;
+
+        $data_goods = Goods::findOrFail($id_goods);
+        if ($qty >= $qty_detil) {
+            $qty_min = $qty - $qty_detil;
+            $data_goods->stock = $stock_goods - $qty_min;
+        }else{
+            $qty_add = $qty_detil - $qty;
+            $data_goods->stock = $stock_goods + $qty_add;
+        }
+        $data_goods->save();
 
         $price = $goods->price;
         $subtotal = $qty * $price;

@@ -144,6 +144,9 @@ input:disabled{
                             <td width="10%"><b>
                                     <font color="">Product Name</font>
                                 </b></td>
+                                <td width="10%"><b>
+                                    <font color="">Categoty</font>
+                                </b></td>
                             <td width="10%"><b>
                                     <font color="">Quantity</font>
                                 </b></td>
@@ -156,6 +159,7 @@ input:disabled{
                             <td><img height="10%" width="40%"
                                     src="{{asset('productImages/shirt').'/'.$detail_transaction2->picture}}" alt="">
                             </td>
+                            <td><p style="margin-top:35%;">{{$detail_transaction2->goods_name}}</p></td>
                             <td><p style="margin-top:35%;">{{$detail_transaction2->cat_name}}</p></td>
                             <td>
                                 {{-- <p style="margin-top:40%;" id="goods_{{$detail_transaction2->id_detail}}" onclick="edit_stok('goods_{{$detail_transaction2->id_detail}}');" >{{$detail_transaction2->qty}}</p>
@@ -196,29 +200,6 @@ $(document).ready(function(){
 
 
          });
-    // function plus($id, $id_transaction){
-    //             var count_plus = parseInt($('.count_'+$id+'').val()) + 1;
-    //             $('.count_'+$id+'').val(count_plus);
-    //             // var qty = $("#count_"+$id+"").val()
-    //             updateQty($id,count_plus);
-    //             // $('#qty').val(count_plus);
-    //             // returnGrandTotal($id_transaction);
-    //             location.reload();
-
-    //             }
-    //     function minus($id, $id_transaction){
-    //                 var count_minus = parseInt($('.count_'+$id+'').val()) - 1;
-    //                 $('.count_'+$id+'').val(count_minus);
-    // 				if ($('.count_'+$id+'').val() == 0) {
-    //                     $('.count_'+$id+'').val(1);
-    //                 }
-    //                 var qty = $("#count_"+$id+"").val()
-    //                     updateQty($id,count_minus);
-    //                     // $('#qty').val(count_minus);
-    //                     // returnGrandTotal($id_transaction);
-    //                     location.reload();
-
-    //             }
 
     function updateQty($id,$qty) {
             $.ajax({

@@ -119,7 +119,9 @@
                         <div><strong>FREE</strong></div>
                     </div>
                     <div class="order-col">
-                        <div><strong>TOTAL</strong></div>
+                        <div><strong>
+                                <h4>TOTAL</h4>
+                            </strong></div>
                         <div id="sum3"></div>
                     </div>
                 </div>
@@ -165,7 +167,8 @@
                         I've read and accept the <a href="#">terms & conditions</a>
                     </label>
                 </div>
-                <a style="cursor:pointer;" onclick="updateTransaction()" class="primary-btn order-submit">Place order</a>
+                <a style="cursor:pointer;" onclick="updateTransaction()" class="primary-btn order-submit">Place
+                    order</a>
             </div>
             <!-- /Order Details -->
         </div>
@@ -182,55 +185,86 @@
     function updateTransaction() {
         var id_transaction = $('#id_transaction').val();
         var total_price = $('#total_price').val();
-    $.ajax({
 
-                type: "get",
-                url: "{{ url('buyer/updateTransaction') }}",
-                data: {
-                    _token: "{{csrf_token()}}",
-                    id_transaction: id_transaction,
-                    total_price: total_price
-                },
-                success: function (data) {
-                    if(data == 1){
-                        // alert("Oreder Success")
-                        // location.reload();
+        $.confirm({
+            title: 'Transaction!',
+            content: 'Are you sure to oder!',
+            type: 'green',
+            theme: 'modern',
+            typeAnimated: true,
+            buttons: {
+                Ok: {
+                    text: 'Ok',
+                    btnClass: 'btn-green',
+                    action: function(){
                         $.confirm({
-                                title: 'Transaction!',
-                                content: 'Are you sure to oder!',
-                                type: 'green',
-                                theme: 'modern',
-                                typeAnimated: true,
-                                buttons: {
-                                    Ok: {
-                                        text: 'Ok',
-                                        btnClass: 'btn-green',
-                                        action: function(){
-                                             $.confirm({
-                                                title: 'Alert Transaction!',
-                                                content: 'Transaction Successfully!',
-                                                type: 'green',
-                                                theme: 'light',
-                                                buttons: {
-                                                    Ok: {
-                                                        text: 'Ok',
-                                                        btnClass: 'btn-green',
-                                                        action: function(){
-                                                            window.location.replace("{{url('buyer/home')}}");
+                            title: 'Alert Transaction!',
+                            content: 'Transaction Successfully!',
+                            type: 'green',
+                            theme: 'light',
+                            buttons: {
+                                Ok: {
+                                    text: 'Ok',
+                                    btnClass: 'btn-green',
+                                    action: function(){
+                                    $.ajax({
+                                        type: "get",
+                                        url: "{{ url('buyer/updateTransaction') }}",
+                                        data: {
+                                            _token: "{{csrf_token()}}",
+                                            id_transaction: id_transaction,
+                                            total_price: total_price
+                                        },
+                                        success: function (data) {
+                                            if(data == 1){
+                                                // alert("Oreder Success")
+                                                // location.reload();
+                                                $.confirm({
+                                                        title: 'Transaction!',
+                                                        content: 'Are you sure to oder!',
+                                                        type: 'green',
+                                                        theme: 'modern',
+                                                        typeAnimated: true,
+                                                        buttons: {
+                                                            Ok: {
+                                                                text: 'Ok',
+                                                                btnClass: 'btn-green',
+                                                                action: function(){
+                                                                    $.confirm({
+                                                                        title: 'Alert Transaction!',
+                                                                        content: 'Transaction Successfully!',
+                                                                        type: 'green',
+                                                                        theme: 'light',
+                                                                        buttons: {
+                                                                            Ok: {
+                                                                                text: 'Ok',
+                                                                                btnClass: 'btn-green',
+                                                                                action: function(){
+                                                                                    window.location.replace("{{url('buyer/home')}}");
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }
+                                                            },
+                                                            cancel: function () {
+                                                            }
                                                         }
-                                                    }
+                                                    });
+                                                }else{
+                                                    alert('Order Failed');
                                                 }
-                                            });
-                                        }
-                                    },
-                                    cancel: function () {
+                                            }
+                                        });
+                                       }
                                     }
-                                }
+                                   }
                             });
-                    }else{
-                        alert('Order Failed');
-                    }
-                }
-            });
+                        }
+                    },
+                cancel: function () {
+            }
+        }
+    });
 }
 </script>

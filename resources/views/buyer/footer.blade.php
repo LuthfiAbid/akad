@@ -167,7 +167,7 @@
                         $('#count2').html('<div class="qty">'+count+'</div>');
                         $('#sum').html('<h5>SUBTOTAL: Rp. '+sum+'</h5>');
                         $('#sum2').html('<h3 align="right">SUBTOTAL: Rp. '+sum+'</h3>');
-                        $('#sum3').html('<strong class="order-total">Rp. '+sum+'</strong><input type="hidden" id="total_price" name="total_price" value='+sum2+'>');
+                        $('#sum3').html('<strong><h4><font color="#d10024">Rp. '+sum+'</font></h4></strong><input type="hidden" id="total_price" name="total_price" value='+sum2+'>');
                     }
                 }
 

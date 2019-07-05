@@ -2,47 +2,30 @@
 		<!-- BREADCRUMB -->
 		<div id="breadcrumb" class="section">
 			<!-- container -->
-			<div class="container">
+			<div class="container" style="box-shadow:1px 1px 5px lightgrey;padding:30px;margin-left:40%;margin-right:40%;width:auto;background-color:#FFFFFF;">
 				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<h3 class="breadcrumb-header">Login AKAD</h3>
-					</div>
-				</div>
-                <!-- /row -->
-                         <div>
-                        <br>
-						<br>
-						<form class="form-auth-small" id="form-login" action="" method="get">
-                        <label for="">Username</label>
-                         <br>
-                         <input type="text" id="username" class="col-xs-4" name="username" placeholder="Username">
-                        <br>
-                        <br>
-                        <label for="">Password</label>
-                        <br>
-                        <input type="password" id="password" class="col-xs-4" name="password" placeholder="Password">
-                        <br>
-                        <br>
-					<button type="submit" class="btn btn-primary">Login</button>
-						</form>
-			</div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="breadcrumb-header" style="text-align:center;">Login AKAD</h3>
+                    </div>
+                </div>
+                <br>
+                <form class="form-auth-small" id="form-login" action="" method="get">
+                    <label for="">Username</label>
+                    <br>
+                    <input type="text" id="username" class="col-xs-12" name="username" placeholder="Username">
+                    <br>
+                    <br>
+                    <label for="">Password</label>
+                    <br>
+                    <input type="password" id="password" class="col-xs-12" name="password" placeholder="Password">
+                    <br>
+                    <br>
+                    <button type="submit" style="width:100%;border:1px;height:35px;" class="btn-primary">Login</button>
+                </form>
+            </div>
 			<!-- /container -->
-		</div>
-		<!-- /BREADCRUMB -->
-
-		<!-- SECTION -->
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /SECTION -->
+        </div>
 
 		@include('buyer.footer')
 
