@@ -48,6 +48,8 @@ Route::get('buyer/updateTransaction','TransactionController@updateTransaction');
 Route::get('buyer/updateQty','TransactionController@updateQty');
 Route::get('buyer/returnGrandTotal','TransactionController@returnGrandTotal');
 Route::get('buyer/searchCategory','TransactionController@searchCategory');
+Route::get('buyer/statusTransaction','TransactionController@statusTransaction');
+Route::get('buyer/showTransaction/{id}','TransactionController@showTransaction');
 
 //--------------------------------------------------------------------//
 

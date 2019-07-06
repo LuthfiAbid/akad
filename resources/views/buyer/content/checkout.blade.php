@@ -219,38 +219,7 @@
                                             if(data == 1){
                                                 // alert("Oreder Success")
                                                 // location.reload();
-                                                $.confirm({
-                                                        title: 'Transaction!',
-                                                        content: 'Are you sure to oder!',
-                                                        type: 'green',
-                                                        theme: 'modern',
-                                                        typeAnimated: true,
-                                                        buttons: {
-                                                            Ok: {
-                                                                text: 'Ok',
-                                                                btnClass: 'btn-green',
-                                                                action: function(){
-                                                                    $.confirm({
-                                                                        title: 'Alert Transaction!',
-                                                                        content: 'Transaction Successfully!',
-                                                                        type: 'green',
-                                                                        theme: 'light',
-                                                                        buttons: {
-                                                                            Ok: {
-                                                                                text: 'Ok',
-                                                                                btnClass: 'btn-green',
-                                                                                action: function(){
-                                                                                    window.location.replace("{{url('buyer/home')}}");
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    });
-                                                                }
-                                                            },
-                                                            cancel: function () {
-                                                            }
-                                                        }
-                                                    });
+                                                      window.location.replace("{{url('buyer/home')}}");
                                                 }else{
                                                     alert('Order Failed');
                                                 }
