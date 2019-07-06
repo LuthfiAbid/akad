@@ -13,7 +13,7 @@ class CategorySeeder extends Seeder
     {
         DB::table('categories')->insert([
             'id_category' => '1',
-            'category_name' => 'T Shirt',
+            'category_name' => 'Shirt',
         ]);
 
         DB::table('categories')->insert([

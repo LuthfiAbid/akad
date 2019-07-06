@@ -109,8 +109,9 @@
                     <div class="order-products">
                         @foreach ($detail_transaction as $detail_transaction2)
                         <div class="order-col">
-                            <div>{{$detail_transaction2->qty}}x {{$detail_transaction2->goods_name}}</div>
+                            <div name="goods_name">{{$detail_transaction2->qty}}x {{$detail_transaction2->goods_name}}</div>
                             <div>Rp. {{number_format($detail_transaction2->subtotal,0,'.','.')}}</div>
+                            <input type="hidden" name="id_detail" value="{{$detail_transaction2->id_detail}}">
                         </div>
                         @endforeach
                     </div>
@@ -120,7 +121,7 @@
                     </div>
                     <div class="order-col">
                         <div><strong>TOTAL</strong></div>
-                        <div id="sum3"></div>
+                        <div id="sum3" name="sum3"></div>
                     </div>
                 </div>
                 <div class="payment-method">
@@ -183,8 +184,7 @@
         var id_transaction = $('#id_transaction').val();
         var total_price = $('#total_price').val();
     $.ajax({
-
-                type: "get",
+                type: "GET",
                 url: "{{ url('buyer/updateTransaction') }}",
                 data: {
                     _token: "{{csrf_token()}}",
@@ -197,7 +197,7 @@
                         // location.reload();
                         $.confirm({
                                 title: 'Transaction!',
-                                content: 'Are you sure to oder!',
+                                content: 'Are you sure to order!',
                                 type: 'green',
                                 theme: 'modern',
                                 typeAnimated: true,

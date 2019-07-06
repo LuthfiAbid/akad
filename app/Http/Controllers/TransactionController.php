@@ -2,16 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use PayPal\Api\ItemList;
+use PayPal\Api\Payer;
+use PayPal\Api\Payment;
+use PayPal\Api\PaymentExecution;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\Transaction;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
+
+use PayPal\Api\Amount;
+use PayPal\Api\Details;
+use PayPal\Api\Item;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use App\Transaction;
+use App\TransactionAkad;
 use App\DetailTransaction;
+use Alert;
+use Redirect;
 use Hash;
+use URL;
 use DB;
 
 class TransactionController extends Controller
 {
     //
+    public function __construct()
+    {
+        $paypal_conf = \Config::get('paypal');
+        $this->_api_context = new ApiContext(new OAuthTokenCredential(
+            $paypal_conf['client_id'],
+            $paypal_conf['secret'])
+        );
+        $this->_api_context->setConfig($paypal_conf['settings']);
+    }
     public function index()
     {
         // print_r(Session::get('username'));
@@ -82,6 +107,7 @@ class TransactionController extends Controller
                     ->where('id_buyer',"=", Session::get('id_buyer'))
                     ->where('isdone', "=", "0")
                     ->get();
+                    // dd($detail_transaction);
         return view('buyer.content.checkout',$good, compact('detail_transaction'));
     }
 
@@ -109,19 +135,17 @@ class TransactionController extends Controller
                         ->where('isdone', "=", "0")
                         ->get();
            return view('buyer.content.product',$good, compact('data_goods','goods','detail_transaction'));
-
     }
-
     public function viewCountSubtotal(Request $request){
         $count = DB::table('detail_transaction')
             ->where('id_transaction', "=", $request->id_transaction)
             ->sum('qty');
 
-            $sum = DB::table('detail_transaction')
-            ->where('id_transaction', "=", $request->id_transaction)
-            ->sum('subtotal');
+        $sum = DB::table('detail_transaction')
+        ->where('id_transaction', "=", $request->id_transaction)
+        ->sum('subtotal');
 
-             $data = array('data_count'=>$count, 'data_sum'=>$sum);
+        $data = array('data_count'=>$count, 'data_sum'=>$sum);
 
            echo json_encode($data);
 
@@ -137,48 +161,38 @@ class TransactionController extends Controller
             ->where('isdone', "=", '0')
             ->orderBy('id_buyer', 'DESC')
             ->count();
-
                 if (empty($count)) {
-                    $transaction = new Transaction();
+                    $transaction = new TransactionAkad();
                     $transaction->id_buyer = Session::get('id_buyer');
                     $transaction->isdone = 0;
                     $transaction->save();
-
                     $get_hd = DB::table('transaction')
                         ->select("transaction.id_transaction")
                         ->where('id_buyer', "=", Session::get('id_buyer'))
                         ->where('isdone', "=", '0')
                         ->orderBy('id_buyer', 'DESC')
                         ->first();
-
                     $id_transaction = $get_hd->id_transaction;
-
                     $detail_transaction = new DetailTransaction();
                     $detail_transaction->id_transaction =  $id_transaction;
                     $detail_transaction->id_goods = $request->id_goods;
                     $detail_transaction->qty =  $request->qty;
                     $detail_transaction->subtotal =  $request->subtotal;
                     $detail_transaction->save();
-
                 }else {
-
                     $get_hd = DB::table('transaction')
                         ->select("transaction.id_transaction")
                         ->where('id_buyer', "=", Session::get('id_buyer'))
                         ->where('isdone', "=", '0')
                         ->orderBy('id_buyer', 'DESC')
                         ->first();
-
                     $id_transaction = $get_hd->id_transaction;
-
                     $get_detail = DB::table('detail_transaction')
                         ->select("detail_transaction.id_detail")
                         ->where('id_transaction', "=", $id_transaction)
                         ->where('id_goods', "=", $request->id_goods)
                         ->count();
-
                     $get_id_detail = $get_detail;
-
                     if (empty($get_id_detail)) {
                        $detail_transaction = new DetailTransaction();
                        $detail_transaction->id_transaction =  $id_transaction;
@@ -187,57 +201,125 @@ class TransactionController extends Controller
                        $detail_transaction->subtotal =  $request->subtotal;
                        $detail_transaction->save();
                     }else{
-
                         $get_detail = DB::table('detail_transaction')
                         ->select("detail_transaction.id_detail")
                         ->where('id_transaction', "=", $id_transaction)
                         ->where('id_goods', "=", $request->id_goods)
                         ->first();
-
                     $get_id_detail = $get_detail->id_detail;
-
                         $goods = DB::table('goods')
                         ->join('detail_transaction','goods.id_goods','detail_transaction.id_goods')
                         ->select('goods.*','detail_transaction.*')
                         ->where('id_detail', "=", $get_id_detail)
                         ->first();
-
                         $qty = $request->qty;
                         $sum_qty = $qty + $goods->qty;
                         $price = $goods->price;
                         $subtotal = $sum_qty * $price;
-
                         $data = DetailTransaction::findOrFail($get_id_detail);
                         $data->qty = $sum_qty;
                         $data->subtotal = $subtotal;
                         $data->save();
                     }
-
                 }
                 echo 1;
         } catch (\Throwable $th) {
             echo 0;
         }
-
-
     }
-
     public function updateTransaction(Request $request)
     {
-        $id_transaction = $request->id_transaction;
-        $total_price = $request->total_price;
-
-        $transaction = Transaction::firstOrNew(['id_transaction' => $id_transaction]);
-        $transaction->total_price = $request->total_price;
-        $transaction->isdone = 1;
-        $transaction->save();
-            if ($transaction) {
-                echo 1;
+        $id_transaction = $request->id_detail;
+        $data_transaction = $request->goods_name;
+        // dd($data_transaction);
+        $qty = TransactionAkad::find($id_transaction);
+        $data = $request->total_price / 14000;
+        $payer = new Payer();
+        $payer->setPaymentMethod('paypal');
+        $item_1 = new Item();
+        $item_1->setName('Item Shop') /** item name **/
+            ->setCurrency('USD')
+            ->setQuantity(1)
+            ->setPrice($data); /** unit price **/
+        $item_list = new ItemList();
+        $item_list->setItems(array($item_1));
+        $amount = new Amount();
+        $amount->setCurrency('USD')
+            ->setTotal($data);
+        $transaction = new Transaction();
+        $transaction->setAmount($amount)
+                    ->setItemList($item_list)
+                    ->setDescription('Your transaction description');
+        $redirect_urls = new RedirectUrls();
+        $redirect_urls->setReturnUrl(URL::to('buyer/home')) /** Specify return URL **/
+                      ->setCancelUrl(URL::to('buyer/home'));
+        $payment = new Payment();
+        $payment->setIntent('Sale') 
+                ->setPayer($payer)
+                ->setRedirectUrls($redirect_urls)
+                ->setTransactions(array($transaction));
+        // dd($payment->create($this->_api_context));
+        // exit;
+        try {
+            $payment->create($this->_api_context);
+        } catch (\PayPal\Exception\PPConnectionException $ex) {
+            if (\Config::get('app.debug')) {
+                \Session::put('error', 'Connection timeout');
+                return Redirect::to('/buyer/home');
             } else {
-                echo 0;
+                \Session::put('error', 'Some error occur, sorry for inconvenient');
+                return Redirect::to('/buyer/home');
             }
-    }
+        }
+        foreach ($payment->getLinks() as $link) {
+            if ($link->getRel() == 'approval_url') {
+                $redirect_url = $link->getHref();
+                break;
+            }
+        }
+        /** add payment ID to session **/
+        Session::put('paypal_payment_id', $payment->getId());
+        if (isset($redirect_url)) {
+            /** redirect to paypal **/
+            return Redirect::away($redirect_url);
+        }
+        \Session::put('error', 'Unknown error occurred');
+        return Redirect::to('/');
+        // $id_transaction = $request->id_transaction;
+        // $total_price = $request->total_price;
 
+        // $transaction = Transaction::firstOrFail(['id_transaction' => $id_transaction]);
+        // $transaction->total_price = $request->total_price;
+        // $transaction->isdone = 1;
+        // $transaction->save();
+        //     if ($transaction) {
+        //         echo 1;
+        //     } else {
+        //         echo 0;
+        //     }
+    }
+    public function getPaymentStatus()
+    {
+        /** Get the payment ID before session clear **/
+        $payment_id = Session::get('paypal_payment_id');
+        /** clear the session payment ID **/
+        Session::forget('paypal_payment_id');
+        if (empty(Input::get('PayerID')) || empty(Input::get('token'))) {
+            \Session::put('error', 'Payment failed');
+            return redirect()->back();
+        }
+        $payment = Payment::get($payment_id, $this->_api_context);
+        $execution = new PaymentExecution();
+        $execution->setPayerId(Input::get('PayerID'));
+        /**Execute the payment **/
+        $result = $payment->execute($execution, $this->_api_context);
+        if ($result->getState() == 'approved') {
+            \Session::put('success', 'Payment success');
+            return Redirect::to('buyer/category');
+        }
+        \Session::put('error', 'Payment failed');
+        return redirect()->back();
+    }
     public function deleteDetail(Request $request)
     {
         try {
@@ -250,6 +332,7 @@ class TransactionController extends Controller
         }
 
     }
+
 
     public function updateQty(Request $request)
     {

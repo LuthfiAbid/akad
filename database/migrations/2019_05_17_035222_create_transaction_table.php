@@ -25,6 +25,8 @@ class CreateTransactionTable extends Migration
             $table->string('description')->nullable();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->nullable();
+
+
         });
     }
 

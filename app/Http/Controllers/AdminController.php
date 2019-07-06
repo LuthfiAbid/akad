@@ -181,11 +181,11 @@ class AdminController extends Controller
             })
             ->editColumn('picture', function($stock){
             if($stock->id_category == 1){
-                return'<td><img src='.asset("productImages/shirt").'/'.$stock->picture.' height="50px"></img></td>';
+                return'<td><img src='.asset("productImages/Shirt").'/'.$stock->picture.' height="50px"></img></td>';
             }else if($stock->id_category == 2){
-                return'<td><img src='.asset("productImages/pants").'/'.$stock->picture.' height="50px"></img></td>';
+                return'<td><img src='.asset("productImages/Pants").'/'.$stock->picture.' height="50px"></img></td>';
             }else{
-                return'<td><img src='.asset("productImages/dress").'/'.$stock->picture.' height="50px"></img></td>';
+                return'<td><img src='.asset("productImages/Dress").'/'.$stock->picture.' height="50px"></img></td>';
             }
             })
                 ->addIndexColumn()
@@ -214,11 +214,11 @@ class AdminController extends Controller
         $dataAdmin = Session::get('id_admin');
 
         if($goods->id_category == 1){
-        $file->move('productImages/shirt',$extension);
+        $file->move('productImages/Shirt',$extension);
         }else if($goods->id_category == 2){
-        $file->move('productImages/pants',$extension);
+        $file->move('productImages/Pants',$extension);
         }else{
-        $file->move('productImages/dress',$extension);
+        $file->move('productImages/Dress',$extension);
         }
         $goods->id_admin = $dataAdmin;
         $goods->goods_name = $request->goods_name;
@@ -251,18 +251,18 @@ class AdminController extends Controller
         $this->validate($request,[
             'picture' => 'required|image|mimes:png,jpg,jpeg'
             ]);
-        $goods = Goods::firstOrFail();
+        $goods = new Goods;
         $file = $request->file('picture');
         $extension = $file->getClientOriginalName();
         $data_admin = Session::get('id_admin');
 
         if(!(Goods::where('goods_name', '=', $request->goods_name)->exists())){
         if($goods->id_category == 1){
-        $file->move('productImages/shirt',$extension);
+        $file->move('productImages/Shirt',$extension);
         }else if($goods->id_category == 2){
-        $file->move('productImages/pants',$extension);
+        $file->move('productImages/Pants',$extension);
         }else{
-        $file->move('productImages/dress',$extension);
+        $file->move('productImages/Dress',$extension);
         }
         $goods->goods_name = $request->goods_name;
         $goods->stock = $request->stock;
@@ -427,5 +427,81 @@ class AdminController extends Controller
         return redirect('admin/dataTransaction');
     }
     //------------------------------------------------------------------------------------------------------//
-
+    //---------------------------------------------PayWithPaypal--------------------------------------------//
+    public function payWithpaypal(Request $request)
+    {
+        $payer = new Payer();
+        $payer->setPaymentMethod('paypal');
+        $item_1 = new Item();
+        $item_1->setName('Item 1') /** item name **/
+            ->setCurrency('USD')
+            ->setQuantity(1)
+            ->setPrice($request->get('amount')); /** unit price **/
+        $item_list = new ItemList();
+        $item_list->setItems(array($item_1));
+        $amount = new Amount();
+        $amount->setCurrency('USD')
+            ->setTotal($request->get('amount'));
+        $transaction = new Transaction();
+        $transaction->setAmount($amount)
+            ->setItemList($item_list)
+            ->setDescription('Your transaction description');
+        $redirect_urls = new RedirectUrls();
+        $redirect_urls->setReturnUrl(URL::to('status')) /** Specify return URL **/
+            ->setCancelUrl(URL::to('status'));
+        $payment = new Payment();
+        $payment->setIntent('Sale')
+            ->setPayer($payer)
+            ->setRedirectUrls($redirect_urls)
+            ->setTransactions(array($transaction));
+        /** dd($payment->create($this->_api_context));exit; **/
+        try {
+            $payment->create($this->_api_context);
+        } catch (\PayPal\Exception\PPConnectionException $ex) {
+            if (\Config::get('app.debug')) {
+                \Session::put('error', 'Connection timeout');
+                return Redirect::to('/');
+            } else {
+                \Session::put('error', 'Some error occur, sorry for inconvenient');
+                return Redirect::to('/');
+            }
+        }
+        foreach ($payment->getLinks() as $link) {
+            if ($link->getRel() == 'approval_url') {
+                $redirect_url = $link->getHref();
+                break;
+            }
+        }
+        /** add payment ID to session **/
+        Session::put('paypal_payment_id', $payment->getId());
+        if (isset($redirect_url)) {
+            /** redirect to paypal **/
+            return Redirect::away($redirect_url);
+        }
+        \Session::put('error', 'Unknown error occurred');
+        return Redirect::to('/');
+    }
+    public function getPaymentStatus()
+    {
+        /** Get the payment ID before session clear **/
+        $payment_id = Session::get('paypal_payment_id');
+        /** clear the session payment ID **/
+        Session::forget('paypal_payment_id');
+        if (empty(Input::get('PayerID')) || empty(Input::get('token'))) {
+            \Session::put('error', 'Payment failed');
+            return Redirect::to('/');
+        }
+        $payment = Payment::get($payment_id, $this->_api_context);
+        $execution = new PaymentExecution();
+        $execution->setPayerId(Input::get('PayerID'));
+        /**Execute the payment **/
+        $result = $payment->execute($execution, $this->_api_context);
+        if ($result->getState() == 'approved') {
+            \Session::put('success', 'Payment success');
+            return Redirect::to('/');
+        }
+        \Session::put('error', 'Payment failed');
+        return Redirect::to('/');
+    }
+    //-----------------------------------------------------------------------------------------------------//
 }
