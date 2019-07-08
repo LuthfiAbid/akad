@@ -97,6 +97,8 @@
             </div>
 
             <!-- Order Details -->
+            <form class="w3-container w3-display-middle w3-card-4 w3-padding-16" action="{!! URL('buyer/updateTransaction') !!}" method="POST" id="payment-form">
+                {{ csrf_field() }}
             <div class="col-md-5 order-details">
                 <div class="section-title text-center">
                     <h3 class="title">Your Order</h3>
@@ -109,9 +111,9 @@
                     <div class="order-products">
                         @foreach ($detail_transaction as $detail_transaction2)
                         <div class="order-col">
-                            <div name="goods_name">{{$detail_transaction2->qty}}x {{$detail_transaction2->goods_name}}</div>
+                            <div>{{$detail_transaction2->qty}}x {{$detail_transaction2->goods_name}}</div>
                             <div>Rp. {{number_format($detail_transaction2->subtotal,0,'.','.')}}</div>
-                            <input type="hidden" name="id_detail" value="{{$detail_transaction2->id_detail}}">
+                            <input type="hidden" name="id_transaction" value="{{$detail_transaction2->id_transaction}}">
                         </div>
                         @endforeach
                     </div>
@@ -166,7 +168,10 @@
                         I've read and accept the <a href="#">terms & conditions</a>
                     </label>
                 </div>
-                <a style="cursor:pointer;" onclick="updateTransaction()" class="primary-btn order-submit">Place order</a>
+                        {{-- {{csrf_token()}} --}}
+                        <button type="submit" class="primary-btn order-submit">Place Order</button>
+                {{-- <a style="cursor:pointer;" onclick="updateTransaction()" class="primary-btn order-submit">Place order</a> --}}
+                    </form>
             </div>
             <!-- /Order Details -->
         </div>
@@ -180,57 +185,57 @@
 @include('buyer.footer')
 <!-- /FOOTER -->
 <script>
-    function updateTransaction() {
-        var id_transaction = $('#id_transaction').val();
-        var total_price = $('#total_price').val();
-    $.ajax({
-                type: "GET",
-                url: "{{ url('buyer/updateTransaction') }}",
-                data: {
-                    _token: "{{csrf_token()}}",
-                    id_transaction: id_transaction,
-                    total_price: total_price
-                },
-                success: function (data) {
-                    if(data == 1){
-                        // alert("Oreder Success")
-                        // location.reload();
-                        $.confirm({
-                                title: 'Transaction!',
-                                content: 'Are you sure to order!',
-                                type: 'green',
-                                theme: 'modern',
-                                typeAnimated: true,
-                                buttons: {
-                                    Ok: {
-                                        text: 'Ok',
-                                        btnClass: 'btn-green',
-                                        action: function(){
-                                             $.confirm({
-                                                title: 'Alert Transaction!',
-                                                content: 'Transaction Successfully!',
-                                                type: 'green',
-                                                theme: 'light',
-                                                buttons: {
-                                                    Ok: {
-                                                        text: 'Ok',
-                                                        btnClass: 'btn-green',
-                                                        action: function(){
-                                                            window.location.replace("{{url('buyer/home')}}");
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    },
-                                    cancel: function () {
-                                    }
-                                }
-                            });
-                    }else{
-                        alert('Order Failed');
-                    }
-                }
-            });
-}
+    // function updateTransaction() {
+    //     var id_transaction = $('#id_transaction').val();
+    //     var total_price = $('#total_price').val();
+    // $.ajax({
+    //             type: "GET",
+    //             url: "{{ url('buyer/updateTransaction') }}",
+    //             data: {
+    //                 _token: "{{csrf_token()}}",
+    //                 id_transaction: id_transaction,
+    //                 total_price: total_price
+    //             },
+    //             success: function (data) {
+    //                 if(data == 1){
+    //                     // alert("Oreder Success")
+    //                     // location.reload();
+    //                     $.confirm({
+    //                             title: 'Transaction!',
+    //                             content: 'Are you sure to order!',
+    //                             type: 'green',
+    //                             theme: 'modern',
+    //                             typeAnimated: true,
+    //                             buttons: {
+    //                                 Ok: {
+    //                                     text: 'Ok',
+    //                                     btnClass: 'btn-green',
+    //                                     action: function(){
+    //                                          $.confirm({
+    //                                             title: 'Alert Transaction!',
+    //                                             content: 'Transaction Successfully!',
+    //                                             type: 'green',
+    //                                             theme: 'light',
+    //                                             buttons: {
+    //                                                 Ok: {
+    //                                                     text: 'Ok',
+    //                                                     btnClass: 'btn-green',
+    //                                                     action: function(){
+    //                                                         window.location.replace("{{url('buyer/home')}}");
+    //                                                     }
+    //                                                 }
+    //                                             }
+    //                                         });
+    //                                     }
+    //                                 },
+    //                                 cancel: function () {
+    //                                 }
+    //                             }
+    //                         });
+    //                 }else{
+    //                     alert('Order Failed');
+    //                 }
+    //             }
+    //         });
+// }
 </script>

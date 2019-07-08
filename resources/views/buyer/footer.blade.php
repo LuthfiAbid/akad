@@ -173,7 +173,6 @@
 
         });
     }
-
     $("#form-search").on('submit', function(e){
         e.preventDefault()
         var search = $("#search").val();

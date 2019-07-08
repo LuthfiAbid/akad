@@ -69,7 +69,11 @@ Route::get('buyer/viewCountSubtotal','TransactionController@viewCountSubtotal');
 Route::get('buyer/viewChart','TransactionController@viewChart');
 Route::get('buyer/viewCheckout','TransactionController@viewCheckout');
 Route::post('buyer/deleteDetail','TransactionController@deleteDetail');
-Route::get('buyer/updateTransaction','TransactionController@updateTransaction');
+Route::post('buyer/updateTransaction','TransactionController@updateTransaction');
+//--------------------------------------------------------------------//
+
+//--------------------------Get Paypal Status------------------------ //
+Route::get('status', 'TransactionController@getPaymentStatus');
 //--------------------------------------------------------------------//
 
 //---------------------Transaction Category Buyer------------------------------//

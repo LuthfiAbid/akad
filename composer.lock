@@ -4,8 +4,123 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec34767baf3f9b338e32a46ee1ebf8e0",
+    "content-hash": "0ec308dea287a170ba0f7cb6f882196f",
     "packages": [
+        {
+            "name": "akibtanjim/currency-converter",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/akibtanjim/currency-converter.git",
+                "reference": "a7f22df8d050fbf4d5ce5a7c4365366d02e5002f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/akibtanjim/currency-converter/zipball/a7f22df8d050fbf4d5ce5a7c4365366d02e5002f",
+                "reference": "a7f22df8d050fbf4d5ce5a7c4365366d02e5002f",
+                "shasum": ""
+            },
+            "require": {
+                "ixudra/curl": "6.*",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "AkibTanjim\\Currency\\CurrencyServiceProvider"
+                    ],
+                    "aliases": {
+                        "Currency": "AkibTanjim\\Currency\\Facades\\CurrencyConverter"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AkibTanjim\\Currency\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Akib Tanjim",
+                    "email": "akibtanjim@gmail.com"
+                }
+            ],
+            "description": "This package provides currency rates as well as single and multiple currency for Laravel app by using https://openexchangerates.org  API",
+            "keywords": [
+                "conversion",
+                "currency",
+                "currency conversion",
+                "exchange",
+                "laravel",
+                "laravel 5"
+            ],
+            "time": "2018-08-13T16:34:09+00:00"
+        },
+        {
+            "name": "danielme85/laravel-cconverter",
+            "version": "v0.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/danielme85/laravel-cconverter.git",
+                "reference": "5a923dac7d7b29d2cec498e627cd73507f373412"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/danielme85/laravel-cconverter/zipball/5a923dac7d7b29d2cec498e627cd73507f373412",
+                "reference": "5a923dac7d7b29d2cec498e627cd73507f373412",
+                "shasum": ""
+            },
+            "require": {
+                "gerardojbaez/money": "~0.3",
+                "guzzlehttp/guzzle": "~6.0",
+                "illuminate/support": "~5.5",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "kint-php/kint": "^2.2",
+                "orchestra/testbench": "~3.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "danielme85\\CConverter\\CConverterServiceProvider"
+                    ],
+                    "aliases": {
+                        "Currency": "danielme85\\CConverter\\CConverter"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "danielme85\\CConverter\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Mellum",
+                    "email": "mellum@gmail.com"
+                }
+            ],
+            "description": "Laravel 5 plug-in for currency conversion",
+            "keywords": [
+                "conversion",
+                "currency",
+                "finance",
+                "laravel",
+                "laravel-5"
+            ],
+            "time": "2018-08-28T15:48:41+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",
@@ -422,6 +537,54 @@
             "time": "2018-07-12T10:23:15+00:00"
         },
         {
+            "name": "gerardojbaez/money",
+            "version": "v0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gerardojbaez/money.git",
+                "reference": "1a29ca19899fad8ae559e9f2c982815ea21f8a6c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gerardojbaez/money/zipball/1a29ca19899fad8ae559e9f2c982815ea21f8a6c",
+                "reference": "1a29ca19899fad8ae559e9f2c982815ea21f8a6c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gerardojbaez\\Money\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gerardo Báez",
+                    "email": "gerardojbaez@gmail.com"
+                }
+            ],
+            "description": "A simple and cross-platform alternative to PHP money_format(). 91 currencies supported, including INR.",
+            "keywords": [
+                "currency",
+                "formatter",
+                "money",
+                "money_format"
+            ],
+            "time": "2018-02-24T18:59:00+00:00"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "6.3.3",
             "source": {
@@ -603,6 +766,59 @@
                 "url"
             ],
             "time": "2018-12-04T20:46:45+00:00"
+        },
+        {
+            "name": "ixudra/curl",
+            "version": "6.16.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ixudra/curl.git",
+                "reference": "1ab270e48082ee6e7f32fa72412c2c81eb974516"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ixudra/curl/zipball/1ab270e48082ee6e7f32fa72412c2c81eb974516",
+                "reference": "1ab270e48082ee6e7f32fa72412c2c81eb974516",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": ">=4.0",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Ixudra\\Curl\\CurlServiceProvider"
+                    ],
+                    "aliases": {
+                        "Curl": "Ixudra\\Curl\\Facades\\Curl"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ixudra\\Curl\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Oris",
+                    "email": "jan.oris@ixudra.be"
+                }
+            ],
+            "description": "Custom PHP Curl library for the Laravel 5 framework - developed by Ixudra",
+            "homepage": "http://ixudra.be",
+            "keywords": [
+                "Ixudra",
+                "curl",
+                "laravel"
+            ],
+            "time": "2017-12-08T14:31:13+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",

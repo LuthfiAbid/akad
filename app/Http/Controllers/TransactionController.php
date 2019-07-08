@@ -1,7 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
+use PayPal\Api\Amount;
+use PayPal\Api\Details;
+use PayPal\Api\Item;
 
+/** All Paypal Details class **/
 use PayPal\Api\ItemList;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment;
@@ -10,17 +16,12 @@ use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
-
-use PayPal\Api\Amount;
-use PayPal\Api\Details;
-use PayPal\Api\Item;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use App\TransactionAkad;
 use App\DetailTransaction;
-use Alert;
+use Currency;
 use Redirect;
+use Session;
+use Alert;
 use Hash;
 use URL;
 use DB;
@@ -229,30 +230,40 @@ class TransactionController extends Controller
     }
     public function updateTransaction(Request $request)
     {
-        $id_transaction = $request->id_detail;
-        $data_transaction = $request->goods_name;
-        // dd($data_transaction);
-        $qty = TransactionAkad::find($id_transaction);
-        $data = $request->total_price / 14000;
+        $dataTotal = round($request->total_price/14113,2);
+        $idTransaction = $request->id_transaction;
+        $dataQty = DB::table('detail_transaction')
+        ->where('id_transaction',$idTransaction)
+        ->sum('qty');
+        $dataPrice = DB::table('detail_transaction')
+        ->where('id_transaction',$idTransaction)
+        ->select('subtotal')
+        ->get();
+        // dd($dataPrice);
+        $dataName = DB::table('detail_transaction')
+        ->join('goods','goods.id_goods','detail_transaction.id_goods')
+        ->where('id_transaction',$idTransaction)
+        ->select('goods_name')
+        ->get();
         $payer = new Payer();
         $payer->setPaymentMethod('paypal');
         $item_1 = new Item();
         $item_1->setName('Item Shop') /** item name **/
             ->setCurrency('USD')
             ->setQuantity(1)
-            ->setPrice($data); /** unit price **/
+            ->setPrice($dataTotal); /** unit price **/
         $item_list = new ItemList();
         $item_list->setItems(array($item_1));
         $amount = new Amount();
         $amount->setCurrency('USD')
-            ->setTotal($data);
+            ->setTotal($dataTotal);
         $transaction = new Transaction();
         $transaction->setAmount($amount)
                     ->setItemList($item_list)
                     ->setDescription('Your transaction description');
         $redirect_urls = new RedirectUrls();
-        $redirect_urls->setReturnUrl(URL::to('buyer/home')) /** Specify return URL **/
-                      ->setCancelUrl(URL::to('buyer/home'));
+        $redirect_urls->setReturnUrl(URL::to('status')) /** Specify return URL **/
+                      ->setCancelUrl(URL::to('status'));
         $payment = new Payment();
         $payment->setIntent('Sale') 
                 ->setPayer($payer)
@@ -279,6 +290,8 @@ class TransactionController extends Controller
         }
         /** add payment ID to session **/
         Session::put('paypal_payment_id', $payment->getId());
+        Session::put('amount', $amount->getTotal());
+        Session::put('id_transaction',$idTransaction);
         if (isset($redirect_url)) {
             /** redirect to paypal **/
             return Redirect::away($redirect_url);
@@ -298,7 +311,7 @@ class TransactionController extends Controller
         //         echo 0;
         //     }
     }
-    public function getPaymentStatus()
+    public function getPaymentStatus(Request $request)
     {
         /** Get the payment ID before session clear **/
         $payment_id = Session::get('paypal_payment_id');
@@ -308,17 +321,24 @@ class TransactionController extends Controller
             \Session::put('error', 'Payment failed');
             return redirect()->back();
         }
+        
         $payment = Payment::get($payment_id, $this->_api_context);
+        $amountFromPaypal = Session::get('amount');
+        $idTransaction = Session::get('id_transaction');
         $execution = new PaymentExecution();
         $execution->setPayerId(Input::get('PayerID'));
         /**Execute the payment **/
         $result = $payment->execute($execution, $this->_api_context);
         if ($result->getState() == 'approved') {
-            \Session::put('success', 'Payment success');
-            return Redirect::to('buyer/category');
+            $detail_transaction = DB::table('transaction')->where('id_transaction',$idTransaction)->update([
+                'total_price' => round($amountFromPaypal*14113,2),
+                'isdone' => '1',
+            ]);
+            Alert::success('Payment Succesfully!','Success')->autoclose(2000);
+            return Redirect::to('buyer/home');
         }
-        \Session::put('error', 'Payment failed');
-        return redirect()->back();
+            Alert::error('Payment Failed!','Error')->autoclose(2000);
+            return redirect()->back();
     }
     public function deleteDetail(Request $request)
     {
