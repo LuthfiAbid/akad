@@ -85,8 +85,8 @@
                     </div>
                     <div class="order-products">
                         @foreach ($detail_transaction as $detail_transaction2)
-                        <div class="order-col">
-                            <div><img width="60" height="80" src="{{asset('productImages/shirt').'/'.$detail_transaction2->picture}}" alt=""></div>
+                        <div class="order-col" style="height: 20%;width: 100%;">
+                            <div style="width: 15%;"><img width="60" height="80" src="{{asset('productImages/shirt').'/'.$detail_transaction2->picture}}" alt=""></div>
                             <div>{{$detail_transaction2->qty}}x {{$detail_transaction2->goods_name}}</div>
                             <div>Rp. {{number_format($detail_transaction2->subtotal,0,'.','.')}}</div>
                         </div>
