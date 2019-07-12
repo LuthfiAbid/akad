@@ -389,11 +389,7 @@ class AdminController extends Controller
         $dataAdmin = Session::get('id_admin');
         $stock = DB::table('transaction')
         ->join('buyer','buyer.id_buyer','transaction.id_buyer')
-        // ->join('detail_transaction','detail_transaction.id_transaction','transaction.id_transaction')
-        // ->join('goods','goods.id_goods','detail_transaction.id_goods')
         ->get();
-        // dd($stock);
-
         return Datatables::of($stock)
         ->addColumn('action', function ($stock){
                 return '<table id="tabel-in-opsi">'.
@@ -425,6 +421,42 @@ class AdminController extends Controller
         ->update(['status' => 'in approve',
                   'id_admin' => $admin]);
         return redirect('admin/dataTransaction');
+    }
+    //------------------------------------------------------------------------------------------------------//
+    //-------------------------------------Payment Verification---------------------------------------------//
+    public function paymentVerification()
+    {    
+        $dataAdmin = Session::get('admin_name');
+        $data = DB::table('transaction')->get();
+        return view('payment.index',compact('data','dataAdmin'));
+    }
+    public function ApiPaymentVerification()
+    {
+        $payment = DB::table('transaction')
+        ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+        ->get();
+        return Datatables::of($payment)
+        ->addColumn('action', function ($payment){
+                return '<table id="tabel-in-opsi">'.
+                '<tr>'.
+                    '<td>'.
+                        '<a href="'. url('admin/paymentVerification/agree'.'/'.$payment->id_transaction) .'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top">Aggree an payment</a>'.'&nbsp;'.
+                    '</td>'.
+                '</tr>'.
+            '</table>';
+            })
+                ->editColumn('id_trans', function($payment){
+                    return '<td>'. ucfirst($payment->id_transaction) .'</td> ';
+            })    
+            ->editColumn('buyer_name', function($payment){
+                return '<td>'. ucfirst($payment->buyer_name) .'</td> ';
+            })
+            ->editColumn('status', function($payment){
+                return '<td>'. ucfirst($payment->status) .'</td> ';
+            })    
+                ->addIndexColumn()
+                ->rawColumns(['buyer_name','status','id_trans','action'])
+                ->make(true);
     }
     //------------------------------------------------------------------------------------------------------//
 }

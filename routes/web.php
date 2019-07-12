@@ -71,6 +71,12 @@ Route::get('buyer/viewCheckout','TransactionController@viewCheckout');
 Route::post('buyer/deleteDetail','TransactionController@deleteDetail');
 Route::post('buyer/updateTransaction','TransactionController@updateTransaction');
 //--------------------------------------------------------------------//
+Route::get('buyer/updateTransaction','TransactionController@updateTransaction');
+Route::get('buyer/updateQty','TransactionController@updateQty');
+Route::get('buyer/returnGrandTotal','TransactionController@returnGrandTotal');
+Route::get('buyer/searchCategory','TransactionController@searchCategory');
+Route::get('buyer/statusTransaction','TransactionController@statusTransaction');
+Route::get('buyer/showTransaction/{id}','TransactionController@showTransaction');
 
 //--------------------------Get Paypal Status------------------------ //
 Route::get('status', 'TransactionController@getPaymentStatus');
@@ -79,7 +85,6 @@ Route::get('status', 'TransactionController@getPaymentStatus');
 //---------------------Transaction Category Buyer------------------------------//
 Route::get('buyer/category','TrCategoryController@index');
 Route::get('buyer/viewSelectedCategory/{category_name}','TrCategoryController@viewSelectedCategory');
-
 //--------------------------------------------------------------------//
 
 //-----------------------------Stock----------------------------------//
@@ -95,4 +100,9 @@ Route::delete('admin/stock/delete/{id}','AdminController@goodsDelete');
 Route::get('admin/dataUser','AdminController@dataUser');
 Route::get('admin/dataUser/edit/{id}','AdminController@dataUserEdit');
 Route::post('admin/dataUser/editPost','AdminController@editDataUserPost');
+//--------------------------------------------------------------------//
+
+//-----------------------Payment Verfification------------------------//
+Route::get('payment/api/get','AdminController@ApiPaymentVerification');
+Route::get('admin/paymentVerification','AdminController@paymentVerification');
 //--------------------------------------------------------------------//

@@ -110,7 +110,7 @@
             				</a>
 						</li>
 						<li>
-            				<a href="{{ url('admin/history') }}">
+            				<a href="{{ url('admin/paymentVerification') }}">
 						<i class='fa fa-edit'></i>
 							<span>Payment Verification</span>
             				</a>

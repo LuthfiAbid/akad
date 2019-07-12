@@ -18,6 +18,7 @@ use PayPal\Auth\OAuthTokenCredential;
 use PayPal\Rest\ApiContext;
 use App\TransactionAkad;
 use App\DetailTransaction;
+use App\Goods;
 use Currency;
 use Redirect;
 use Session;
@@ -333,6 +334,7 @@ class TransactionController extends Controller
             $detail_transaction = DB::table('transaction')->where('id_transaction',$idTransaction)->update([
                 'total_price' => round($amountFromPaypal*14113,2),
                 'isdone' => '1',
+                'status' => 'in approve',
             ]);
             Alert::success('Payment Succesfully!','Success')->autoclose(2000);
             return Redirect::to('buyer/home');
@@ -366,6 +368,20 @@ class TransactionController extends Controller
                         ->where('id_detail', "=", $id)
                         ->first();
 
+        $qty_detil = $goods->qty;
+        $stock_goods = $goods->stock;
+        $id_goods = $goods->id_goods;
+
+        $data_goods = Goods::findOrFail($id_goods);
+        if ($qty >= $qty_detil) {
+            $qty_min = $qty - $qty_detil;
+            $data_goods->stock = $stock_goods - $qty_min;
+        }else{
+            $qty_add = $qty_detil - $qty;
+            $data_goods->stock = $stock_goods + $qty_add;
+        }
+        $data_goods->save();
+
         $price = $goods->price;
         $subtotal = $qty * $price;
 
@@ -396,5 +412,76 @@ class TransactionController extends Controller
 
     }
 
+    public function statusTransaction(Request $request){
+        $good['search'] = $request->search;
+        // // print_r(Session::get('login'));
+        // if(!Session::get('login')){
 
+        //     return redirect('/buyer/login', $good);
+        // }else{
+            if (!Session::get('login_buyer')) {
+                return redirect('/buyer/login');
+            }else{
+                $detail_transaction = DB::table('transaction')
+                        ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
+                        ->join('goods','detail_transaction.id_goods','goods.id_goods')
+                        ->join('categories','categories.id_category','goods.id_category')
+                        ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
+                        ->where('id_buyer',"=", Session::get('id_buyer'))
+                        ->where('isdone', "=", "0")
+                        ->get();
+
+                $transaction = DB::table('transaction')
+                        ->join('detail_transaction','detail_transaction.id_transaction','transaction.id_transaction')
+                        ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+                        ->select('transaction.*','buyer.buyer_name','detail_transaction.subtotal')
+                        // ->where('detail_transaction.id_transaction',$request->id_transaction)
+                        ->where('buyer.id_buyer',"=", Session::get('id_buyer'))
+                        ->where('transaction.isdone', "=", "1")
+                        ->where('status','in approve')
+                        ->orderBy('transaction.id_transaction', 'asc')
+                        ->groupBy('detail_transaction.id_transaction')
+                        ->get();
+                // dd($transaction);
+                return view('buyer.content.status_transaction', $good, compact('transaction','detail_transaction'));
+            }
+        }
+
+        public function getSubtotal(Request $request)
+        {
+            $id_transaction = $request->id_transaction;
+            $sum = DB::table('detail_transaction')
+            ->where('id_transaction', "=", $id_transaction)
+            ->sum('subtotal');
+            $data = array('data_sum'=>$sum);
+            echo json_encode($data);
+        }
+
+        public function showTransaction(Request $request, $id_transaction)
+    {
+        $good['search'] = $request->search;
+        //    $data = Session::get('buyer_name');
+
+           $data_goods = DB::table('transaction')
+                        ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
+                        ->join('goods','goods.id_goods','detail_transaction.id_goods')
+                        ->join('categories','categories.id_category','goods.id_category')
+                        ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+                        ->select('goods.goods_name','goods.picture','transaction.*','detail_transaction.qty','detail_transaction.subtotal','categories.category_name','buyer.buyer_name')
+                        ->where('transaction.id_transaction',$id_transaction)
+                        ->first();
+
+
+            $detail_transaction = DB::table('transaction')
+                        ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
+                        ->join('goods','detail_transaction.id_goods','goods.id_goods')
+                        ->join('categories','categories.id_category','goods.id_category')
+                        ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
+                        ->where('id_buyer',"=", Session::get('id_buyer'))
+                        ->where('transaction.id_transaction',$id_transaction)
+                        ->get();
+           return view('buyer.content.show_transaction',$good, compact('data_goods','detail_transaction'));
+
+    }
 }
+

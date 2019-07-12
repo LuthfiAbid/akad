@@ -11,11 +11,11 @@
             $('#table_id').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '<?= url("transaction/api/get") ?>',
+                ajax: '<?= url("payment/api/get") ?>',
                 columns: [
+                    {data: 'id_trans', name: 'id_trans'},
                     {data: 'buyer_name', name: 'buyer_name'},
-                    {data: 'status', name: 'status'},
-                    {data: 'created_at', name: 'created_at'},
+                    {data: 'status', name: 'status'}
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ]
             });
@@ -40,19 +40,17 @@
                 </div>
             </div>
         </div>
-        <h2>Data Transaction</h2>     
-        <center><a href="{{url('admin/stock/add')}}" class="btn btn-info"><li class="fa fa-plus">Add Goods</li></a>   </center>
+        <h2>Payment Status</h2>     
         <thead>
         <tr>
-            <td>Buyer name</td>
+            <td>Id Transaction</td>
+            <td>Buyer Name</td>
             <td>Status</td>
-            <td>Transaction Date</td>
             <td>Action</td>
         </tr>
         </thead>
         <tbody>            
         </tbody>
-            {{-- @endforeach --}}
         </table>
     @endsection
     @section('navmenu')

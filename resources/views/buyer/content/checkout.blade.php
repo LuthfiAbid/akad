@@ -122,8 +122,10 @@
                         <div><strong>FREE</strong></div>
                     </div>
                     <div class="order-col">
-                        <div><strong>TOTAL</strong></div>
-                        <div id="sum3" name="sum3"></div>
+                        <div><strong>
+                                <h4>TOTAL</h4>
+                            </strong></div>
+                        <div id="sum3"></div>
                     </div>
                 </div>
                 <div class="payment-method">

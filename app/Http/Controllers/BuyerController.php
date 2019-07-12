@@ -94,9 +94,10 @@ class BuyerController extends Controller
 
     public function login(Request $request)
     {
+        $good['search'] = $request->search;
         // print_r(Session::get('username'));
         if(!Session::get('login_buyer')){
-            $good['search'] = $request->search;
+
              return view('buyer.login', $good);
         }else{
 

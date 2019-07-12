@@ -34,7 +34,7 @@
 							</div>						
 							<div class="shop-body">
 								<h3>collection<br>Upper clothes</h3>
-								<a href="#" class="cta-btn">Show all<i class="fa fa-arrow-circle-right"></i></a>
+								<a href="{{url('buyer/viewSelectedCategory/Shirt')}}" style="cursor:pointer" class="cta-btn">Show all<i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -48,7 +48,7 @@
 							</div>
 							<div class="shop-body">
 								<h3>collection<br>Down clothes</h3>
-								<a href="#" class="cta-btn">Show all<i class="fa fa-arrow-circle-right"></i></a>
+								<a href="{{url('buyer/viewSelectedCategory/Pants')}}" style="cursor:pinter" class="cta-btn">Show all<i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -61,8 +61,8 @@
 								<img height="240px" src="{{asset('productImages/pants/1.jpg')}}"" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>collection<br>Koko shirt</h3>
-								<a href="#" class="cta-btn">Show all <i class="fa fa-arrow-circle-right"></i></a>
+								<h3>collection<br>Dress</h3>
+								<a href="{{url('buyer/viewSelectedCategory/Dress')}}" style="cursor:pinter"" class="cta-btn">Show all <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -86,22 +86,6 @@
 						<div class="section-title">
 							<h3 class="title">New Products</h3>
 							<div class="section-nav">
-								<ul class="section-tab-nav tab-nav">
-											<li class="dropdown">
-									<a href="#" data-toggle="dropdown">Clothes</a>
-										<ul class="dropdown-menu">
-											<li><a href="#">Shirt</a></li>
-											<li><a href="#">Batik Shirts</a></li>
-											<li><a href="#">T-shirt</a></li>
-										</ul>
-									</li>
-									<li class="dropdown">
-									<a href="#" data-toggle="dropdown">Koko Clothes</a>
-										<ul class="dropdown-menu">
-											<li><a href="#">Koko Clothes</a></li>
-										</ul>
-									</li>
-								</ul>
 							</div>
 						</div>
 					</div>
