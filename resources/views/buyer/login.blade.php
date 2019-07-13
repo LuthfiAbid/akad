@@ -2,7 +2,7 @@
 		<!-- BREADCRUMB -->
 		<div id="breadcrumb" class="section">
 			<!-- container -->
-			<div class="container" style="box-shadow:1px 1px 5px lightgrey;padding:30px;margin-left:40%;margin-right:40%;width:auto;background-color:#FFFFFF;">
+			<div class="container" style="box-shadow:1px 1px 5px lightgrey;padding:30px;margin-left:35%;margin-right:35%;width:auto;background-color:#FFFFFF;">
 				<!-- row -->
                 <div class="row">
                     <div class="col-md-12">

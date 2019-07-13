@@ -103,6 +103,13 @@ Route::post('admin/dataUser/editPost','AdminController@editDataUserPost');
 //--------------------------------------------------------------------//
 
 //-----------------------Payment Verfification------------------------//
-Route::get('payment/api/get','AdminController@ApiPaymentVerification');
-Route::get('admin/paymentVerification','AdminController@paymentVerification');
+Route::get('payment/api/get','AdminController@apiPaymentVerification');
+Route::get('admin/dataPaymentVerification','AdminController@paymentVerification');
+Route::get('admin/paymentVerification/agree/{id}','AdminController@updatePayment');
+//--------------------------------------------------------------------//
+
+//-------------------------History Payment----------------------------//
+Route::get('admin/historyPayment','AdminController@historyPayment');
+Route::get('admin/history/api/get','AdminController@apiHistoryPayment');
+Route::get('admin/history/show/{id}','AdminController@showHistory');
 //--------------------------------------------------------------------//

@@ -13,9 +13,9 @@
                 serverSide: true,
                 ajax: '<?= url("payment/api/get") ?>',
                 columns: [
-                    {data: 'id_trans', name: 'id_trans'},
+                    {data: 'id_transaction', name: 'id_transaction'},
                     {data: 'buyer_name', name: 'buyer_name'},
-                    {data: 'status', name: 'status'}
+                    {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ]
             });
@@ -43,13 +43,14 @@
         <h2>Payment Status</h2>     
         <thead>
         <tr>
-            <td>Id Transaction</td>
-            <td>Buyer Name</td>
-            <td>Status</td>
-            <td>Action</td>
+            <td width="10%">ID Transaction</td>
+            <td width="20%">Buyer Name</td>
+            <td width="10%">Status</td>
+            <td width="10%">Action</td>
         </tr>
         </thead>
-        <tbody>            
+        <tbody>  
+                      
         </tbody>
         </table>
     @endsection

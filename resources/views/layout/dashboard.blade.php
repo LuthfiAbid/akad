@@ -104,29 +104,17 @@
             				</a>
 						</li>
 						<li>
-            				<a href="{{ url('admin/paymenVerification') }}">
-						<i class='fa fa-edit'></i>
-							<span>Data Usage</span>
-            				</a>
-						</li>
-						<li>
-            				<a href="{{ url('admin/paymentVerification') }}">
+            				<a href="{{ url('admin/dataPaymentVerification') }}">
 						<i class='fa fa-edit'></i>
 							<span>Payment Verification</span>
             				</a>
                         </li>
                         <li>
-            				<a href="{{ url('admin/logout') }}">
+            				<a href="{{ url('admin/historyPayment') }}">
 						<i class='fa fa-edit'></i>
 							<span>History Payment</span>
             				</a>
-						</li>
-						{{--<li @yield('admin/logout')>
-            				<a href="{{ url('admin/logout') }}">
-						<i class='fa fa-edit'></i>
-							<span>Logout</span>
-            				</a>
-						</li--}}				
+						</li>				
 					</ul>
 				</nav>
 			</div>

@@ -29,7 +29,8 @@
     <div class="container">
         <!-- row -->
         <div class="row">
-
+            <form class="w3-container w3-display-middle w3-card-4 w3-padding-16" action="{!! URL('buyer/updateTransaction') !!}" method="POST" id="payment-form">
+                {{ csrf_field() }}
             <div class="col-md-7">
                 <!-- Billing Details -->
                 <div class="billing-details">
@@ -68,37 +69,18 @@
                     <div class="section-title">
                         <h3 class="title">Shiping address</h3>
                     </div>
-                    <div class="input-checkbox">
-                        <input type="checkbox" id="shiping-address">
-                        <label for="shiping-address">
-                            <span></span>
-                            Ship to a diffrent address?
-                        </label>
-                        <div class="caption">
-                            <div class="form-group">
-                                <input class="input" type="text" name="first-name" placeholder="First Name">
-                            </div>
-                            <div class="form-group">
-                                <input class="input" type="text" name="address" placeholder="Address">
-                            </div>
-                            <div class="form-group">
-                                <input class="input" type="text" name="city" placeholder="City">
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <!-- /Shiping Details -->
 
                 <!-- Order notes -->
                 <div class="order-notes">
-                    <textarea class="input" placeholder="Order Notes"></textarea>
+                    <textarea class="input" name="description" placeholder="Order Notes"></textarea>
                 </div>
                 <!-- /Order notes -->
             </div>
-
+            
             <!-- Order Details -->
-            <form class="w3-container w3-display-middle w3-card-4 w3-padding-16" action="{!! URL('buyer/updateTransaction') !!}" method="POST" id="payment-form">
-                {{ csrf_field() }}
+            
             <div class="col-md-5 order-details">
                 <div class="section-title text-center">
                     <h3 class="title">Your Order</h3>
@@ -110,8 +92,8 @@
                     </div>
                     <div class="order-products">
                         @foreach ($detail_transaction as $detail_transaction2)
-                        <div class="order-col">
-                            <div>{{$detail_transaction2->qty}}x {{$detail_transaction2->goods_name}}</div>
+                        <div class="order-col" style="height: 20%;width: 100%;">
+                            <div style="width: 80%;">{{$detail_transaction2->qty}}x {{$detail_transaction2->goods_name}}</div>
                             <div>Rp. {{number_format($detail_transaction2->subtotal,0,'.','.')}}</div>
                             <input type="hidden" name="id_transaction" value="{{$detail_transaction2->id_transaction}}">
                         </div>
@@ -127,51 +109,9 @@
                             </strong></div>
                         <div id="sum3"></div>
                     </div>
-                </div>
-                <div class="payment-method">
-                    <div class="input-radio">
-                        <input type="radio" name="payment" id="payment-1">
-                        <label for="payment-1">
-                            <span></span>
-                            Direct Bank Transfer
-                        </label>
-                        <div class="caption">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.</p>
-                        </div>
-                    </div>
-                    <div class="input-radio">
-                        <input type="radio" name="payment" id="payment-2">
-                        <label for="payment-2">
-                            <span></span>
-                            Cheque Payment
-                        </label>
-                        <div class="caption">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.</p>
-                        </div>
-                    </div>
-                    <div class="input-radio">
-                        <input type="radio" name="payment" id="payment-3">
-                        <label for="payment-3">
-                            <span></span>
-                            Paypal System
-                        </label>
-                        <div class="caption">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-checkbox">
-                    <input type="checkbox" id="terms">
-                    <label for="terms">
-                        <span></span>
-                        I've read and accept the <a href="#">terms & conditions</a>
-                    </label>
-                </div>
+                </div>        
                         {{-- {{csrf_token()}} --}}
-                        <button type="submit" class="primary-btn order-submit">Place Order</button>
+                        <button type="submit" class="primary-btn order-submit col-md-12">Place Order</button>
                 {{-- <a style="cursor:pointer;" onclick="updateTransaction()" class="primary-btn order-submit">Place order</a> --}}
                     </form>
             </div>

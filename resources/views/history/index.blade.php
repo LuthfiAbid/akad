@@ -11,13 +11,12 @@
             $('#table_id').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '<?= url("stock/api/get") ?>',
+                ajax: '<?= url("admin/history/api/get") ?>',
                 columns: [
-                    {data: 'goods_name', name: 'goods_name'},
-                    {data: 'stock', name: 'stock'},
-                    {data: 'price', name: 'price'},
-                    {data: 'picture', name: 'picture'},
-                    {data: 'category', name: 'category'},
+                    {data: 'id_transaction', name: 'id_transaction'},
+                    {data: 'buyer_name', name: 'buyer_name'},
+                    {data: 'status', name: 'status'},
+                    {data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
                 ]
             });
@@ -42,25 +41,24 @@
                 </div>
             </div>
         </div>
-        <h2>Goods Warehouse</h2>     
-        <center><a href="{{url('admin/stock/add')}}" class="btn btn-info"><li class="fa fa-plus">Add Goods</li></a>   </center>
+        <h2>Payment Status</h2>     
         <thead>
         <tr>
-            <td>Goods name</td>
-            <td>Stock</td>
-            <td>Price</td>
-            <td>Picture</td>
-            <td>Category</td>
-            <td>Action</td>
+            <td width="10%">ID Transaction</td>
+            <td width="20%">Buyer Name</td>
+            <td width="10%">Status</td>
+            <td width="20%">Transaction Time</td>
+            <td width="10%">Action</td>
         </tr>
         </thead>
-        <tbody>
+        <tbody>  
+                      
         </tbody>
         </table>
     @endsection
     @section('navmenu')
     <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{asset('assets/img/user.png')}}" class="img-circle" alt="Avatar"> <span>{{$data_admin}}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{asset('assets/img/user.png')}}" class="img-circle" alt="Avatar"> <span>{{$dataAdmin}}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
         <ul class="dropdown-menu">
             <li><a href="{{ url('admin/logout') }}"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
         </ul>

@@ -99,7 +99,6 @@
 								<div id="tab1" class="tab-pane active">
 									<div class="products-slick" data-nav="#slick-nav-1">
 										<!-- product -->
-
 										@foreach ($goods as $goods)
 										<div class="product" onclick="window.location.href='{{url('buyer/getViewGoods')}}/{{$goods->id_goods}}'" style="cursor:pointer;">
 											<div class="product-img">
@@ -148,7 +147,6 @@
 			<div class="container">
 				<!-- row -->
 				<div class="row">
-
 					<!-- section title -->
 					<div class="col-md-12">
 						<div class="section-title">
@@ -347,8 +345,10 @@
                         <!-- /row -->
                     </div>
                     <!-- /container -->
-                </div>
+				</div>
+				</div>
+			</div>
+		</div>
                 <!-- /SECTION -->
-
 		@include('buyer.footer')
 

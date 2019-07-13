@@ -10,27 +10,12 @@
                     <form>
                         <input class="input" type="email" placeholder="Tulis Pendapat Anda">
                         <button class="newsletter-btn"><i class="fa fa-envelope"></i> Send</button>
-                    </form>
-                    <ul class="newsletter-follow">
-                        <li>
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-pinterest"></i></a>
-                        </li>
-                    </ul>
+                    </form>                
                 </div>
             </div>
         </div>
         <!-- /row -->
     </div>
-    <!-- /container -->
 </div>
 <!-- /NEWSLETTER -->
 
@@ -44,9 +29,8 @@
             <div class="row">
                 <div class="col-md-3 col-xs-6">
                     <div class="footer">
-                        <h3 class="footer-title">About Us</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt
-                            ut.</p>
+                        <h3 class="footer-title">About Us</h3><center>“I have always believed that fashion was not only to make women more beautiful, but also to reassure them, give them confidence”</center><br>
+                        <center>– Yves Saint Laurent</center></p>
                         <ul class="footer-links">
                             <li><a href="#"><i class="fa fa-map-marker"></i>Kl kedoya</a></li>
                             <li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>

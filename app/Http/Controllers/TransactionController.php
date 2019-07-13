@@ -102,11 +102,12 @@ class TransactionController extends Controller
     public function viewCheckout(Request $request){
         $good['search'] = $request->search;
         $detail_transaction = DB::table('transaction')
+                    ->join('buyer','buyer.id_buyer','transaction.id_buyer')
                     ->join('detail_transaction','transaction.id_transaction','detail_transaction.id_transaction')
                     ->join('goods','detail_transaction.id_goods','goods.id_goods')
                     ->join('categories','categories.id_category','goods.id_category')
-                    ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name')
-                    ->where('id_buyer',"=", Session::get('id_buyer'))
+                    ->select('goods.*','detail_transaction.*','transaction.*','categories.category_name as cat_name','address')
+                    ->where('buyer.id_buyer',"=", Session::get('id_buyer'))
                     ->where('isdone', "=", "0")
                     ->get();
                     // dd($detail_transaction);
@@ -150,11 +151,7 @@ class TransactionController extends Controller
         $data = array('data_count'=>$count, 'data_sum'=>$sum);
 
            echo json_encode($data);
-
     }
-
-
-
     public function createTransaction(Request $request)
     {
         try {
@@ -233,35 +230,23 @@ class TransactionController extends Controller
     {
         $dataTotal = round($request->total_price/14113,2);
         $idTransaction = $request->id_transaction;
-        $dataQty = DB::table('detail_transaction')
-        ->where('id_transaction',$idTransaction)
-        ->sum('qty');
-        $dataPrice = DB::table('detail_transaction')
-        ->where('id_transaction',$idTransaction)
-        ->select('subtotal')
-        ->get();
-        // dd($dataPrice);
-        $dataName = DB::table('detail_transaction')
-        ->join('goods','goods.id_goods','detail_transaction.id_goods')
-        ->where('id_transaction',$idTransaction)
-        ->select('goods_name')
-        ->get();
+        $address = $request->address;
         $payer = new Payer();
         $payer->setPaymentMethod('paypal');
-        $item_1 = new Item();
-        $item_1->setName('Item Shop') /** item name **/
-            ->setCurrency('USD')
-            ->setQuantity(1)
-            ->setPrice($dataTotal); /** unit price **/
+        $items = new Item();
+        $items->setName('Item Shop') /** item name **/
+        ->setCurrency('USD')
+        ->setQuantity(1)
+        ->setPrice($dataTotal); /** unit price **/
         $item_list = new ItemList();
-        $item_list->setItems(array($item_1));
+        $item_list->setItems(array($items));
         $amount = new Amount();
         $amount->setCurrency('USD')
-            ->setTotal($dataTotal);
+        ->setTotal($dataTotal);
         $transaction = new Transaction();
         $transaction->setAmount($amount)
-                    ->setItemList($item_list)
-                    ->setDescription('Your transaction description');
+        ->setItemList($item_list)
+        ->setDescription($request->description);
         $redirect_urls = new RedirectUrls();
         $redirect_urls->setReturnUrl(URL::to('status')) /** Specify return URL **/
                       ->setCancelUrl(URL::to('status'));
@@ -293,24 +278,15 @@ class TransactionController extends Controller
         Session::put('paypal_payment_id', $payment->getId());
         Session::put('amount', $amount->getTotal());
         Session::put('id_transaction',$idTransaction);
+        Session::put('description',$transaction->getDescription());
+        // dd($request->description);
+        
         if (isset($redirect_url)) {
             /** redirect to paypal **/
             return Redirect::away($redirect_url);
         }
         \Session::put('error', 'Unknown error occurred');
         return Redirect::to('/');
-        // $id_transaction = $request->id_transaction;
-        // $total_price = $request->total_price;
-
-        // $transaction = Transaction::firstOrFail(['id_transaction' => $id_transaction]);
-        // $transaction->total_price = $request->total_price;
-        // $transaction->isdone = 1;
-        // $transaction->save();
-        //     if ($transaction) {
-        //         echo 1;
-        //     } else {
-        //         echo 0;
-        //     }
     }
     public function getPaymentStatus(Request $request)
     {
@@ -326,6 +302,7 @@ class TransactionController extends Controller
         $payment = Payment::get($payment_id, $this->_api_context);
         $amountFromPaypal = Session::get('amount');
         $idTransaction = Session::get('id_transaction');
+        $description = Session::get('description');
         $execution = new PaymentExecution();
         $execution->setPayerId(Input::get('PayerID'));
         /**Execute the payment **/
@@ -335,6 +312,7 @@ class TransactionController extends Controller
                 'total_price' => round($amountFromPaypal*14113,2),
                 'isdone' => '1',
                 'status' => 'in approve',
+                'description' => $description,
             ]);
             Alert::success('Payment Succesfully!','Success')->autoclose(2000);
             return Redirect::to('buyer/home');

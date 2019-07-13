@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\Transaction;
+use App\TransactionAkad;
 use App\Category;
 use App\Admin;
 use App\Buyer;
@@ -77,7 +77,7 @@ class AdminController extends Controller
                 return '<td>'. ucfirst($pending->status).'</td> ';
             })
             ->editColumn('transaction', function($pending){
-                return '<td>'.date('d/m/y - H:i:s',strtotime($pending->created_at)).'</td> ';
+                return '<td>'.date('d F Y - H:i:s',strtotime($pending->created_at)).'</td> ';
             })
                 ->addIndexColumn()
                 ->rawColumns(['no','buyer_name','status','transaction','action'])
@@ -374,8 +374,6 @@ class AdminController extends Controller
             ->where('detail_transaction.id_transaction',$id)
             ->sum('detail_transaction.subtotal');
 
-            $totalPlusTax = $sumPrice + ($sumPrice * 2.5/100);
-
             $data = DB::table('transaction')
             ->join('buyer','buyer.id_buyer','transaction.id_buyer')
             ->join('detail_transaction','detail_transaction.id_transaction','transaction.id_transaction')
@@ -389,6 +387,7 @@ class AdminController extends Controller
         $dataAdmin = Session::get('id_admin');
         $stock = DB::table('transaction')
         ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+        ->where('status','pending')
         ->get();
         return Datatables::of($stock)
         ->addColumn('action', function ($stock){
@@ -423,6 +422,7 @@ class AdminController extends Controller
         return redirect('admin/dataTransaction');
     }
     //------------------------------------------------------------------------------------------------------//
+
     //-------------------------------------Payment Verification---------------------------------------------//
     public function paymentVerification()
     {    
@@ -430,33 +430,122 @@ class AdminController extends Controller
         $data = DB::table('transaction')->get();
         return view('payment.index',compact('data','dataAdmin'));
     }
-    public function ApiPaymentVerification()
+    public function apiPaymentVerification()
     {
+        $dataAdmin = Session::get('admin_name');
         $payment = DB::table('transaction')
         ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+        ->where('status','in approve')
         ->get();
         return Datatables::of($payment)
         ->addColumn('action', function ($payment){
                 return '<table id="tabel-in-opsi">'.
                 '<tr>'.
                     '<td>'.
-                        '<a href="'. url('admin/paymentVerification/agree'.'/'.$payment->id_transaction) .'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top">Aggree an payment</a>'.'&nbsp;'.
+                        '<a href="'. url('admin/paymentVerification/agree'.'/'.$payment->id_transaction) .'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top">Aggre an Payment</a>'.'&nbsp;'.
                     '</td>'.
                 '</tr>'.
             '</table>';
             })
-                ->editColumn('id_trans', function($payment){
-                    return '<td>'. ucfirst($payment->id_transaction) .'</td> ';
-            })    
+            ->editColumn('id_transaction', function($payment){
+                return '<td>'. ucfirst($payment->id_transaction) .'</td> ';
+            })
             ->editColumn('buyer_name', function($payment){
                 return '<td>'. ucfirst($payment->buyer_name) .'</td> ';
             })
             ->editColumn('status', function($payment){
-                return '<td>'. ucfirst($payment->status) .'</td> ';
-            })    
+                return '<td>'. $payment->status .'</td> ';
+            })        
                 ->addIndexColumn()
-                ->rawColumns(['buyer_name','status','id_trans','action'])
+                ->rawColumns(['id_transaction','buyer_name','status','action'])
                 ->make(true);
+        }
+
+        public function updatePayment($id)
+        {
+            $data = DB::table('transaction')
+            ->where('id_transaction',$id)
+            ->update([
+                'status' => 'agree'
+            ]);
+            return redirect('admin/dataPaymentVerification');
+        }
+    //------------------------------------------------History Payment---------------------------------------//
+        public function historyPayment()
+        {
+            $data = DB::table('transaction')
+            ->get();
+            $dataAdmin = Session::get('admin_name');
+            return view('history.index',compact('data','dataAdmin'));
+        }
+
+        public function apiHistoryPayment()
+        {
+            $dataAdmin = Session::get('admin_name');
+            $payment = DB::table('transaction')
+            ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+            ->select('transaction.*','buyer.buyer_name')
+            ->where('status','agree')
+            ->get();
+            return Datatables::of($payment)
+            ->addColumn('action', function ($payment){
+                return '<table id="tabel-in-opsi">'.
+                '<tr>'.
+                    '<td>'.
+                        '<a href="'. url('admin/history/show'.'/'.$payment->id_transaction) .'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top">Show History</a>'.'&nbsp;'.
+                    '</td>'.
+                '</tr>'.
+            '</table>';
+            })
+            ->editColumn('id_transaction', function($payment){
+                return '<td>'. ucfirst($payment->id_transaction) .'</td> ';
+            })
+            ->editColumn('buyer_name', function($payment){
+                return '<td>'. ucfirst($payment->buyer_name) .'</td> ';
+            })
+            ->editColumn('created_at', function($payment){
+                return '<td>'. date('d F Y H:s.s', strtotime($payment->created_at)) .'</td> ';
+            }) 
+            ->editColumn('status', function($payment){
+                return '<td>'. ucfirst($payment->status) .'</td> ';
+            })        
+                ->addIndexColumn()
+                ->rawColumns(['id_transaction','buyer_name','status','action','created_at'])
+                ->make(true);
+        }
+
+        public function showHistory($id)
+        {
+            $buyer = DB::table('transaction')
+            ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+            ->where('id_transaction',$id)
+            ->first();
+
+            $data = DB::table('transaction')
+            ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+            ->join('detail_transaction','detail_transaction.id_transaction','transaction.id_transaction')
+            ->join('goods','goods.id_goods','detail_transaction.id_goods')
+            ->where('transaction.id_transaction',$id)
+            ->get();
+            
+            $sumPrice =  DB::table('detail_transaction')
+            ->join('transaction','transaction.id_transaction','detail_transaction.id_transaction')
+            ->where('transaction.isdone','=','1')
+            ->where('detail_transaction.id_transaction',$id)
+            ->sum('detail_transaction.subtotal');
+
+            $desc = DB::table('transaction')
+            ->join('buyer','buyer.id_buyer','transaction.id_buyer')
+            ->join('detail_transaction','detail_transaction.id_transaction','transaction.id_transaction')
+            ->join('goods','goods.id_goods','detail_transaction.id_goods')
+            ->where('transaction.id_transaction',$id)
+            ->select('transaction.description')
+            ->first();
+            // dd($desc);
+            
+            $admin = Session::get('admin_name');
+            return view('history.show',compact('data','admin','buyer','desc','sumPrice'));
+        }
+    //------------------------------------------------------------------------------------------------------//
     }
     //------------------------------------------------------------------------------------------------------//
-}
