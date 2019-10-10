@@ -21,6 +21,26 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## How to install project
+1. Write this command down on your terminal : "composer install"
+2. Install yajra/datatables 
+-> $ composer require yajra/laravel-datatables-oracle:"~9.0"
+Service Provider & Facade (Optional on Laravel 5.5)
+Register provider and facade on your config/app.php file.
+
+-> 'providers' => [
+    ...,
+    Yajra\DataTables\DataTablesServiceProvider::class,
+]
+
+-> 'aliases' => [
+    ...,
+    'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+]
+Configuration (Optional)
+-> $ php artisan vendor:publish --provider="Yajra\DataTables\DataTablesServiceProvider"
+3. After composer install, write "php artisan serve" for run this project
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
