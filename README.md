@@ -39,6 +39,7 @@ Register provider and facade on your config/app.php file.
 ]
 Configuration (Optional)
 -> $ php artisan vendor:publish --provider="Yajra\DataTables\DataTablesServiceProvider"
+
 3. After composer install, write "php artisan serve" for run this project
 
 ## Learning Laravel
