@@ -40,7 +40,38 @@ Register provider and facade on your config/app.php file.
 Configuration (Optional)
 -> $ php artisan vendor:publish --provider="Yajra\DataTables\DataTablesServiceProvider"
 
-3. After composer install, write "php artisan serve" for run this project
+3. Install uxweb/sweet-alert
+First, pull in the package through Composer.
+
+composer require uxweb/sweet-alert
+If using laravel < 5.5 include the service provider and alias within config/app.php.
+
+'providers' => [
+    UxWeb\SweetAlert\SweetAlertServiceProvider::class,
+];
+
+'aliases' => [
+    'Alert' => UxWeb\SweetAlert\SweetAlert::class,
+];
+
+4. Install srmklive paypal ( masih Sandbox )
+Use following command to install:
+
+composer require srmklive/paypal:~1.0
+
+Add the service provider to your $providers array in config/app.php file like:
+
+Srmklive\PayPal\Providers\PayPalServiceProvider::class
+
+Add the alias to your $aliases array in config/app.php file like:
+
+'PayPal' => Srmklive\PayPal\Facades\PayPal::class
+
+Run the following command to publish configuration:
+
+php artisan vendor:publish --provider "Srmklive\PayPal\Providers\PayPalServiceProvider"
+
+5. After composer install, write "php artisan serve" for run this project
 
 ## Learning Laravel
 
